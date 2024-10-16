@@ -1,3 +1,21 @@
+#Options -Indexes
+#
+#<FilesMatch ".*\.(log|ini|htaccess)$">
+#    deny from all
+#</FilesMatch>
+#
+#<IfModule mod_rewrite.c>
+#    RewriteEngine On
+#    RewriteBase /
+#    RewriteRule ^(public)($|/) - [L,NC]
+#    RewriteCond %{REQUEST_FILENAME} !-f
+#    RewriteCond %{REQUEST_FILENAME} !-d
+#    RewriteRule ^(.*)/(.*)/(.*)$ index.php?controller=$1&action=$2&$3 [L,QSA]
+#    RewriteRule ^(.*)/(.*)$ index.php?controller=$1&action=$2 [L,QSA]
+#    RewriteRule ^(.*)$ index.php?controller=$1 [L,QSA]
+#</IfModule>
+
+
 Options -Indexes
 
 <FilesMatch ".*\.(log|ini|htaccess)$">
@@ -6,11 +24,23 @@ Options -Indexes
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /
-    RewriteRule ^(public)($|/) - [L,NC]
+    RewriteBase /tp-final-pw2/
+
+    # No reescribir si la solicitud es para 'public' o 'index.php'
+    RewriteRule ^(public|index\.php)($|/) - [L,NC]
+
+    # Si no es un archivo o directorio existente, redirigir a index.php
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Reescribe las rutas en formato controller/action/param
     RewriteRule ^(.*)/(.*)/(.*)$ index.php?controller=$1&action=$2&$3 [L,QSA]
+
+    # Reescribe las rutas en formato controller/action
     RewriteRule ^(.*)/(.*)$ index.php?controller=$1&action=$2 [L,QSA]
+
+    # Reescribe las rutas en formato controller
     RewriteRule ^(.*)$ index.php?controller=$1 [L,QSA]
 </IfModule>
+
+
