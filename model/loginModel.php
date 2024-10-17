@@ -9,8 +9,12 @@ class LoginModel {
     }
 
     public function validateLogin($username, $password){
-        $sql = "SELECT * FROM usuario WHERE nombre_completo = '$username' AND contrasena = '$password'";
-        $resultado = $this->db->query($sql);
-        return $resultado->fetch_assoc();
+        $user = $this->db->getUser($username);
+        if($user){
+            if($password === $user["contrasena"]){
+                return true;
+            }
+        }
+        return false;
     }
 }

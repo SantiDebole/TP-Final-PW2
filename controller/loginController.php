@@ -16,7 +16,6 @@ class LoginController{
         $password = $_POST['password'];
         $usuario = $this->model->validateLogin($username, $password);
         if($usuario){
-            $_SESSION['usuario'] = $usuario;
             $this->presenter->render("./view/lobby.mustache");
         }else{
             header("location: /tp-final-pw2/login/list");
