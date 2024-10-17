@@ -8,10 +8,10 @@ include_once ("./controller/loginController.php");
 include_once ("./model/loginModel.php");
 class Configuration
 {
-    private $conn;
+    private $db;
 
     public function __construct(){
-        $this->conn = $this->getDatabase();
+        $this->db = $this->getDatabase();
     }
 
     // getCONTROLLERS
@@ -23,7 +23,7 @@ class Configuration
 
     // getMODELS
     private function getLoginModel(){
-        return new LoginModel($this->conn);
+        return new LoginModel($this->db);
     }
 
 

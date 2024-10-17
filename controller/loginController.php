@@ -12,10 +12,22 @@ class LoginController{
     }
 
     public function validate(){
-        echo "hola";
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $usuario = $this->model->validateLogin($username, $password);
+        if($usuario){
+            $_SESSION['usuario'] = $usuario;
+            $this->presenter->render("./view/lobby.mustache");
+        }else{
+            header("location: /tp-final-pw2/login/list");
+            exit();
+        }
+
     }
 
+
+
     public function list(){
-        $this->presenter->render("./view/loginView.html");
+        $this->presenter->render("./view/loginView.mustache");
     }
 }

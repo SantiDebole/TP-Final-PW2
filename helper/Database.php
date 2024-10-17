@@ -1,15 +1,21 @@
 <?php
 
 class Database {
-    private $database;
-    private $password;
-    private $username;
-    private $host;
+
+    private $conn;
 
     public function __construct($host, $username, $password, $database) {
-        $this->host = $host;
-        $this->username = $username;
-        $this->password = $password;
-        $this->database = $database;
+            $this->conn = new mysqli($host, $username, $password, $database);
     }
+
+    public function __destruct()
+    {
+        $this->conn->close();
+    }
+
+    public function query($sql){
+        return $this->conn->query($sql);
+    }
+
+
 }
