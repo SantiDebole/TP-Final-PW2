@@ -10,49 +10,41 @@
 <div class="perfil">
 
     <div class="foto_y_nombre">
-        <img src="../public/image/juan_perez.jpg" alt="Foto de perfil" class="foto-perfil">
-        <h1 class="nombre-usuario">Juan</h1>
-
-
+        <img src="../public/image/<?php echo $_SESSION['usuario']['foto']; ?>" alt="Foto de perfil" class="foto-perfil">
+        <h1 class="nombre-usuario"><?php echo $_SESSION['usuario']['nombre']; ?></h1>
     </div>
 
-    <form id="perfilForm">
+    <form id="perfilForm" method="POST" action="PerfilController.php?action=editarPerfil">
         <div class="informacion">
             <label for="fotoInput">Cambiar Foto de Perfil:</label>
-            <input type="file" id="fotoInput" accept="image/*" disabled>
+            <input type="file" id="fotoInput" accept="image/*">
 
             <label for="nombreCompleto">Nombre Completo:</label>
-            <input type="text" id="nombreCompleto" value="Juan Pérez" disabled>
+            <input type="text" name="nombreCompleto" id="nombreCompleto" value="<?php echo $_SESSION['usuario']['nombre']; ?>">
 
             <label for="username">Username:</label>
-            <input type="text" id="username" value="@juaan90" disabled>
+            <input type="text" name="username" id="username" value="<?php echo $_SESSION['usuario']['username']; ?>" disabled>
 
             <label for="anoNacimiento">Año de Nacimiento:</label>
-            <input type="number" id="anoNacimiento" value="1990" disabled>
+            <input type="number" name="anoNacimiento" id="anoNacimiento" value="<?php echo $_SESSION['usuario']['anoNacimiento']; ?>">
 
             <label for="ciudad">Ciudad:</label>
-            <input type="text" id="ciudad" value="San justo" disabled>
+            <input type="text" name="ciudad" id="ciudad" value="<?php echo $_SESSION['usuario']['ciudad']; ?>">
 
             <label for="pais">País:</label>
-            <input type="text" id="pais" value="Argentina" disabled>
-
-           <iframe  id="mapa" class="mapa" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13125.456632530742!2d-58.5628052!3d-34.6707576!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcc62cc3ef7083%3A0x8867107f425fade5!2sUniversidad%20Nacional%20de%20La%20Matanza!5e0!3m2!1ses-419!2sar!4v1729111178631!5m2!1ses-419!2sar" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <input type="text" name="pais" id="pais" value="<?php echo $_SESSION['usuario']['pais']; ?>">
 
             <label for="genero">Género:</label>
-            <select id="genero" disabled>
-                <option value="masculino">Masculino</option>
-                <option value="femenino">Femenino</option>
-                <option value="otro">Prefiero no decirlo</option>
+            <select name="genero" id="genero">
+                <option value="masculino" <?php if ($_SESSION['usuario']['genero'] == 'masculino') echo 'selected'; ?>>Masculino</option>
+                <option value="femenino" <?php if ($_SESSION['usuario']['genero'] == 'femenino') echo 'selected'; ?>>Femenino</option>
+                <option value="otro" <?php if ($_SESSION['usuario']['genero'] == 'otro') echo 'selected'; ?>>Prefiero no decirlo</option>
             </select>
 
             <label for="email">Email:</label>
-            <input type="email" id="email" value="juan.perez@mail.com" disabled>
+            <input type="email" name="email" id="email" value="<?php echo $_SESSION['usuario']['email']; ?>">
 
-            <label for="contrasena">Contraseña:</label>
-            <input type="password" id="contrasena" value="12345Juan*" disabled>
-
-            <button type="button" id="editarBtn">Editar</button>
-            <button type="submit" id="guardarBtn" disabled>Guardar</button>
+            <button type="submit" id="guardarBtn">Guardar</button>
         </div>
     </form>
 </div>
