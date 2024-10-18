@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="perfil">
-
+    <a href="#" class="back">Volver</a>
     <div class="foto_y_nombre">
         <img src="../public/image/<?php echo $_SESSION['usuario']['foto']; ?>" alt="Foto de perfil" class="foto-perfil">
         <h1 class="nombre-usuario"><?php echo $_SESSION['usuario']['nombre']; ?></h1>

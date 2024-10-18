@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="perfil">
-
+    <a href="../view/lobby-generico.php" class="back">Volver</a>
     <div class="foto_y_nombre">
         <img src="../public/image/juan_perez.jpg" alt="Foto de perfil" class="foto-perfil">
         <h1 class="nombre-usuario">Juan</h1>
