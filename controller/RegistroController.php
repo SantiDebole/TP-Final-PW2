@@ -22,7 +22,7 @@ class RegistroController{
         //validar semantica del formulario
         $nombre_completo= $_POST['nombre_completo'];
         $fecha_nacimiento= $_POST['fecha_nacimiento'];
-        $genero= $_POST['genero'];
+        $genero= isset($_POST['genero'])?$_POST['genero']:'';
         $email= $_POST['email'];
         $usuario= $_POST['usuario'];
         $password= $_POST['password'];
@@ -72,11 +72,10 @@ class RegistroController{
         ];
 
 
-
         $data['registro'] = $this->model->registrar($datos_usuario);
 
 
-        $this->presenter->show('registro',$data);
+        $this->presenter->show('registroFinalizado',$data);
     }
 
 
