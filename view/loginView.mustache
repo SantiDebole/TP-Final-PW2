@@ -52,6 +52,9 @@
             <div class="text-center mt-3">
                 <a href="#">Registrarse</a>
             </div>
+            {{#auth_error}}
+            <span><p>Usuario y/o contraseña incorrectos</p></span>
+            {{/auth_error}}
         </div>
     </div>
 </div>

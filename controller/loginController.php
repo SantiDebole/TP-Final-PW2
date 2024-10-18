@@ -14,12 +14,11 @@ class LoginController{
     public function validate(){
         $username = $_POST['username'];
         $password = $_POST['password'];
-        $usuario = $this->model->validateLogin($username, $password);
-        if($usuario){
-            $this->presenter->render("./view/lobby.mustache");
+        $esValido = $this->model->validateLogin($username, $password);
+        if($esValido){
+            $this->presenter->render("./view/lobby.mustache",["loggedUserId" => $_SESSION["loggedUserId"]]);
         }else{
-            header("location: /tp-final-pw2/login/list");
-            exit();
+            $this->presenter->render("./view/loginView.mustache",["auth_error" => $_SESSION["auth_error"]]);
         }
 
     }
