@@ -46,6 +46,15 @@ class Configuration
         return new LoginModel($this->getDatabase());
     }
 
+    private function getPerfilController(){
+        return new PerfilController($this->getPerfilModel(),$this->getPresenter);
+    }
+
+    private function getPerfilModel(){
+        return new PerfilModel($this->getDatabase());
+    }
+
+
 
     ///CONTROLADOR REGISTRO
     public function getRegistroController()

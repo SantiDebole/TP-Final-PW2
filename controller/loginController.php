@@ -16,7 +16,7 @@ class LoginController{
         $password = $_POST['password'];
         $esValido = $this->model->validateLogin($username, $password);
         if($esValido){
-            $this->presenter->show("lobby",["loggedUserId" => $_SESSION["loggedUserId"]]);
+            $this->presenter->show("lobby",["loggedUserId" => $_SESSION["loggedUserId"],"username" => $username]);
         }else{
             $this->presenter->show("login",["auth_error" => $_SESSION["auth_error"]]);
         }

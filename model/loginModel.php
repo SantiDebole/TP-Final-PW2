@@ -1,6 +1,5 @@
 <?php
 
-
 class LoginModel {
     private $db;
 
