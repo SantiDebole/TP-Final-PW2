@@ -4,6 +4,8 @@ include_once ("./helper/MustachePresenter.php");
 include_once ("./helper/Database.php");
 include_once ("./helper/Router.php");
 
+include_once ("./controller/loginController.php");
+include_once ("./model/loginModel.php");
 
 include_once ("./controller/RegistroController.php");
 
@@ -12,13 +14,20 @@ include_once ("./model/RegistroModel.php");
 include_once('./vendor/autoload.php');
 class Configuration
 {
-    public function __construct(){
+    public function __construct()
+    {
 
+
+    }
+
+    public function getRouter(){
+        return new Router($this,"getLoginController", "list");
     }
 
     public function getDatabase(){
         $config = parse_ini_file("./configuration/config.ini");
         return new Database($config['host'], $config['username'], $config['password'], $config['database'], $config['port']);
+
 
     }
 
@@ -26,11 +35,15 @@ class Configuration
     {
         return new MustachePresenter("./view/template");
     }
+    // getCONTROLLERS
+    public function getLoginController(){
+        return new LoginController($this->getLoginModel(),$this->getPresenter());
+    }
 
-    //OTROS
-    private static function getConfig()
-    {
-        return parse_ini_file("configuration/config.ini");
+
+    // getMODELS
+    private function getLoginModel(){
+        return new LoginModel($this->getDatabase());
     }
 
 
@@ -43,11 +56,6 @@ class Configuration
     ///MODELO REGISTRO
     public function getRegistroModel(){
         return new RegistroModel($this->getDatabase());
-    }
-
-    public function getRouter(){
-
-        return new Router($this,"getRegistroController", "listar"); //le paso el objeto configuration con un metodo predeterminado
     }
 
 

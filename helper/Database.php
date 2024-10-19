@@ -2,6 +2,7 @@
 
 class Database {
 
+
     public $connection;
 
     public function __construct($servername, $username, $password, $database, $port) {
@@ -38,6 +39,14 @@ class Database {
 
     }
 
+    public function getUser($username){
+        $sql = "SELECT * FROM usuario WHERE nombre_completo = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
+    }
+
 
 
 
@@ -45,3 +54,9 @@ class Database {
 
 
 ?>
+
+
+
+
+
+
