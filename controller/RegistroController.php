@@ -28,7 +28,7 @@ class RegistroController{
         $password= $_POST['password'];
         $rol = "ur";
         $repeat_password =$_POST['repeat_password'];
-        $foto_perfil = isset($_POST['foto_perfil'])?$_POST['foto_perfil']:'';
+        $foto_perfil = isset($_FILES['foto_perfil'])?$_FILES['foto_perfil']:'';
         $pais = $_POST['pais'];
         $ciudad = $_POST['ciudad'];
 
@@ -50,7 +50,9 @@ class RegistroController{
         echo "\nRepetir contraseña: ";
         var_dump($repeat_password);
         echo "\nFoto de perfil: ";
-        var_dump($foto_perfil);  // Archivo subido
+        var_dump($foto_perfil);
+        echo "\n files: ";
+        var_dump($_FILES);
         echo "\nPaís: ";
         var_dump($pais);
         echo "\nCiudad: ";
