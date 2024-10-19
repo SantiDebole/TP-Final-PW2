@@ -12,6 +12,11 @@ class RegistroModel
 
     public function registrar($datos_usuario)
     {
+        $validacionPasswordSeanIguales = $this->validarPassword($datos_usuario['password'], $datos_usuario['repeat_password']);
+        if(strcmp($validacionPasswordSeanIguales, "password invalida")==0) {
+            return "Las password no son iguales";
+        }
+
         $validacionUsuario = $this->validarUsuario($datos_usuario['usuario']);
         if($validacionUsuario == true){
             return "Usuario ya existente";
@@ -173,6 +178,18 @@ class RegistroModel
                 echo "Error al subir la imagen.";
                 exit();
             }
+        }
+
+    }
+
+    private function validarPassword($password, $repeat_password)
+
+    {
+
+        if(strcmp($password, $repeat_password) == 0) {
+            return "password valida";
+        }else{
+            return "password invalida";
         }
 
     }

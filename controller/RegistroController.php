@@ -28,7 +28,7 @@ class RegistroController{
         $password= $_POST['password'];
         $rol = "ur";
         $repeat_password =$_POST['repeat_password'];
-        $foto_perfil = isset($_FILES['foto_perfil'])?$_FILES['foto_perfil']:'';
+        $foto_perfil = isset($_FILES['foto_perfil'])?$_FILES['foto_perfil']:$_POST['foto_perfil'];
         $pais = $_POST['pais'];
         $ciudad = $_POST['ciudad'];
 
