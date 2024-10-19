@@ -9,9 +9,10 @@ class LoginModel {
     }
 
     public function validateLogin($username, $password){
-        $user = $this->db->getUser($username);
+        $user = $this->getUser($username);
+        var_dump($user);
         if($user){
-            if($password === $user["contrasena"]){
+            if($password === $user["password"]){
                 if(isset($_SESSION["auth_error"])){
                     unset($_SESSION["auth_error"]);
                 }
@@ -21,5 +22,13 @@ class LoginModel {
         }
         $_SESSION["auth_error"] = 1;
         return false;
+    }
+
+    public function getUser($username){
+        $sql = "SELECT * FROM usuario WHERE usuario = ?";
+        $stmt = $this->db->connection->prepare($sql);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
     }
 }

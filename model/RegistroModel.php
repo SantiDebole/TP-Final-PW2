@@ -38,14 +38,14 @@ class RegistroModel
         // Verificar si la preparación fue exitosa
         if ($stmt) {
             // Enlazar parámetros (s: string, d: double, i: integer, b: blob)
-            $hashed_password = password_hash($datos_usuario['password'], PASSWORD_DEFAULT);
+            //$hashed_password = password_hash($datos_usuario['password'], PASSWORD_DEFAULT);
             $stmt->bind_param("ssssssssss",
                 $datos_usuario['nombre_completo'],
                 $datos_usuario['fecha_nacimiento'],
                 $datos_usuario['genero'],
                 $datos_usuario['email'],
                 $datos_usuario['usuario'],
-                $hashed_password,
+                $datos_usuario['password'],
                 $datos_usuario['rol'],
                 $datos_usuario['foto_perfil']['name'],
                 $datos_usuario['pais'],

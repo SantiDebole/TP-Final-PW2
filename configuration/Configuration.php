@@ -21,7 +21,7 @@ class Configuration
     }
 
     public function getRouter(){
-        return new Router($this,"getLoginController", "list");
+        return new Router($this,"getLoginController", "listar");
     }
 
     public function getDatabase(){
