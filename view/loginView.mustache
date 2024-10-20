@@ -12,26 +12,35 @@
 {{> header}}
 
 <!-- Login Form -->
-<div class="container mt-5">
+<div class="container-fluid mt-5">
     <div class="row justify-content-center">
         <div class="col-10 col-md-6 col-lg-4">
-            <h2 class="text-center mb-4">Iniciar Sesión</h2>
-            <form action="/tp-final-pw2/login/validate" method="post">
-                <div class="mb-3">
+            <form class="mx-auto " action="/tp-final-pw2/login/validate" method="post">
+                <h4 class="text-center mb-4">Iniciar Sesión</h4>
+
+                <div class="mb-3 mt-5">
                     <label for="username" class="form-label">Usuario</label>
                     <input type="text" class="form-control" name="username" id="username" placeholder="Ingresa tu usuario" required>
                 </div>
+
                 <div class="mb-3">
                     <label for="password" class="form-label">Contraseña</label>
                     <input type="password" class="form-control" name="password" id="password" placeholder="Ingresa tu contraseña" required>
+                    <div id="emailHelp" class="form-text mt-3">
+                        <a href="#" class="text-decoration-none form-label">¿Olvidaste tu contraseña?</a>
+                    </div>
                 </div>
+
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                    <button type="submit" class="btn btn-primary mt-4 ">Iniciar Sesión</button>
+                </div>
+
+                <div class="text-center mt-3 ">
+                    <a href="#" class="text-decoration-none form-label">Registrarse</a>
                 </div>
             </form>
-            <div class="text-center mt-3">
-                <a href="#">Registrarse</a>
-            </div>
+
+
             {{#auth_error}}
                 <span class="text-danger"><p>Usuario y/o contraseña incorrectos</p></span>
             {{/auth_error}}
