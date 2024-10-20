@@ -9,7 +9,7 @@ class LoginModel {
 
     public function validateLogin($username, $password){
         $user = $this->getUser($username);
-        var_dump($user);
+
         if($user){
             if($password === $user["password"]){
                 if(isset($_SESSION["auth_error"])){

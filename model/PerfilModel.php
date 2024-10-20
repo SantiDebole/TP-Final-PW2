@@ -1,6 +1,6 @@
 <?php
 
-class LoginModel
+class PerfilModel
 {
     private $db;
 
@@ -9,13 +9,22 @@ class LoginModel
         $this->db = $db;
     }
 
-    public function mostrarPerfil() {
+    public function traerPerfil() {
         global $pdo;
 
-        if (!isset($_SESSION['usuario'])) {
+        /*if (!isset($_SESSION['usuario'])) {
             header('Location: login.php');
             exit;
-        }
+        }*/
+
+        $loggedUserId = $_SESSION["loggedUserId"] ? $_SESSION["loggedUserId"] : null;
+
+        $data = [
+            'lobby' => [
+                "loggedUserId" => $loggedUserId,
+                "username" => $username
+            ]
+        ];
 
         $usuarioId = $_SESSION['usuario']['id'];
         $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE id = ?");

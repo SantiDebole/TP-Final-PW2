@@ -1,6 +1,5 @@
 <?php
-session_start();
-require './data/db.php'; // Incluir la conexión a la base de datos
+
 
 class PerfilController {
 
@@ -16,7 +15,7 @@ class PerfilController {
 
     public function listar(){
 
-        $data = [];
+        $data['perfil'] = $this->model->traerPerfil();
 
         $this->presenter->show('perfil',$data);
     }

@@ -12,11 +12,24 @@ class LoginController{
     }
 
     public function validate(){
+        var_dump($_POST);
         $username = $_POST['username'];
         $password = $_POST['password'];
         $esValido = $this->model->validateLogin($username, $password);
         if($esValido){
-            $this->presenter->show("lobby",["loggedUserId" => $_SESSION["loggedUserId"],"username" => $username]);
+            $loggedUserId = $_SESSION["loggedUserId"] ? $_SESSION["loggedUserId"] : null;
+
+            $data = [
+                'lobby' => [
+                    "loggedUserId" => $loggedUserId,
+                    "username" => $username
+                ]
+            ];
+            $this->presenter->show("lobby", $data);
+
+            //header("Location: /lobby/listar");
+
+
         }else{
             $this->presenter->show("login",["auth_error" => $_SESSION["auth_error"]]);
         }
