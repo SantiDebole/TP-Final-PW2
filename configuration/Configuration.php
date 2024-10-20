@@ -41,7 +41,7 @@ class Configuration
 
     }
 
-    private function getPresenter()
+    public function getPresenter()
     {
         return new MustachePresenter("./view/template");
     }
@@ -51,7 +51,7 @@ class Configuration
     }
 
     // getMODELS
-    private function getLoginModel(){
+    public function getLoginModel(){
         return new LoginModel($this->getDatabase());
     }
 
@@ -59,15 +59,15 @@ class Configuration
         return new LoginController($this->getLobbyModel(),$this->getPresenter());
     }
 
-    private function getLobbyModel(){
+    public function getLobbyModel(){
         return new LobbyModel($this->getDatabase());
     }
 
-    private function getPerfilController(){
+    public function getPerfilController(){
         return new PerfilController($this->getPerfilModel(),$this->getPresenter());
     }
 
-    private function getPerfilModel(){
+    public function getPerfilModel(){
         return new PerfilModel($this->getDatabase());
     }
 

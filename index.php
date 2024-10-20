@@ -1,7 +1,5 @@
 <?php
 session_start();
-echo 'esta es la sesion:';
-var_dump($_SESSION);
 include_once ("./configuration/Configuration.php");
 
 $configuration = new Configuration();

@@ -1,25 +1,14 @@
-
-<div class="container">
-
-    <img src="../public/image/logo.png" class="logo">
-
-    <?php
-    include '../controllers/UserController.php';
-    $userController = new LobbyController($conn);
-
-    $user = $userController->showUser(1);
-    ?>
-
-    <div class="nombre_y_puntaje">
-        <a href="perfil-generico.php"><h1 id="user-name"><?php echo htmlspecialchars($user['nombre']); ?></h1></a>
-        <p>Puntaje: <?php echo htmlspecialchars($user['puntaje']); ?></p>
-    </div>
-
-    <div class="buttons">
-        <button class="btn">Crear partida</button>
-        <button class="btn">Ver ranking</button>
-        <button class="btn">Ver partidas anteriores</button>
-        <button class="btn">Crear nuevas preguntas</button>
+<div class="flex-grow-1 ">
+    <div class="container mt-5 mb-5 bg-light">
+        {{#perfil}}
+            <a href="/lobby/listar">Ir a al lobby</a>
+            <h1>Bienvenido usuario con el id: {{loggedUserId}}</h1>
+            <h2>Usuario: {{usuario}}</h2>
+            <h3>Nombre completo: {{nombre_completo}}</h3>
+            <h4>Fecha nacimiento: {{fecha_nacimiento}}</h4>
+            <h5>Genero: {{genero}}</h5>
+            <h6>Email: {{email}}</h6>
+            <h6>Pais: {{pais}}</h6>
+        {{/perfil}}
     </div>
 </div>
-

@@ -2,41 +2,41 @@
 
 class PerfilModel
 {
-    private $db;
+    private $database;
 
-    public function __construct($db)
+    public function __construct($database)
     {
-        $this->db = $db;
+        $this->database = $database;
     }
 
     public function traerPerfil() {
-        global $pdo;
+        //global $pdo;
 
         /*if (!isset($_SESSION['usuario'])) {
             header('Location: login.php');
             exit;
         }*/
 
-        $loggedUserId = $_SESSION["loggedUserId"] ? $_SESSION["loggedUserId"] : null;
+        $usuarioId = $_SESSION["loggedUserId"];
+        $sql= "SELECT * FROM usuario WHERE id = ?";
+        $stmt = $this->database->connection->prepare($sql);
+        $stmt->bind_param("i", $usuarioId);
+        $stmt->execute();
+        // Obtener el resultado
+        $result = $stmt->get_result();
+        $usuario = $result->fetch_assoc(); // Esto devuelve un array asociativo
 
-        $data = [
-            'lobby' => [
-                "loggedUserId" => $loggedUserId,
-                "username" => $username
-            ]
-        ];
+        // Si quieres depurar o ver el resultado
+        var_dump($usuario);
 
-        $usuarioId = $_SESSION['usuario']['id'];
-        $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE id = ?");
-        $stmt->execute([$usuarioId]);
-        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $usuario;
 
-        if ($usuario) {
+        /*if ($usuario) {
             $_SESSION['usuario'] = $usuario; // Guardar datos actualizados en sesión
             include 'perfil.php';
         } else {
             echo "Usuario no encontrado.";
-        }
+        }*/
     }
 
     public function editarPerfil() {
