@@ -12,24 +12,51 @@ class RegistroModel
 
     public function registrar($datos_usuario)
     {
+        $errores=0;
+        $datos_usuario['errores'] = [];
+        $datos_usuario['nombreArchivo'] = [];
+
+// Validar que las contraseñas sean iguales
         $validacionPasswordSeanIguales = $this->validarPassword($datos_usuario['password'], $datos_usuario['repeat_password']);
-        if(strcmp($validacionPasswordSeanIguales, "password invalida")==0) {
-            return "Las password no son iguales";
+        if (strcmp($validacionPasswordSeanIguales, "password invalida") == 0) {
+            $errores=1;
+            $datos_usuario['errores'][] = "Elija contraseña correctamente"; // Agrega el mensaje de error
         }
 
+// Validar si el usuario ya existe
         $validacionUsuario = $this->validarUsuario($datos_usuario['usuario']);
-        if($validacionUsuario == true){
-            return "Usuario ya existente";
+        if ($validacionUsuario) {
+            $errores=1;
+            $datos_usuario['errores'][] = "Usuario ya existente"; // Agrega el mensaje de error
         }
+
+
         $validacionEmail = $this->validarEmail($datos_usuario['email']);
-        if($validacionEmail == true){
-            return "Email ya existente";
+        if ($validacionEmail) {
+            $errores=1;
+            $datos_usuario['errores'][] = "Email ya existente"; // Agrega el mensaje de error
         }
+        if($errores==1) return $datos_usuario;
 
         //si el guardado de foto falla, devuelve un error sino devuelve el nombre de la imagen para guardarla en la bd
         $guardadoDeFotoDePerfil = $this->guardarFotoDePerfil($datos_usuario['foto_perfil']);
+
         //envia el mail
 
+        $nombreArchivo = md5($datos_usuario['usuario']);
+        $rutaTemporal = "./data/" . $nombreArchivo . ".json";
+        var_dump($rutaTemporal);
+        $this->crearArchivoTemporalDeConfirmacion($rutaTemporal, $datos_usuario);
+       $datos_usuario['nombreArchivo']=$nombreArchivo;
+        return $datos_usuario;
+
+
+    }
+    public function emailConfirmacion($rutaArchivo)
+    {
+        $datos_usuario=file_get_contents($rutaArchivo);//carga los datos del archivo
+        $datos_usuario=json_decode($datos_usuario, true); //decodifica los datos en un array asociativo
+        unlink($rutaArchivo); //borra el archivo inicial
         $sql = "INSERT INTO usuario (nombre_completo, fecha_nacimiento, genero, email, usuario, password, rol, foto_perfil, pais, ciudad) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -54,16 +81,13 @@ class RegistroModel
             );
 
 
-
-
-
             if ($stmt->execute()) {
 
-                $registro="exitoso";
+                $registro = "exitoso";
 
 
             } else {
-                $registro="fallo";
+                $registro = "fallo";
 
 
             }
@@ -187,7 +211,7 @@ class RegistroModel
 
     {
 
-        if(strcmp($password, $repeat_password) == 0) {
+        if($password!='' &&strcmp($password, $repeat_password) == 0) {
             return "password valida";
         }else{
             return "password invalida";
@@ -195,4 +219,10 @@ class RegistroModel
 
     }
 
+    private function crearArchivoTemporalDeConfirmacion($ruta, $datos)
+    {
+        $json=json_encode($datos, JSON_PRETTY_PRINT);
+        file_put_contents($ruta, $json);
+
+    }
 }
