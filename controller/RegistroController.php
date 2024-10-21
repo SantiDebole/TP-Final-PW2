@@ -77,9 +77,18 @@ class RegistroController{
         $data['registro'] = $this->model->registrar($datos_usuario);
 
 
-        $this->presenter->show('registroFinalizado',$data);
+        $this->presenter->show('validarEmail',$data);
     }
+    public function validarEmail(){
+      if(isset($_POST['hash'])){
+        $rutaArchivo='./data/'.$_POST['hash'].'.json';
+             if(file_exists($rutaArchivo)){ $data['registro']=$this->model->emailConfirmacion($rutaArchivo);
+               } else $data['registro']="error en la confirmacion";
+                } else $data['registro']="error en la confirmacion";
 
+        $this->presenter->show('registroFinalizado', $data);
+
+    }
 
 
 }

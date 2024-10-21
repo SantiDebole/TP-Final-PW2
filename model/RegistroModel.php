@@ -12,23 +12,35 @@ class RegistroModel
 
     public function registrar($datos_usuario)
     {
+
         $validacionPasswordSeanIguales = $this->validarPassword($datos_usuario['password'], $datos_usuario['repeat_password']);
-        if(strcmp($validacionPasswordSeanIguales, "password invalida")==0) {
+        if (strcmp($validacionPasswordSeanIguales, "password invalida") == 0) {
             return "Las password no son iguales";
         }
 
         $validacionUsuario = $this->validarUsuario($datos_usuario['usuario']);
-        if($validacionUsuario == true){
+        if ($validacionUsuario == true) {
             return "Usuario ya existente";
         }
         $validacionEmail = $this->validarEmail($datos_usuario['email']);
-        if($validacionEmail == true){
+        if ($validacionEmail == true) {
             return "Email ya existente";
         }
 
         //si el guardado de foto falla, devuelve un error sino devuelve el nombre de la imagen para guardarla en la bd
         $guardadoDeFotoDePerfil = $this->guardarFotoDePerfil($datos_usuario['foto_perfil']);
+        $nombreArchivo = md5($datos_usuario['usuario']);
+        $rutaTemporal = "./data/" . $nombreArchivo . ".json";
+        var_dump($rutaTemporal);
+        $this->crearArchivoTemporalDeConfirmacion($rutaTemporal, $datos_usuario);
+        return $nombreArchivo;
 
+    }
+    public function emailConfirmacion($rutaArchivo)
+    {
+        $datos_usuario=file_get_contents($rutaArchivo);//carga los datos del archivo
+        $datos_usuario=json_decode($datos_usuario, true); //decodifica los datos en un array asociativo
+        unlink($rutaArchivo); //borra el archivo inicial
         $sql = "INSERT INTO usuario (nombre_completo, fecha_nacimiento, genero, email, usuario, password, rol, foto_perfil, pais, ciudad) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -53,16 +65,13 @@ class RegistroModel
             );
 
 
-
-
-
             if ($stmt->execute()) {
 
-                $registro="exitoso";
+                $registro = "exitoso";
 
 
             } else {
-                $registro="fallo";
+                $registro = "fallo";
 
 
             }
@@ -194,4 +203,10 @@ class RegistroModel
 
     }
 
+    private function crearArchivoTemporalDeConfirmacion($ruta, $datos)
+    {
+        $json=json_encode($datos, JSON_PRETTY_PRINT);
+        file_put_contents($ruta, $json);
+
+    }
 }
