@@ -77,28 +77,25 @@ class RegistroController{
     }
     private function cargaDeDatosParaRenderizacionDeFormulario ($data)
     {
-        $datos = [
-            'nombre_completo' => '',
-            'fecha_nacimiento' => '',
-            'genero' => '',
-            'email' => '',
-            'usuario' => '',
-            'pais' => '',
-            'ciudad' => '',
-            'errores' => [] // Inicialmente no hay errores
-        ];
-        if(isset($data['nombre_completo']))$datos['nombre_completo']=$data['nombre_completo'];
-        if(isset($data['fecha_nacimiento']))$datos['fecha_nacimiento']=$data['fecha_nacimiento'];
-        if(isset($data['genero']))$datos['genero']=$data['genero'];
-        if(isset($data['email']))$datos['email']=$data['email'];
-        if(isset($data['usuario']))$datos['usuario']=$data['usuario'];
-        if(isset($data['pais']))$datos['pais']=$data['pais'];
-        if(isset($data['ciudad']))$datos['ciudad']=$data['ciudad'];
-        if(isset($data['nombre_completo']))$datos['nombre_completo']=$data['nombre_completo'];
+        $datos = [];
 
-        if (isset($data['errores']) && is_array($data['errores'])) {
-            $datos['errores'] = array_merge($datos['errores'], $data['errores']);
+        $campos = [
+            'nombre_completo',
+            'fecha_nacimiento',
+            'genero',
+            'email',
+            'usuario',
+            'pais',
+            'ciudad',
+            'errores'
+        ];
+
+        foreach ($campos as $campo) {
+            if (isset($data[$campo])) {
+                $datos[$campo] = $data[$campo];
+            }else $datos[$campo]='';
         }
+
         var_dump($datos);
 return $datos;
     }
