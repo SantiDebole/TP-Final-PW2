@@ -14,18 +14,16 @@ class LobbyController {
 
         // Obtener los valores guardados en la sesión
         $loggedUserId = $_SESSION["loggedUserId"];
+        $data = $_SESSION["lobby"];
 
         var_dump($loggedUserId);
         //var_dump($username);
 
-            $data = [
-                'lobby' => [
-                    "loggedUserId" => $loggedUserId
 
-                ]
-            ];
-            $this->presenter->show("lobby", $data);
+        $this->presenter->show("lobby", $data);
     }
+
+
 
 
     public function getUserById($id) {

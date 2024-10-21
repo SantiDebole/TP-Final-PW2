@@ -25,14 +25,27 @@ class LoginController{
                     "username" => $username
                 ]
             ];
-            $this->presenter->show("lobby", $data);
+            $_SESSION['lobby'] = $data;
 
-            //header("Location: /lobby/listar");
+            //$_SESSION['lobby']['username']
 
+            //$this->presenter->show("lobby", $data);
+
+           header("Location: /lobby/listar");
+           exit();
 
         }else{
             $this->presenter->show("login",["auth_error" => $_SESSION["auth_error"]]);
         }
+
+    }
+
+    public function logout(){
+
+        session_destroy();
+        header("Location: /login/listar");
+        exit();
+
 
     }
 

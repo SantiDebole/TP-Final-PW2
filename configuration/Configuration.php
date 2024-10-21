@@ -56,7 +56,7 @@ class Configuration
     }
 
     public function getLobbyController(){
-        return new LoginController($this->getLobbyModel(),$this->getPresenter());
+        return new LobbyController($this->getLobbyModel(),$this->getPresenter());
     }
 
     public function getLobbyModel(){
