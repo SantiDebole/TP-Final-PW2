@@ -12,20 +12,31 @@ class RegistroModel
 
     public function registrar($datos_usuario)
     {
+        $errores=0;
+        $datos_usuario['errores'] = [];
+        $datos_usuario['nombreArchivo'] = [];
 
+// Validar que las contraseñas sean iguales
         $validacionPasswordSeanIguales = $this->validarPassword($datos_usuario['password'], $datos_usuario['repeat_password']);
         if (strcmp($validacionPasswordSeanIguales, "password invalida") == 0) {
-            return "Las password no son iguales";
+            $errores=1;
+            $datos_usuario['errores'][] = "Elija contraseña correctamente"; // Agrega el mensaje de error
         }
 
+// Validar si el usuario ya existe
         $validacionUsuario = $this->validarUsuario($datos_usuario['usuario']);
-        if ($validacionUsuario == true) {
-            return "Usuario ya existente";
+        if ($validacionUsuario) {
+            $errores=1;
+            $datos_usuario['errores'][] = "Usuario ya existente"; // Agrega el mensaje de error
         }
+
+
         $validacionEmail = $this->validarEmail($datos_usuario['email']);
-        if ($validacionEmail == true) {
-            return "Email ya existente";
+        if ($validacionEmail) {
+            $errores=1;
+            $datos_usuario['errores'][] = "Email ya existente"; // Agrega el mensaje de error
         }
+        if($errores==1) return $datos_usuario;
 
         //si el guardado de foto falla, devuelve un error sino devuelve el nombre de la imagen para guardarla en la bd
         $guardadoDeFotoDePerfil = $this->guardarFotoDePerfil($datos_usuario['foto_perfil']);
@@ -33,7 +44,8 @@ class RegistroModel
         $rutaTemporal = "./data/" . $nombreArchivo . ".json";
         var_dump($rutaTemporal);
         $this->crearArchivoTemporalDeConfirmacion($rutaTemporal, $datos_usuario);
-        return $nombreArchivo;
+       $datos_usuario['nombreArchivo']=$nombreArchivo;
+        return $datos_usuario;
 
     }
     public function emailConfirmacion($rutaArchivo)
@@ -195,7 +207,7 @@ class RegistroModel
 
     {
 
-        if(strcmp($password, $repeat_password) == 0) {
+        if($password!='' &&strcmp($password, $repeat_password) == 0) {
             return "password valida";
         }else{
             return "password invalida";

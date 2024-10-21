@@ -13,7 +13,8 @@ class RegistroController{
 
     public function listar(){
 
-        $data = [];
+        $datos=[];
+        $data = $this->cargaDeDatosParaRenderizacionDeFormulario($datos);
 
         $this->presenter->show('registro',$data);
     }
@@ -32,34 +33,7 @@ class RegistroController{
         $pais = $_POST['pais'];
         $ciudad = $_POST['ciudad'];
 
-        // Var_dump prolijo
-        echo "<pre>";
-        echo "Datos recibidos del formulario:\n";
-        echo "Nombre completo: ";
-        var_dump($nombre_completo);
-        echo "\nFecha de nacimiento: ";
-        var_dump($fecha_nacimiento);
-        echo "\nGénero: ";
-        var_dump($genero);
-        echo "\nEmail: ";
-        var_dump($email);
-        echo "\nUsuario: ";
-        var_dump($usuario);
-        echo "\nContraseña: ";
-        var_dump($password);
-        echo "\nRepetir contraseña: ";
-        var_dump($repeat_password);
-        echo "\nFoto de perfil: ";
-        var_dump($foto_perfil);
-        echo "\n files: ";
-        var_dump($_FILES);
-        echo "\nPaís: ";
-        var_dump($pais);
-        echo "\nCiudad: ";
-        var_dump($ciudad);
-        echo "</pre>";
-
-        $datos_usuario = [
+             $datos_usuario = [
             'nombre_completo' => $nombre_completo,
             'fecha_nacimiento' => $fecha_nacimiento,
             'genero' => $genero,
@@ -70,14 +44,26 @@ class RegistroController{
             'repeat_password' => $repeat_password,
             'foto_perfil' => $foto_perfil,
             'pais' => $pais,
-            'ciudad' => $ciudad,
+            'ciudad' => $ciudad
         ];
 
 
-        $data['registro'] = $this->model->registrar($datos_usuario);
+
+        $data = $this->model->registrar($datos_usuario);
+        /*var_dump($data);
+        var_dump($data['errores']);*/
+        if(empty($data['errores'])){
+            $retorno['registro']=$data['nombreArchivo'];
+            $this->presenter->show('validarEmail',$retorno);
+        }else{
+
+            $datos_usuario['errores']= $data['errores'];
+            $data = $this->cargaDeDatosParaRenderizacionDeFormulario($datos_usuario);
+            $this->presenter->show('registro',$data);
+        }
 
 
-        $this->presenter->show('validarEmail',$data);
+
     }
     public function validarEmail(){
       if(isset($_POST['hash'])){
@@ -89,6 +75,33 @@ class RegistroController{
         $this->presenter->show('registroFinalizado', $data);
 
     }
+    private function cargaDeDatosParaRenderizacionDeFormulario ($data)
+    {
+        $datos = [
+            'nombre_completo' => '',
+            'fecha_nacimiento' => '',
+            'genero' => '',
+            'email' => '',
+            'usuario' => '',
+            'pais' => '',
+            'ciudad' => '',
+            'errores' => [] // Inicialmente no hay errores
+        ];
+        if(isset($data['nombre_completo']))$datos['nombre_completo']=$data['nombre_completo'];
+        if(isset($data['fecha_nacimiento']))$datos['fecha_nacimiento']=$data['fecha_nacimiento'];
+        if(isset($data['genero']))$datos['genero']=$data['genero'];
+        if(isset($data['email']))$datos['email']=$data['email'];
+        if(isset($data['usuario']))$datos['usuario']=$data['usuario'];
+        if(isset($data['pais']))$datos['pais']=$data['pais'];
+        if(isset($data['ciudad']))$datos['ciudad']=$data['ciudad'];
+        if(isset($data['nombre_completo']))$datos['nombre_completo']=$data['nombre_completo'];
 
+        if (isset($data['errores']) && is_array($data['errores'])) {
+            $datos['errores'] = array_merge($datos['errores'], $data['errores']);
+        }
+        var_dump($datos);
+return $datos;
+    }
 
 }
+
