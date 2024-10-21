@@ -1,3 +1,11 @@
-{{#loggedUserId}}
-    <h1>Bienvenido usuario con el id: {{loggedUserId}}</h1>
-{{/loggedUserId}}
+<div class="flex-grow-1 ">
+<div class="container mt-5 mb-5 bg-light">
+    {{#lobby}}
+        <a href="/login/logout">Logout</a>
+        <br>
+        <a href="/perfil/mostrarPerfil">Ir a mi perfil</a>
+        <h1>Bienvenido usuario con el id: {{loggedUserId}}</h1>
+        <h2>Usuario: {{username}}</h2>
+    {{/lobby}}
+</div>
+</div>
