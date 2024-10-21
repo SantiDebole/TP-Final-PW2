@@ -30,8 +30,8 @@ body {
 }
 
 .foto-perfil {
-    width: 100px;
-    height: 100px;
+    width: 15%;
+    height: auto;
     border-radius: 50%;
     margin-right: 20px;
 }
