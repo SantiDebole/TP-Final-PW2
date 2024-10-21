@@ -13,8 +13,28 @@ body {
     height: 100vh;
 }
 
+.enlace-ver-perfil{
+    display: flex;
+    flex-direction: column;
+}
+
+.foto-perfil{
+    width: 50px;
+}
+
+.encabezado{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+}
+
 .logo{
-    width: 40%;
+    width: 30%;
 }
 
 .container {
@@ -59,7 +79,7 @@ p {
 
 }
 
-.btn {
+button {
     background-color: #007BFF;
     color: white;
     border: none;
@@ -71,25 +91,12 @@ p {
     transition: background-color 0.3s;
 }
 
-.btn:hover {
+button:hover {
     background-color: #0056b3; /* Color al pasar el mouse */
 }
 
 /* Estilos para pantallas más grandes */
 @media (min-width: 600px) {
-    h1 {
-        font-size: 24px; /* Tamaño del nombre en pantallas grandes */
-    }
 
-    p {
-        font-size: 18px; /* Tamaño del puntaje en pantallas grandes */
-    }
-
-    .container {
-        width: 400px; /* Ancho fijo para pantallas grandes */
-    }
-    .logo{
-        width: 50%;
-    }
 
 }
