@@ -9,15 +9,19 @@ class PerfilModel
         $this->database = $database;
     }
 
-    public function traerPerfil() {
-        //global $pdo;
+    public function transformImagePath($usuario): array{
 
-        /*if (!isset($_SESSION['usuario'])) {
-            header('Location: login.php');
-            exit;
-        }*/
+
+        $usuario["foto_perfil"] = "/public/image/" .$usuario["foto_perfil"];
+
+
+        return $usuario;
+    }
+
+    public function traerPerfil() {
 
         $usuarioId = $_SESSION["loggedUserId"];
+
         $sql= "SELECT * FROM usuario WHERE id = ?";
         $stmt = $this->database->connection->prepare($sql);
         $stmt->bind_param("i", $usuarioId);
@@ -25,9 +29,23 @@ class PerfilModel
         // Obtener el resultado
         $result = $stmt->get_result();
         $usuario = $result->fetch_assoc(); // Esto devuelve un array asociativo
+        var_dump($usuario);
+
+
+
+       $usuario = $this->transformImagePath($usuario);
+
 
         // Si quieres depurar o ver el resultado
-        var_dump($usuario);
+        echo '<br>';
+        echo '<br>';
+        echo '<br>';
+        echo 'SOY LA FOTO DE PERFIL';
+
+        echo '<br>';
+
+        var_dump($usuario['foto_perfil']);
+
 
         return $usuario;
 

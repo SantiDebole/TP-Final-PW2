@@ -16,6 +16,7 @@ class LoginModel {
                     unset($_SESSION["auth_error"]);
                 }
                 $_SESSION["loggedUserId"] = $user["id"];
+                $_SESSION["loggedUsername"] = $user["usuario"];
                 return true;
             }
         }

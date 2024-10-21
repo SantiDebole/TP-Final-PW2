@@ -17,7 +17,7 @@ class LoginController{
         $password = $_POST['password'];
         $esValido = $this->model->validateLogin($username, $password);
         if($esValido){
-            $loggedUserId = $_SESSION["loggedUserId"] ? $_SESSION["loggedUserId"] : null;
+            $loggedUserId = $_SESSION["loggedUserId"];
 
             $data = [
                 'lobby' => [
