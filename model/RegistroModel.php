@@ -28,6 +28,7 @@ class RegistroModel
 
         //si el guardado de foto falla, devuelve un error sino devuelve el nombre de la imagen para guardarla en la bd
         $guardadoDeFotoDePerfil = $this->guardarFotoDePerfil($datos_usuario['foto_perfil']);
+        //envia el mail
 
         $sql = "INSERT INTO usuario (nombre_completo, fecha_nacimiento, genero, email, usuario, password, rol, foto_perfil, pais, ciudad) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
