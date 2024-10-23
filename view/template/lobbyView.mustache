@@ -1,11 +1,33 @@
 <div class="flex-grow-1 ">
 <div class="container mt-5 mb-5 bg-light">
     {{#lobby}}
-        <a href="/login/logout">Logout</a>
+        <a href="#">Logout</a>
         <br>
-        <a href="/perfil/mostrarPerfil">Ir a mi perfil</a>
+        <a href="#">Ir a mi perfil</a>
         <h1>Bienvenido usuario con el id: {{loggedUserId}}</h1>
         <h2>Usuario: {{username}}</h2>
+        <h2>Usuario: {{rol}}</h2>
     {{/lobby}}
 </div>
+
+    <h1>Bienvenido al Lobby</h1>
+
+    {{#isAdmin}}
+        <h2>Administrador</h2>
+        <a href="#">Dashboard Admin</a>
+        <a href="#">Gestionar Preguntas</a>
+    {{/isAdmin}}
+
+    {{#isEditor}}
+        <h2>Editor</h2>
+        <a href="#">Dashboard Editor</a>
+        <a href="#">Reportar Preguntas</a>
+    {{/isEditor}}
+
+    {{#isPlayer}}
+        <h2>Jugador</h2>
+        <a href="#">Jugar Partida</a>
+        <a href="#">Mis Partidas</a>
+    {{/isPlayer}}
+
 </div>
