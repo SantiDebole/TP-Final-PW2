@@ -1,54 +1,88 @@
 <?php
-/*PONER INCLUDES Y REQUIRES ACA*/
+
+//mustache
+include_once('./vendor/autoload.php');
+
+//helpers
 include_once ("./helper/MustachePresenter.php");
 include_once ("./helper/Database.php");
 include_once ("./helper/Router.php");
-include_once ("./vendor/mustache/mustache/src/Mustache/Autoloader.php");
-include_once ("./controller/loginController.php");
-include_once ("./model/loginModel.php");
+
+//model
+include_once ("./model/RegistroModel.php");
+include_once("./model/LoginModel.php");
+include_once ("./model/LobbyModel.php");
+include_once ("./model/PerfilModel.php");
+
+//controladores
+include_once("./controller/LoginController.php");
+include_once ("./controller/RegistroController.php");
+include_once ("./controller/LobbyController.php");
+include_once ("./controller/PerfilController.php");
+
+
+
 class Configuration
 {
-    private $db;
+    public function __construct()
+    {
 
-    public function __construct(){
-        $this->db = $this->getDatabase();
+
     }
 
+    public function getRouter(){
+        return new Router($this,"getRegistroController", "listar");
+    }
+
+    public function getDatabase(){
+        $config = parse_ini_file("./configuration/config.ini");
+        return new Database($config['host'], $config['username'], $config['password'], $config['database'], $config['port']);
+
+
+    }
+
+    public function getPresenter()
+    {
+        return new MustachePresenter("./view/template");
+    }
     // getCONTROLLERS
     public function getLoginController(){
         return new LoginController($this->getLoginModel(),$this->getPresenter());
     }
 
-
-
     // getMODELS
-    private function getLoginModel(){
-        return new LoginModel($this->db);
+    public function getLoginModel(){
+        return new LoginModel($this->getDatabase());
+    }
+
+    public function getLobbyController(){
+        return new LobbyController($this->getLobbyModel(),$this->getPresenter());
+    }
+
+    public function getLobbyModel(){
+        return new LobbyModel($this->getDatabase());
+    }
+
+    public function getPerfilController(){
+        return new PerfilController($this->getPerfilModel(),$this->getPresenter());
+    }
+
+    public function getPerfilModel(){
+        return new PerfilModel($this->getDatabase());
     }
 
 
-    // getHELPERS
-
-    private function getDatabase(){
-        $config = $this->getConfig();
-        return new Database($config["servername"], $config["username"], $config["password"], $config["dbname"]);
+    ///CONTROLADOR REGISTRO
+    public function getRegistroController()
+    {
+        return new RegistroController($this->getRegistroModel(), $this->getPresenter());
     }
 
-
-
-
-    public function getRouter(){
-        return new Router($this,"getLoginController", "list");
+    ///MODELO REGISTRO
+    public function getRegistroModel(){
+        return new RegistroModel($this->getDatabase());
     }
 
-    private function getPresenter(){
-        return new MustachePresenter("view/template");
-    }
-
-    //OTROS
-    private function getConfig(){
-        return parse_ini_file("./configuration/config.ini");
-    }
 
 
 }
