@@ -12,6 +12,8 @@ class PartidaController {
 
     public function jugar() {
         // Trae la pregunta
+        $idUsuario = $_SESSION['loggedUserId'];
+        $partida = $this->model->crearPartida($idUsuario);
         $pregunta = $this->model->traerPregunta();
 
         // Trae las respuestas asociadas a la pregunta

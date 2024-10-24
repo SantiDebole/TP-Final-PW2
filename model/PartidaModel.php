@@ -9,6 +9,38 @@ class PartidaModel
         $this->database = $database;
     }
 
+    public function crearPartida($idUsuario) {
+
+        // El estado inicial de la partida
+        $estado = 'activa';
+
+        // Preparar la consulta para insertar una nueva partida
+        // NOTA: No necesitamos especificar la columna de fecha porque se autocompletará con CURRENT_TIMESTAMP
+        $stmt = $this->database->connection->prepare("
+        INSERT INTO partida (estado, idUsuario) 
+        VALUES (?, ?)
+    ");
+
+        // Vincular los parámetros (estado es una cadena y idUsuario es un entero)
+        $stmt->bind_param("si", $estado, $idUsuario);
+
+        // Ejecutar la consulta
+        if ($stmt->execute()) {
+            // Obtener el ID de la partida recién creada
+            $partidaId = $stmt->insert_id;
+
+            // Cerrar la consulta
+            $stmt->close();
+
+            // Devolver el ID de la nueva partida
+            return $partidaId;
+        } else {
+            // Manejar el error si la inserción falla
+            $stmt->close();
+            return false;
+        }
+    }
+
     public function traerPregunta() {
         $stmt = $this->database->connection->prepare("SELECT id, descripcion FROM pregunta LIMIT 1");
         $stmt->execute();
