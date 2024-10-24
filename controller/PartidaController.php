@@ -38,6 +38,8 @@ class PartidaController
             exit();
         }else{
             // habria que cambiar el estado de la partida a inactivo..
+            $idPartida = $_SESSION["idPartida"];
+            $this->model->desactivarPartida($idPartida);
             // se destruye la variable de la sesion que contiene el id de la partida actual al finalizar la partida.
             unset($_SESSION["idPartida"]);
 

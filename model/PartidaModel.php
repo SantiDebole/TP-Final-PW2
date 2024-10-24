@@ -9,6 +9,14 @@ class PartidaModel
         $this->db = $db;
     }
 
+
+    public function desactivarPartida($idPartida){
+        $query = "UPDATE partida SET estado = 'inactivo' WHERE id = ?";
+        $stmt = $this->db->connection->prepare($query);
+        $stmt->bind_param("i",$idPartida);
+        $stmt->execute();
+    }
+
     public function crearPartida($idUsuario){
         $fecha = date('Y-m-d H:i:s');
         $estado = "Activo";
@@ -19,7 +27,7 @@ class PartidaModel
     }
 
     public function getPartida($idUsuario){
-        $query = "SELECT id FROM partida WHERE idUsuario = ?";
+        $query = "SELECT id FROM partida WHERE idUsuario = ? AND estado = 'activo'";
         $stmt = $this->db->connection->prepare($query);
         $stmt->bind_param("i", $idUsuario);
         $stmt->execute();
@@ -28,8 +36,10 @@ class PartidaModel
     }
 
     public function getPregunta(){
-        //obtiene una pregunta random de entre todas las que hay pero de momento no lo hace como tal
-        $idPregunta = random_int(1, 1);
+        //obtiene una pregunta random de entre todas las que hay pero de momento no lo hace como tal ya que esta
+        //hardcodeado
+        //buscar en tabla tienen las preguntas que todavia no haya respondido
+        $idPregunta = random_int(1, 13);
         $query = "SELECT p.id as idPregunta, p.descripcion as pregunta, r.descripcion as respuesta, r.id as idRta
               FROM pregunta p 
               JOIN respuesta r ON p.id = r.idPregunta 
