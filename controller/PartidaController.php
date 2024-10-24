@@ -35,6 +35,8 @@ class PartidaController
             header("location: /partida/jugar");
             exit();
         }else{
+            // se destruye la variable de la sesion que contiene el id de la partida actual al finalizar la partida.
+            unset($_SESSION["idPartida"]);
             header("location: /partida/mostrarPuntos");
             exit();
         }
