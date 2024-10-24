@@ -83,6 +83,18 @@ class Configuration
         return new RegistroModel($this->getDatabase());
     }
 
+    public function getPartidaController()
+    {
+        return new PartidaController($this->getPartidaModel(), $this->getPresenter());
+    }
+
+
+    public function getPartidaModel(){
+        return new PartidaModel($this->getDatabase());
+    }
+
+
+
 
 
 }
