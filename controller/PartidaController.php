@@ -16,7 +16,7 @@ class PartidaController
             $idUsuario = $_SESSION["loggedUserId"];
             $pregunta = $this->model->getPregunta();
             if(!isset($_SESSION["idPartida"])){
-                //la idea seria que si no hay una variable de sesion que contenga el id de la partida que la cree
+                //la idea seria que si no hay una variable de sesion que contenga el id de la partida, que la cree
                 //y en algun momento destruya dicha variable cuando la partida finalice
                 $this->crearPartida($idUsuario);
             }
@@ -26,17 +26,21 @@ class PartidaController
     }
 
     public function responder(){
-        $respuesta = $_POST["respuesta"];
-        $acierta = $this->model->validarRespuesta($respuesta);
+        $idRespuesta = $_POST["idRespuesta"];
+        $idPregunta = $_POST["idPregunta"];
+        $acierta = $this->model->validarRespuesta($idRespuesta);
         if($acierta){
             //crearia un registro de la tabla "tiene" con el id de la partida y el id de la pregunta,
             // el puntaje no sabria que ponerle
-            $this->model->registrarPuntaje($_SESSION["idPartida"], $_POST["idPregunta"]);
+            $idPartida = $_SESSION["idPartida"];
+            $this->model->registrarPuntaje($idPartida, $idPregunta);
             header("location: /partida/jugar");
             exit();
         }else{
+            // habria que cambiar el estado de la partida a inactivo..
             // se destruye la variable de la sesion que contiene el id de la partida actual al finalizar la partida.
             unset($_SESSION["idPartida"]);
+
             header("location: /partida/mostrarPuntos");
             exit();
         }
@@ -44,6 +48,7 @@ class PartidaController
 
     public function mostrarPuntos(){
         //generaria la vista donde muestra los puntos obtenidos
+        $this->presenter->show("mostrarPuntos");
     }
 
     private function crearPartida($idUsuario){
