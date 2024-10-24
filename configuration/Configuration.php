@@ -13,12 +13,14 @@ include_once ("./model/RegistroModel.php");
 include_once("./model/LoginModel.php");
 include_once ("./model/LobbyModel.php");
 include_once ("./model/PerfilModel.php");
+include_once ("./model/PartidaModel.php");
 
 //controladores
 include_once("./controller/LoginController.php");
 include_once ("./controller/RegistroController.php");
 include_once ("./controller/LobbyController.php");
 include_once ("./controller/PerfilController.php");
+include_once ("./controller/PartidaController.php");
 
 
 

@@ -1,17 +1,24 @@
-<div class="flex-grow-1 ">
+<div class="flex-grow-1">
     <div class="container mt-5 mb-5 bg-light">
+        <h1>Pregunta</h1>
+        <!-- Muestra la descripción de la pregunta -->
+        <p>{{pregunta}}</p>
 
-            <h1>Pregunta2</h1>
-            <br>
-            <a href="/perfil/mostrarPerfil">Ir a mi perfil</a>
-            <h1>Bienvenido usuario con el id: {{pregunta}}</h1>
-            <h2>Usuario: {{username}}</h2>
+        <h2>Respuestas</h2>
+        <form action="/partida/responder" method="POST">
+            <!-- Campo oculto para enviar el id de la pregunta -->
+            <input type="hidden" name="idPregunta" value="{{idPregunta}}">
 
-            <br>
-            <br>
-            <br>
-            <br>
-            <a href="/partida/jugar">Jugar partida</a>
+            <ul>
+                {{#respuestas}}
+                    <li>
+                        <input type="radio" id="respuesta-{{@index}}" name="respuesta" value="{{descripcion}}">
+                        <label for="respuesta-{{@index}}">{{descripcion}}</label>
+                    </li>
+                {{/respuestas}}
+            </ul>
 
+            <input type="submit" value="Enviar Respuesta">
+        </form>
     </div>
 </div>
