@@ -39,7 +39,7 @@ class PartidaModel
         //obtiene una pregunta random de entre todas las que hay pero de momento no lo hace como tal ya que esta
         //hardcodeado
         //buscar en tabla tienen las preguntas que todavia no haya respondido
-        $idPregunta = random_int(1, 13);
+        $idPregunta = random_int(1, 10);
         $query = "SELECT p.id as idPregunta, p.descripcion as pregunta, r.descripcion as respuesta, r.id as idRta
               FROM pregunta p 
               JOIN respuesta r ON p.id = r.idPregunta 
@@ -88,9 +88,16 @@ class PartidaModel
         return false;
     }
 
-    public function registrarPuntaje($idPartida, $idPregunta){
+    public function registrarPreguntaCorrecta($idPartida, $idPregunta){
         $query = "INSERT INTO tienen (idPartida, idPregunta,puntaje) VALUES (?,?,?)";
         $puntaje = 1;
+        $stmt = $this->db->connection->prepare($query);
+        $stmt->bind_param("iii", $idPartida, $idPregunta,$puntaje);
+        $stmt->execute();
+    }
+    public function registrarPreguntaIncorrecta($idPartida, $idPregunta){
+        $query = "INSERT INTO tienen (idPartida, idPregunta,puntaje) VALUES (?,?,?)";
+        $puntaje = 0;
         $stmt = $this->db->connection->prepare($query);
         $stmt->bind_param("iii", $idPartida, $idPregunta,$puntaje);
         $stmt->execute();
