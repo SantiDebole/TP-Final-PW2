@@ -12,7 +12,7 @@ class PartidaController {
 
     public function jugar(){
         //empieza el estado de una partida
-
+        $preguntaConRespuestas = $this->model->traerPreguntaConRespuestas();
         //trae una pregunta
         //responde
         //evalua respuesta
@@ -20,7 +20,7 @@ class PartidaController {
         //desea reportar la preguntar? le queres poner me gusta?
         //siguiente pregunta
 
-
+        $this->presenter->show('registro',$preguntaConRespuestas);
     }
 
 
