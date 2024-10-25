@@ -18,10 +18,16 @@ class PartidaController
             if(!isset($_SESSION["idPartida"])){
                 //la idea seria que si no hay una variable de sesion que contenga el id de la partida, que la cree
                 //y en algun momento destruya dicha variable cuando la partida finalice
-                $this->crearPartida($idUsuario);
+                $this->crearPartida($idUsuario); //aca le asigno a la sesion
             }
-
-                $this->presenter->show("pregunta", ["pregunta" => $pregunta]);
+                $idPartida = $_SESSION["idPartida"];
+                $puntaje= $this->model->traerPuntajeDelUsuarioEnLaPartida($idPartida,$idUsuario);
+                $data = [
+                        "loggedUserId" => $idUsuario,
+                        "pregunta" => $pregunta,
+                        "puntaje" => $puntaje
+                ];
+                $this->presenter->show("pregunta", $data);
 
         }
     }
@@ -36,6 +42,7 @@ class PartidaController
             $idPartida = $_SESSION["idPartida"];
             $_SESSION["correcta"] = 1;
             $this->model->registrarPreguntaCorrecta($idPartida, $idPregunta);
+
             header("location: /partida/jugar");
             exit();
         }else{
@@ -47,7 +54,7 @@ class PartidaController
             $this->model->desactivarPartida($idPartida);
 
             // se destruye la variable de la sesion que contiene el id de la partida actual al finalizar la partida.
-            unset($_SESSION["idPartida"]);
+
 
             header("location: /partida/mostrarPuntos");
             exit();
@@ -56,7 +63,15 @@ class PartidaController
 
     public function mostrarPuntos(){
         //generaria la vista donde muestra los puntos obtenidos
-        $this->presenter->show("mostrarPuntos");
+        $idUsuario = $_SESSION["loggedUserId"];
+        $idPartida = $_SESSION["idPartida"];
+        $puntaje= $this->model->traerPuntajeDelUsuarioEnLaPartida($idPartida,$idUsuario);
+        $data = [
+            "loggedUserId" => $idUsuario,
+            "puntaje" => $puntaje
+        ];
+        unset($_SESSION["idPartida"]);
+        $this->presenter->show("mostrarPuntos",$data);
     }
 
     private function crearPartida($idUsuario){
