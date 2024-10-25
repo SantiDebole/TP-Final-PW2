@@ -20,6 +20,7 @@ class PartidaController
                 //y en algun momento destruya dicha variable cuando la partida finalice
                 $this->crearPartida($idUsuario);
             }
+
                 $this->presenter->show("pregunta", ["pregunta" => $pregunta]);
 
         }
@@ -33,13 +34,18 @@ class PartidaController
             //crearia un registro de la tabla "tiene" con el id de la partida y el id de la pregunta,
             // el puntaje no sabria que ponerle
             $idPartida = $_SESSION["idPartida"];
-            $this->model->registrarPuntaje($idPartida, $idPregunta);
+            $_SESSION["correcta"] = 1;
+            $this->model->registrarPreguntaCorrecta($idPartida, $idPregunta);
             header("location: /partida/jugar");
             exit();
         }else{
-            // habria que cambiar el estado de la partida a inactivo..
             $idPartida = $_SESSION["idPartida"];
+            $this->model->registrarPreguntaIncorrecta($idPartida, $idPregunta);
+            // habria que cambiar el estado de la partida a inactivo..
+
+            //le cambia el estado de "activo" a "inactivo" para que al crear una partida
             $this->model->desactivarPartida($idPartida);
+
             // se destruye la variable de la sesion que contiene el id de la partida actual al finalizar la partida.
             unset($_SESSION["idPartida"]);
 
