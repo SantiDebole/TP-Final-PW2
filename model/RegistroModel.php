@@ -47,11 +47,7 @@ class RegistroModel
         $rutaTemporal = "./data/" . $nombreArchivo . ".json";
         var_dump($rutaTemporal);
         $this->crearArchivoTemporalDeConfirmacion($rutaTemporal, $datos_usuario);
-
        $datos_usuario['nombreArchivo']=$nombreArchivo;
-
-
-
         return $datos_usuario;
 
 
