@@ -10,32 +10,28 @@ class PartidaController
         $this->model = $model;
         $this->presenter = $presenter;
     }
-
     public function jugar(){
         if(isset($_SESSION["loggedUserId"])){
             $idUsuario = $_SESSION["loggedUserId"];
-
-            $pregunta = $this->model->getPregunta();
-            if(!isset($_SESSION["idPartida"])){
-                //la idea seria que si no hay una variable de sesion que contenga el id de la partida, que la cree
-                //y en algun momento destruya dicha variable cuando la partida finalice
-                $this->crearPartida($idUsuario); //aca le asigno a la sesion
-            }
+            $pregunta = $this->model->getPregunta($idUsuario);
+            if($pregunta){
+                if(!isset($_SESSION["idPartida"])){
+                    $this->crearPartida($idUsuario);
+                }
                 $idPartida = $_SESSION["idPartida"];
                 $puntaje= $this->model->traerPuntajeDelUsuarioEnLaPartida($idPartida,$idUsuario);
                 $data = [
-                        "loggedUserId" => $idUsuario,
-                        "pregunta" => $pregunta,
-                        "puntaje" => $puntaje
+                    "loggedUserId" => $idUsuario,
+                    "pregunta" => $pregunta,
+                    "puntaje" => $puntaje
                 ];
                 $this->presenter->show("pregunta", $data);
-
-
+            }
             //de momento si no hay mas preguntas, que te mande al lobby. Mas adelante tendria que resetear las preguntasVistas
             header("location: /lobby/listar");
-
         }
     }
+
 
     public function responder(){
         $idRespuesta = $_POST["idRespuesta"];
