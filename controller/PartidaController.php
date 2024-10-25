@@ -14,6 +14,7 @@ class PartidaController
     public function jugar(){
         if(isset($_SESSION["loggedUserId"])){
             $idUsuario = $_SESSION["loggedUserId"];
+
             $pregunta = $this->model->getPregunta();
             if(!isset($_SESSION["idPartida"])){
                 //la idea seria que si no hay una variable de sesion que contenga el id de la partida, que la cree
@@ -29,6 +30,10 @@ class PartidaController
                 ];
                 $this->presenter->show("pregunta", $data);
 
+
+            //de momento si no hay mas preguntas, que te mande al lobby. Mas adelante tendria que resetear las preguntasVistas
+            header("location: /lobby/listar");
+
         }
     }
 
@@ -37,10 +42,7 @@ class PartidaController
         $idPregunta = $_POST["idPregunta"];
         $acierta = $this->model->validarRespuesta($idRespuesta);
         if($acierta){
-            //crearia un registro de la tabla "tiene" con el id de la partida y el id de la pregunta,
-            // el puntaje no sabria que ponerle
             $idPartida = $_SESSION["idPartida"];
-            $_SESSION["correcta"] = 1;
             $this->model->registrarPreguntaCorrecta($idPartida, $idPregunta);
 
             header("location: /partida/jugar");
@@ -48,13 +50,10 @@ class PartidaController
         }else{
             $idPartida = $_SESSION["idPartida"];
             $this->model->registrarPreguntaIncorrecta($idPartida, $idPregunta);
-            // habria que cambiar el estado de la partida a inactivo..
-
-            //le cambia el estado de "activo" a "inactivo" para que al crear una partida
             $this->model->desactivarPartida($idPartida);
 
-            // se destruye la variable de la sesion que contiene el id de la partida actual al finalizar la partida.
 
+            // se destruye la variable de la sesion que contiene el id de la partida actual al finalizar la partida.
 
             header("location: /partida/mostrarPuntos");
             exit();
@@ -76,10 +75,7 @@ class PartidaController
 
     private function crearPartida($idUsuario){
         $this->model->crearPartida($idUsuario);
-        //aca capaz para encontrar la partida actual se base en el estado de la partida (?
         $partida = $this->model->getPartida($idUsuario);
-        //crearia la variable de sesion idPartida para poder luego en "responder" crear un registro de la tabla "tiene" con el id de
-        //la partida que estoy jugando ahora junto con el id de la pregunta
         $_SESSION["idPartida"] = $partida["id"];
     }
 

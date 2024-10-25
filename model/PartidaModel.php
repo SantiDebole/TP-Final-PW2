@@ -39,36 +39,13 @@ class PartidaModel
     }
 
 
-    public function desactivarPartida($idPartida){
-        $query = "UPDATE partida SET estado = 'inactivo' WHERE id = ?";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("i",$idPartida);
-        $stmt->execute();
-    }
 
-    public function crearPartida($idUsuario){
-        $fecha = date('Y-m-d H:i:s');
-        $estado = "Activo";
-        $query = "INSERT INTO partida(fecha, estado,idUsuario) VALUES (?,?,?)";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("ssi", $fecha, $estado, $idUsuario);
-        $stmt->execute();
-    }
+    public function getPregunta($idUsuario){
+        $preguntasNoVistasPorUsuario = $this->getPreguntasNoVistasPorUsuario($idUsuario);
+        if($preguntasNoVistasPorUsuario){
 
-    public function getPartida($idUsuario){
-        $query = "SELECT id FROM partida WHERE idUsuario = ? AND estado = 'activo'";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("i", $idUsuario);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_assoc();
-    }
 
-    public function getPregunta(){
-        //obtiene una pregunta random de entre todas las que hay pero de momento no lo hace como tal ya que esta
-        //hardcodeado
-        //buscar en tabla tienen las preguntas que todavia no haya respondido
-        $idPregunta = random_int(1, 10);
+        $idPregunta = $this->getPreguntaAleatoria($preguntasNoVistasPorUsuario);
         $query = "SELECT p.id as idPregunta, p.descripcion as pregunta, r.descripcion as respuesta, r.id as idRta
               FROM pregunta p 
               JOIN respuesta r ON p.id = r.idPregunta 
@@ -100,6 +77,8 @@ class PartidaModel
         }
 
         return $data;
+        }
+        return null;
     }
 
 
@@ -130,5 +109,59 @@ class PartidaModel
         $stmt = $this->db->connection->prepare($query);
         $stmt->bind_param("iii", $idPartida, $idPregunta,$puntaje);
         $stmt->execute();
+    }
+
+    private function getPreguntasNoVistasPorUsuario($idUsuario)
+    {
+        $queryFuncional = "SELECT pr.id AS idPreguntaNoVista 
+                   FROM pregunta pr
+                   WHERE pr.id NOT IN (
+                       SELECT pr2.id
+                       FROM usuario u
+                       JOIN partida p ON u.id = p.idUsuario
+                       JOIN tienen t ON p.id = t.idPartida
+                       JOIN pregunta pr2 ON t.idPregunta = pr2.id
+                       WHERE u.id = ?
+                       ORDER BY u.id
+                   );";
+        $stmt = $this->db->connection->prepare($queryFuncional);
+        $stmt->bind_param("i", $idUsuario);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $preguntasNoVistasPorUsuario = [];
+        while($row = $result->fetch_assoc()){
+            $preguntasNoVistasPorUsuario[] = $row["idPreguntaNoVista"];
+        }
+        return $preguntasNoVistasPorUsuario;
+    }
+
+    private function getPreguntaAleatoria(array $preguntasNoVistasPorUsuario){
+        $preguntas = $preguntasNoVistasPorUsuario;
+        $idPreguntaAleatoria = array_rand($preguntas);
+        return $preguntas[$idPreguntaAleatoria];
+    }
+    public function desactivarPartida($idPartida){
+        $query = "UPDATE partida SET estado = 'inactivo' WHERE id = ?";
+        $stmt = $this->db->connection->prepare($query);
+        $stmt->bind_param("i",$idPartida);
+        $stmt->execute();
+    }
+
+    public function crearPartida($idUsuario){
+        $fecha = date('Y-m-d H:i:s');
+        $estado = "Activo";
+        $query = "INSERT INTO partida(fecha, estado,idUsuario) VALUES (?,?,?)";
+        $stmt = $this->db->connection->prepare($query);
+        $stmt->bind_param("ssi", $fecha, $estado, $idUsuario);
+        $stmt->execute();
+    }
+
+    public function getPartida($idUsuario){
+        $query = "SELECT id FROM partida WHERE idUsuario = ? AND estado = 'activo'";
+        $stmt = $this->db->connection->prepare($query);
+        $stmt->bind_param("i", $idUsuario);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
     }
 }
