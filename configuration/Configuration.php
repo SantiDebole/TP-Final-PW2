@@ -14,11 +14,18 @@ include_once("./model/LoginModel.php");
 include_once ("./model/LobbyModel.php");
 include_once ("./model/PerfilModel.php");
 
+include_once ("./model/PartidaModel.php");
+
+
 //controladores
 include_once("./controller/LoginController.php");
 include_once ("./controller/RegistroController.php");
 include_once ("./controller/LobbyController.php");
 include_once ("./controller/PerfilController.php");
+
+
+
+include_once ("./controller/PartidaController.php");
 
 
 
@@ -31,7 +38,10 @@ class Configuration
     }
 
     public function getRouter(){
+
         return new Router($this,"getRegistroController", "listar");
+
+
     }
 
     public function getDatabase(){
@@ -83,6 +93,15 @@ class Configuration
         return new RegistroModel($this->getDatabase());
     }
 
+    public function getPartidaController()
+    {
+        return new PartidaController($this->getPartidaModel(), $this->getPresenter());
+    }
+
+    ///MODELO REGISTRO
+    public function getPartidaModel(){
+        return new PartidaModel($this->getDatabase());
+    }
 
 
 }
