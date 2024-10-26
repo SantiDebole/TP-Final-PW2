@@ -7,7 +7,7 @@ include_once('./vendor/autoload.php');
 include_once ("./helper/MustachePresenter.php");
 include_once ("./helper/Database.php");
 include_once ("./helper/Router.php");
-
+include_once ("./helper/Mailer.php");
 //model
 include_once ("./model/RegistroModel.php");
 include_once("./model/LoginModel.php");

@@ -25,7 +25,7 @@ class LoginModel {
     }
 
     public function getUser($username){
-        $sql = "SELECT * FROM usuario WHERE usuario = ?";
+        $sql = "SELECT * FROM usuario WHERE usuario = ? and esta_verificado =1";
         $stmt = $this->db->connection->prepare($sql);
         $stmt->bind_param("s", $username);
         $stmt->execute();

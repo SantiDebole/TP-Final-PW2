@@ -33,52 +33,7 @@
     </div>
 </footer>
 <!-- Bootstrap JS, Popper.js, and jQuery -->
-<script>
-    // Inicializar el mapa en una ubicación predeterminada (puedes ajustarlo según tu preferencia)
-    var map = L.map('map').setView([20.5937, 78.9629], 2); // Latitud y longitud de India (puedes cambiarlo)
 
-    // Cargar los tiles de OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    // Crear un marcador inicial (opcional)
-    var marker = L.marker([20.5937, 78.9629]).addTo(map);
-
-    // Función para obtener el país y la ciudad a partir de coordenadas (usando Nominatim)
-    function getCountryAndCity(lat, lon) {
-        var url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
-
-        fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    var country = data.address.country || '';
-                    var city = data.address.city || data.address.town || data.address.village || '';
-
-                    // Asignar los valores al formulario
-                    document.getElementById('pais').value = country;
-                    document.getElementById('ciudad').value = city;
-                })
-                .catch(error => {
-                    console.log('Error fetching data: ', error);
-                });
-    }
-
-    // Función que se ejecuta al hacer clic en el mapa
-    function onMapClick(e) {
-        var lat = e.latlng.lat;
-        var lon = e.latlng.lng;
-
-        // Mover el marcador al nuevo lugar donde se hizo clic
-        marker.setLatLng(e.latlng);
-
-        // Obtener país y ciudad usando las coordenadas
-        getCountryAndCity(lat, lon);
-    }
-
-    // Escuchar el evento de clic en el mapa
-    map.on('click', onMapClick);
-</script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
