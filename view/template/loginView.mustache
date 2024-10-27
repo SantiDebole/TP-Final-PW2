@@ -1,71 +1,42 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preguntados - Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
+<div class="flex-grow-1 ">
 
-        .social-icons a {
-            margin: 0 10px;
-            color: #555;
-        }
-        .social-icons a:hover {
-            color: #007bff;
-        }
-    </style>
-</head>
-<body>
-<!-- Header -->
-<header class="bg-primary text-white text-center py-4">
-    <div class="container">
-        <img src="/public/image/celebrity%20deathmatch.jpg" alt="Preguntados" >
-        <h1 class="d-inline-block ms-3">Preguntados</h1>
-    </div>
-</header>
 
-<!-- Login Form -->
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-4">
-            <h2 class="text-center mb-4">Iniciar Sesión</h2>
-            <form action="/login/validate" method="post">
-                <div class="mb-3">
-                    <label for="username" class="form-label">Usuario</label>
-                    <input type="text" class="form-control" name="username" id="username" placeholder="Ingresa tu usuario">
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" name="password" id="password" placeholder="Ingresa tu contraseña">
-                </div>
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
-                </div>
-            </form>
-            <div class="text-center mt-3">
-                <a href="/registro/listar">Registrarse</a>
+    <div class="container mt-5">
+
+            <div class="bg-primary text-white text-center py-4r mb-3">
+                <img src="/public/image/celebrity%20deathmatch.jpg" alt="Preguntados" >
+                <h1 class="d-inline-block ms-3">Preguntados</h1>
             </div>
-            {{#auth_error}}
-            <span><p>Usuario y/o contraseña incorrectos</p></span>
-            {{/auth_error}}
+
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <h2 class="text-center mb-4">Iniciar Sesión</h2>
+                <form action="/login/validate" method="post">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" name="username" id="username" placeholder="Ingresa tu usuario">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Ingresa tu contraseña">
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                    </div>
+                </form>
+                <div class="text-center mt-3">
+                    <a href="/registro/listar">Registrarse</a>
+                </div>
+                {{#auth_error}}
+                    <span><p>Usuario y/o contraseña incorrectos</p></span>
+                {{/auth_error}}
+            </div>
         </div>
     </div>
+
 </div>
 
-<!-- Footer -->
-<footer class="bg-light text-center py-3 mt-auto">
-    <div class="container">
-        <div class="social-icons">
-            <a href="#"><i class="fab fa-facebook fa-2x"></i></a>
-            <a href="#"><i class="fab fa-twitter fa-2x"></i></a>
-            <a href="#"><i class="fab fa-instagram fa-2x"></i></a>
-        </div>
-    </div>
-</footer>
 
-<!-- Bootstrap JS and FontAwesome -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-</body>
-</html>
+<!-- Login Form -->
+
+
