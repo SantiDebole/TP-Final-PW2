@@ -22,8 +22,6 @@ include_once("./controller/LoginController.php");
 include_once ("./controller/RegistroController.php");
 include_once ("./controller/LobbyController.php");
 include_once ("./controller/PerfilController.php");
-
-
 include_once ("./controller/PartidaController.php");
 
 
@@ -37,8 +35,14 @@ class Configuration
     }
 
     public function getRouter(){
-        return new Router($this,"getLoginController", "listar");
+
+
+        return new Router($this,"getRegistroController", "listar");
+
     }
+
+
+
 
     public function getDatabase(){
         $config = parse_ini_file("./configuration/config.ini");
