@@ -15,12 +15,14 @@ class LobbyController {
     public function listar() {
         // Obtengo rol del usuario desde la sesión
         $rol = $_SESSION['rol'];
+        $userId = $_SESSION['user_id'];
+        $username = $_SESSION['username'];
 
         // Preparar los datos para la vista
         $data = [
             'lobby' => [
-                'loggedUserId' => $_SESSION['user_id'],
-                'username' => $_SESSION['username'],
+                'loggedUserId' => $userId,
+                'username' => $username,
                 'rol' => $rol
             ],
             'rol' => $rol,
