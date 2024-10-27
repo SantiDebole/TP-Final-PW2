@@ -29,6 +29,7 @@ class PartidaController
             }
             //de momento si no hay mas preguntas, que te mande al lobby. Mas adelante tendria que resetear las preguntasVistas
             header("location: /lobby/listar");
+            exit();
         }
     }
 

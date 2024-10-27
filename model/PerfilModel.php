@@ -29,22 +29,12 @@ class PerfilModel
         // Obtener el resultado
         $result = $stmt->get_result();
         $usuario = $result->fetch_assoc(); // Esto devuelve un array asociativo
-        var_dump($usuario);
+
 
 
 
        $usuario = $this->transformImagePath($usuario);
 
-
-        // Si quieres depurar o ver el resultado
-        echo '<br>';
-        echo '<br>';
-        echo '<br>';
-        echo 'SOY LA FOTO DE PERFIL';
-
-        echo '<br>';
-
-        var_dump($usuario['foto_perfil']);
 
 
         return $usuario;
