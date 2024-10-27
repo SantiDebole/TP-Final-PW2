@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 25-10-2024 a las 01:01:24
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Host: 127.0.0.1
+-- Generation Time: Oct 27, 2024 at 08:42 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `juego_preguntas_respuestas`
+-- Database: `juego_preguntas_respuestas_1`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `categoria`
+-- Table structure for table `categoria`
 --
 
 CREATE TABLE `categoria` (
@@ -34,7 +34,7 @@ CREATE TABLE `categoria` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `categoria`
+-- Dumping data for table `categoria`
 --
 
 INSERT INTO `categoria` (`id`, `descripcion`, `color`) VALUES
@@ -46,7 +46,7 @@ INSERT INTO `categoria` (`id`, `descripcion`, `color`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `partida`
+-- Table structure for table `partida`
 --
 
 CREATE TABLE `partida` (
@@ -57,19 +57,27 @@ CREATE TABLE `partida` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `partida`
+-- Dumping data for table `partida`
 --
 
 INSERT INTO `partida` (`id`, `estado`, `fecha`, `idUsuario`) VALUES
 (10, 'inactivo', '2024-10-25 00:45:05', 10),
 (11, 'inactivo', '2024-10-25 00:48:33', 10),
 (12, 'inactivo', '2024-10-25 00:53:02', 10),
-(13, 'inactivo', '2024-10-25 00:55:59', 3);
+(13, 'inactivo', '2024-10-25 00:55:59', 3),
+(15, 'inactivo', '2024-10-25 13:49:15', 11),
+(16, 'inactivo', '2024-10-27 19:39:29', 11),
+(17, 'inactivo', '2024-10-27 19:42:24', 11),
+(18, 'inactivo', '2024-10-27 19:44:23', 11),
+(19, 'inactivo', '2024-10-27 19:48:26', 11),
+(20, 'inactivo', '2024-10-27 20:14:00', 11),
+(21, 'Activo', '2024-10-27 20:15:38', 11),
+(22, 'inactivo', '2024-10-27 20:18:28', 12);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `pregunta`
+-- Table structure for table `pregunta`
 --
 
 CREATE TABLE `pregunta` (
@@ -80,7 +88,7 @@ CREATE TABLE `pregunta` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `pregunta`
+-- Dumping data for table `pregunta`
 --
 
 INSERT INTO `pregunta` (`id`, `descripcion`, `estado`, `idCategoria`) VALUES
@@ -101,7 +109,7 @@ INSERT INTO `pregunta` (`id`, `descripcion`, `estado`, `idCategoria`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `respuesta`
+-- Table structure for table `respuesta`
 --
 
 CREATE TABLE `respuesta` (
@@ -112,7 +120,7 @@ CREATE TABLE `respuesta` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `respuesta`
+-- Dumping data for table `respuesta`
 --
 
 INSERT INTO `respuesta` (`id`, `descripcion`, `esCorrecta`, `idPregunta`) VALUES
@@ -159,7 +167,7 @@ INSERT INTO `respuesta` (`id`, `descripcion`, `esCorrecta`, `idPregunta`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tienen`
+-- Table structure for table `tienen`
 --
 
 CREATE TABLE `tienen` (
@@ -169,22 +177,29 @@ CREATE TABLE `tienen` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `tienen`
+-- Dumping data for table `tienen`
 --
 
 INSERT INTO `tienen` (`idPartida`, `idPregunta`, `puntaje`) VALUES
-(10, 1, 1),
-(10, 3, 1),
-(12, 11, 1),
-(13, 1, 1),
-(13, 6, 1),
-(13, 10, 1),
-(13, 11, 1);
+(19, 2, 1),
+(19, 3, 1),
+(19, 4, 0),
+(19, 7, 1),
+(19, 9, 1),
+(19, 10, 1),
+(19, 12, 1),
+(19, 13, 1),
+(20, 1, 1),
+(20, 5, 1),
+(20, 6, 0),
+(20, 8, 1),
+(20, 11, 1),
+(22, 3, 0);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuario`
+-- Table structure for table `usuario`
 --
 
 CREATE TABLE `usuario` (
@@ -199,128 +214,134 @@ CREATE TABLE `usuario` (
   `foto_perfil` varchar(255) DEFAULT NULL,
   `pais` varchar(50) DEFAULT NULL,
   `ciudad` varchar(50) DEFAULT NULL,
-  `fecha_creacion` date NOT NULL
+  `fecha_creacion` date NOT NULL,
+  `esta_verificado` tinyint(1) NOT NULL DEFAULT 0,
+  `token_verificacion` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `usuario`
+-- Dumping data for table `usuario`
 --
 
-INSERT INTO `usuario` (`id`, `nombre_completo`, `usuario`, `fecha_nacimiento`, `genero`, `email`, `password`, `rol`, `foto_perfil`, `pais`, `ciudad`, `fecha_creacion`) VALUES
-(1, 'Juan Pérez', '@juanperez', '1990-03-15', 'M', 'juan.perez@mail.com', '12345Juan*', 'ur', 'juan_perez.jpg', 'Argentina', 'Buenos Aires', '2023-05-10'),
-(2, 'María López', '@maria_lopez', '1985-07-20', 'F', 'maria.lopez@mail.com', 'maria*85', 'e', 'maria_lopez.jpg', 'México', 'Ciudad de México', '2023-06-15'),
-(3, 'Carlos Fernández', '@carlos_fernandez', '1992-11-10', 'M', 'carlos.fernandez@mail.com', 'carlosFern@92', 'ur', 'carlos_fernandez.jpg', 'España', 'Madrid', '2023-07-20'),
-(4, 'Ana Martínez', '@ana_martinez', '1995-01-25', 'F', 'ana.martinez@mail.com', 'AnaM@rtinez95', 'ur', 'ana_martinez.jpg', 'Chile', 'Santiago', '2023-08-05'),
-(5, 'Luis García', '@luis_garcia', '1988-05-05', 'M', 'luis.garcia@mail.com', 'LuisGarc88', 'a', 'luis_garcia.jpg', 'Colombia', 'Bogotá', '2023-09-01'),
-(6, 'Sofía Gómez', '@sofia_gomez', '1993-08-30', 'F', 'sofia.gomez@mail.com', 'Sofia*1234', 'ur', 'sofia_gomez.jpg', 'Perú', 'Lima', '2023-10-10'),
-(7, 'Pedro Rojas', '@pedro_rojas', '1986-02-14', 'M', 'pedro.rojas@mail.com', 'PedroR86', 'e', 'pedro_rojas.jpg', 'Argentina', 'Córdoba', '2023-11-15'),
-(8, 'Lucía Torres', '@lucia_torres', '1994-12-18', 'F', 'lucia.torres@mail.com', 'LuciaTorres94', 'ur', 'lucia_torres.jpg', 'Uruguay', 'Montevideo', '2023-12-20'),
-(9, 'Diego Castro', '@diego_castro', '1989-06-22', 'M', 'diego.castro@mail.com', 'Diego@Castro89', 'ur', 'diego_castro.jpg', 'Paraguay', 'Asunción', '2024-01-05'),
-(10, 'Marta Díaz', '@marta_diaz', '1991-04-12', 'F', 'marta.diaz@mail.com', 'MartaD91', 'ur', 'marta_diaz.jpg', 'Bolivia', 'La Paz', '2024-02-15');
+INSERT INTO `usuario` (`id`, `nombre_completo`, `usuario`, `fecha_nacimiento`, `genero`, `email`, `password`, `rol`, `foto_perfil`, `pais`, `ciudad`, `fecha_creacion`, `esta_verificado`, `token_verificacion`) VALUES
+(1, 'Juan Pérez', '@juanperez', '1990-03-15', 'M', 'juan.perez@mail.com', '12345Juan*', 'ur', 'juan_perez.jpg', 'Argentina', 'Buenos Aires', '2023-05-10', 0, NULL),
+(2, 'María López', '@maria_lopez', '1985-07-20', 'F', 'maria.lopez@mail.com', 'maria*85', 'e', 'maria_lopez.jpg', 'México', 'Ciudad de México', '2023-06-15', 0, NULL),
+(3, 'Carlos Fernández', '@carlos_fernandez', '1992-11-10', 'M', 'carlos.fernandez@mail.com', 'carlosFern@92', 'ur', 'carlos_fernandez.jpg', 'España', 'Madrid', '2023-07-20', 0, NULL),
+(4, 'Ana Martínez', '@ana_martinez', '1995-01-25', 'F', 'ana.martinez@mail.com', 'AnaM@rtinez95', 'ur', 'ana_martinez.jpg', 'Chile', 'Santiago', '2023-08-05', 0, NULL),
+(5, 'Luis García', '@luis_garcia', '1988-05-05', 'M', 'luis.garcia@mail.com', 'LuisGarc88', 'a', 'luis_garcia.jpg', 'Colombia', 'Bogotá', '2023-09-01', 0, NULL),
+(6, 'Sofía Gómez', '@sofia_gomez', '1993-08-30', 'F', 'sofia.gomez@mail.com', 'Sofia*1234', 'ur', 'sofia_gomez.jpg', 'Perú', 'Lima', '2023-10-10', 0, NULL),
+(7, 'Pedro Rojas', '@pedro_rojas', '1986-02-14', 'M', 'pedro.rojas@mail.com', 'PedroR86', 'e', 'pedro_rojas.jpg', 'Argentina', 'Córdoba', '2023-11-15', 0, NULL),
+(8, 'Lucía Torres', '@lucia_torres', '1994-12-18', 'F', 'lucia.torres@mail.com', 'LuciaTorres94', 'ur', 'lucia_torres.jpg', 'Uruguay', 'Montevideo', '2023-12-20', 0, NULL),
+(9, 'Diego Castro', '@diego_castro', '1989-06-22', 'M', 'diego.castro@mail.com', 'Diego@Castro89', 'ur', 'diego_castro.jpg', 'Paraguay', 'Asunción', '2024-01-05', 0, NULL),
+(10, 'Marta Díaz', '@marta_diaz', '1991-04-12', 'F', 'marta.diaz@mail.com', 'MartaD91', 'ur', 'marta_diaz.jpg', 'Bolivia', 'La Paz', '2024-02-15', 0, NULL),
+(11, 'admin3', 'admin3', '2024-10-21', 'femenino', 'admin3', 'admin3', 'ur', 'foto.jpg', 'Argentina', 'Aeropuerto Internacional Ezeiza', '0000-00-00', 0, NULL),
+(12, 'admin1', 'admin1', '0000-00-00', '', 'admin1', 'admin1', 'ur', 'images.jfif', 'Brazil', 'Cedro', '0000-00-00', 0, NULL),
+(13, 'usuariovalidar', 'usuariovalidar', '0000-00-00', 'femenino', 'usuariovalidar', 'usuariovalidar', 'ur', '', 'South Africa', 'Moretele Local Municipality', '0000-00-00', 0, 1),
+(14, 'usuarioleo', 'usuarioleo', '0000-00-00', '', 'leandrojavierloureiro@gmail.com', 'usuarioleo', 'ur', '', '', '', '0000-00-00', 1, 5623866);
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `categoria`
+-- Indexes for table `categoria`
 --
 ALTER TABLE `categoria`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `partida`
+-- Indexes for table `partida`
 --
 ALTER TABLE `partida`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_usuario` (`idUsuario`);
 
 --
--- Indices de la tabla `pregunta`
+-- Indexes for table `pregunta`
 --
 ALTER TABLE `pregunta`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_idCategoria` (`idCategoria`);
 
 --
--- Indices de la tabla `respuesta`
+-- Indexes for table `respuesta`
 --
 ALTER TABLE `respuesta`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_idPreguntaEnRta` (`idPregunta`);
 
 --
--- Indices de la tabla `tienen`
+-- Indexes for table `tienen`
 --
 ALTER TABLE `tienen`
   ADD PRIMARY KEY (`idPartida`,`idPregunta`),
   ADD KEY `fk_idPregunta` (`idPregunta`);
 
 --
--- Indices de la tabla `usuario`
+-- Indexes for table `usuario`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `categoria`
+-- AUTO_INCREMENT for table `categoria`
 --
 ALTER TABLE `categoria`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de la tabla `partida`
+-- AUTO_INCREMENT for table `partida`
 --
 ALTER TABLE `partida`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
--- AUTO_INCREMENT de la tabla `pregunta`
+-- AUTO_INCREMENT for table `pregunta`
 --
 ALTER TABLE `pregunta`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT de la tabla `respuesta`
+-- AUTO_INCREMENT for table `respuesta`
 --
 ALTER TABLE `respuesta`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
--- AUTO_INCREMENT de la tabla `usuario`
+-- AUTO_INCREMENT for table `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- Restricciones para tablas volcadas
+-- Constraints for dumped tables
 --
 
 --
--- Filtros para la tabla `partida`
+-- Constraints for table `partida`
 --
 ALTER TABLE `partida`
   ADD CONSTRAINT `fk_usuario` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 
 --
--- Filtros para la tabla `pregunta`
+-- Constraints for table `pregunta`
 --
 ALTER TABLE `pregunta`
   ADD CONSTRAINT `fk_idCategoria` FOREIGN KEY (`idCategoria`) REFERENCES `categoria` (`id`);
 
 --
--- Filtros para la tabla `respuesta`
+-- Constraints for table `respuesta`
 --
 ALTER TABLE `respuesta`
   ADD CONSTRAINT `fk_idPreguntaEnRta` FOREIGN KEY (`idPregunta`) REFERENCES `pregunta` (`id`);
 
 --
--- Filtros para la tabla `tienen`
+-- Constraints for table `tienen`
 --
 ALTER TABLE `tienen`
   ADD CONSTRAINT `fk_idPartida` FOREIGN KEY (`idPartida`) REFERENCES `partida` (`id`),
