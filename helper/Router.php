@@ -6,17 +6,19 @@ class Router
     private $defaultMethod;
     private $configuration;
 
-    public function __construct($configuration,$defaultController, $defaultMethod)
+    public function __construct($configuration, $defaultController, $defaultMethod)
     {
+
         $this->configuration = $configuration;
         $this->defaultController = $defaultController;
         $this->defaultMethod = $defaultMethod;
+       // $this->addRoutes();
     }
 
-    public function route($controllerName, $methodName)
+    public function route($controllerName, $methodName, $param)
     {
         $controller = $this->getControllerFrom($controllerName);
-        $this->executeMethodFromController($controller, $methodName);
+        $this->executeMethodFromController($controller, $methodName, $param);
     }
 
     private function getControllerFrom($module)
@@ -26,9 +28,15 @@ class Router
         return call_user_func(array($this->configuration, $validController));
     }
 
-    private function executeMethodFromController($controller, $method)
+    private function executeMethodFromController($controller, $method, $param)
     {
+        $params = array_slice(func_get_args(), 2);
         $validMethod = method_exists($controller, $method) ? $method : $this->defaultMethod;
-        call_user_func(array($controller, $validMethod));
+        call_user_func(array($controller, $validMethod), $param);
     }
+
+  /*  public function addRoutes()
+    {
+        $this->getRouter()->addRoute('GET', '/ingresoPorEmail', 'RegistroController@ingresoPorEmail');
+    }*/
 }
