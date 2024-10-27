@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+form {
+    border-radius: 20px;
+    width: 100%;
+    max-width: 400px;
+    background-color: white !important;
+    padding: 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+}
+
+.btn-primary {
+    width: 100%;
+    border: none;
+    background-color: #007bff;
+}
+
+.form-control {
+    color: rgba(0,0,0,0.87);
+    border-bottom-color: rgba(0,0,0,0.42);
+    box-shadow: none !important;
+    border: none;
+    border-bottom: 1px solid;
+    border-radius: 4px 4px 0 0;
+}
+
+h4 {
+    font-size: 2rem !important;
+    font-weight: 700;
+}
+
+.form-label {
+    font-weight: 800 !important;
+}
+
+
+.isotipo {
+    width: 150px;
+    height: auto;
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+}
+
+.social-icons a {
+    margin: 0 10px;
+    color: #555;
+}
+
+.social-icons a:hover {
+    color: #007bff;
+}
+
+footer {
+    margin-top: 50px;
+}
+
+.text-danger {
+    color: red;
+}
+
+
+
+
+@media (max-width: 576px) {
+    header, footer {
+        font-size: 0.8rem;
+        padding: 8px 0;
+    }
+    .isotipo {
+        width: 30px;
+        height: auto;
+    }
+}
+
+
+@media only screen and (max-width: 600px) {
+    form {
+        width: 100% !important;
+        max-width: 100%;
+    }
+}

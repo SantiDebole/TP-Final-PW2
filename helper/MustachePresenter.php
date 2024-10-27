@@ -26,4 +26,5 @@ class MustachePresenter{
         para luego procesarla y renderizarla usando Mustache.* */
         return $this->mustache->render($contentAsString, $data);
     }
+
 }
