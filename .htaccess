@@ -16,7 +16,7 @@ Options -Indexes
     RewriteCond %{REQUEST_FILENAME} !-d
 
     # Reescribe las rutas en formato controller/action/param
-    RewriteRule ^(.*)/(.*)/(.*)$ index.php?controller=$1&action=$2&$3 [L,QSA]
+    RewriteRule ^(.*)/(.*)/(.*)$ index.php?controller=$1&action=$2&param=$3 [L,QSA]
 
     # Reescribe las rutas en formato controller/action
     RewriteRule ^(.*)/(.*)$ index.php?controller=$1&action=$2 [L,QSA]

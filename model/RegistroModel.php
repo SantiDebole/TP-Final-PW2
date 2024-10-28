@@ -10,72 +10,126 @@ class RegistroModel
         $this->database = $database;
     }
 
-    public function registrar($datos_usuario)
-    {
-        $validacionPasswordSeanIguales = $this->validarPassword($datos_usuario['password'], $datos_usuario['repeat_password']);
-        if(strcmp($validacionPasswordSeanIguales, "password invalida")==0) {
-            return "Las password no son iguales";
-        }
+    public function ingresoPorEmail($token){
 
-        $validacionUsuario = $this->validarUsuario($datos_usuario['usuario']);
-        if($validacionUsuario == true){
-            return "Usuario ya existente";
-        }
-        $validacionEmail = $this->validarEmail($datos_usuario['email']);
-        if($validacionEmail == true){
-            return "Email ya existente";
-        }
-
-        //si el guardado de foto falla, devuelve un error sino devuelve el nombre de la imagen para guardarla en la bd
-        $guardadoDeFotoDePerfil = $this->guardarFotoDePerfil($datos_usuario['foto_perfil']);
-
-        $sql = "INSERT INTO usuario (nombre_completo, fecha_nacimiento, genero, email, usuario, password, rol, foto_perfil, pais, ciudad) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        // Preparar la consulta
+    $resultado="Error, la activacion no se ha podido realizar";
+    $idUser="";
+        $sql = "SELECT id FROM usuario WHERE token_verificacion = ? and esta_verificado=0";
+    $stmt = $this->database->connection->prepare($sql);
+    if($stmt){
+        $stmt->bind_param("s", $token);
+        if($stmt->execute()){
+            $stmt->store_result();
+            $stmt->bind_result($idUser);
+            $stmt->fetch();
+            }
+        $stmt->close();
+    }
+    if($idUser!="") {
+        $sql = "UPDATE usuario
+                set esta_verificado =1
+                where id = ?";
         $stmt = $this->database->connection->prepare($sql);
-
-        // Verificar si la preparación fue exitosa
         if ($stmt) {
-            // Enlazar parámetros (s: string, d: double, i: integer, b: blob)
-            //$hashed_password = password_hash($datos_usuario['password'], PASSWORD_DEFAULT);
-            $stmt->bind_param("ssssssssss",
-                $datos_usuario['nombre_completo'],
-                $datos_usuario['fecha_nacimiento'],
-                $datos_usuario['genero'],
-                $datos_usuario['email'],
-                $datos_usuario['usuario'],
-                $datos_usuario['password'],
-                $datos_usuario['rol'],
-                $datos_usuario['foto_perfil']['name'],
-                $datos_usuario['pais'],
-                $datos_usuario['ciudad']
-            );
+            $stmt->bind_param("s", $idUser);
+            $stmt->execute();
+            if ($stmt->affected_rows > 0) $resultado = "La activacion se ha realizado con exito";
+        }
+        $stmt->close();
 
 
+    } return $resultado;}
+    public function reenviarEmail($email)
+    {
 
-
-
+        $token="";
+        $sql = "SELECT token_verificacion FROM usuario WHERE email = ? and esta_verificado =0";
+        $stmt = $this->database->connection->prepare($sql);
+        if ($stmt) {
+            $stmt->bind_param("s", $email);
             if ($stmt->execute()) {
-
-                $registro="exitoso";
-
+                $stmt->store_result();
+                $stmt->bind_result($token);
+                $stmt->fetch();
+                $stmt->close();
+                $mailer = new Mailer($email, $token);
+                return $token;
 
             } else {
-                $registro="fallo";
-
-
+                $stmt->close();
+                return "error en la consulta";
             }
-            $stmt->close();
-            return $registro;
-
 
         }
 
 
     }
 
-    private function validarUsuario($usuario)
+
+    public function registrar($datos_usuario)
+    {
+        $errores=0;
+        $datos_usuario['errores'] = [];
+        $datos_usuario['nombreArchivo'] = [];
+
+        //Valida las contraseñas, el email y el usuario
+        list($errores, $datos_usuario) = $this->validarDatos($datos_usuario, $errores);
+        if($errores==1) return $datos_usuario;
+
+        //si el guardado de foto falla, devuelve un error sino devuelve el nombre de la imagen para guardarla en la bd
+        $guardadoDeFotoDePerfil = $this->guardarFotoDePerfil($datos_usuario['foto_perfil']);
+
+         $token=$this->cargarNuevoUsuarioEnBaseDeDatos($datos_usuario);
+        if($token=="fallo"){
+            $datos_usuario['errores'][] = "Error en la carga de base de datos";
+            return $datos_usuario;}
+        else {
+            $mailer = new Mailer($datos_usuario['email'], $token);
+            $datos_usuario['nombreArchivo']=$token;
+            return $datos_usuario;
+        }
+
+
+    }
+    private function cargarNuevoUsuarioEnBaseDeDatos($datos_usuario){
+    $token = bin2hex(random_bytes(16));
+    $sql = "INSERT INTO usuario (nombre_completo, fecha_nacimiento, genero, email, usuario, password, rol, foto_perfil, pais, ciudad, token_verificacion) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $this->database->connection->prepare($sql);
+    if($stmt){
+        $stmt->bind_param("sssssssssss",
+            $datos_usuario['nombre_completo'],
+            $datos_usuario['fecha_nacimiento'],
+            $datos_usuario['genero'],
+            $datos_usuario['email'],
+            $datos_usuario['usuario'],
+            $datos_usuario['password'],
+            $datos_usuario['rol'],
+            $datos_usuario['foto_perfil']['name'],
+            $datos_usuario['pais'],
+            $datos_usuario['ciudad'],
+            $token
+        );
+
+        if ($stmt->execute()) {
+
+            $registro = $token;
+
+
+        } else {
+            $registro = "fallo";
+
+
+        }
+        $stmt->close();
+
+        return $registro;
+
+
+    }
+    }
+
+       private function validarUsuario($usuario)
     {
         $sql = "SELECT 1 FROM usuario WHERE usuario=?";
         $stmt = $this->database->connection->prepare($sql);
@@ -186,7 +240,7 @@ class RegistroModel
 
     {
 
-        if(strcmp($password, $repeat_password) == 0) {
+        if($password!='' &&strcmp($password, $repeat_password) == 0) {
             return "password valida";
         }else{
             return "password invalida";
@@ -194,4 +248,33 @@ class RegistroModel
 
     }
 
+
+    /**
+     * @param $datos_usuario
+     * @param int $errores
+     * @return array
+     */
+    private function validarDatos($datos_usuario, int $errores): array
+    {
+        $validacionPasswordSeanIguales = $this->validarPassword($datos_usuario['password'], $datos_usuario['repeat_password']);
+        if (strcmp($validacionPasswordSeanIguales, "password invalida") == 0) {
+            $errores = 1;
+            $datos_usuario['errores'][] = "Elija contraseña correctamente"; // Agrega el mensaje de error
+        }
+
+// Validar si el usuario ya existe
+        $validacionUsuario = $this->validarUsuario($datos_usuario['usuario']);
+        if ($validacionUsuario) {
+            $errores = 1;
+            $datos_usuario['errores'][] = "Usuario ya existente"; // Agrega el mensaje de error
+        }
+
+
+        $validacionEmail = $this->validarEmail($datos_usuario['email']);
+        if ($validacionEmail) {
+            $errores = 1;
+            $datos_usuario['errores'][] = "Email ya existente"; // Agrega el mensaje de error
+        }
+        return array($errores, $datos_usuario);
+    }
 }

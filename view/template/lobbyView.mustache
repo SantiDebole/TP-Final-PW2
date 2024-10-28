@@ -6,6 +6,39 @@
         <a href="/perfil/mostrarPerfil">Ir a mi perfil</a>
         <h1>Bienvenido usuario con el id: {{loggedUserId}}</h1>
         <h2>Usuario: {{username}}</h2>
+
+
+
+        <h2>tipo usuario: {{rol}}</h2>
+
     {{/lobby}}
+
+    {{#isAdmin}}
+        <h2>Rol Administrador</h2>
+        <a href="#">Dashboard Admin</a>
+        <br>
+        <a href="#">Gestionar Preguntas</a>
+    {{/isAdmin}}
+
+    {{#isEditor}}
+        <h2>Editor</h2>
+        <a href="#">Dashboard Editor</a>
+        <br>
+        <a href="#">Reportar Preguntas</a>
+    {{/isEditor}}
+
+    {{#isPlayer}}
+
+        <a href="/partida/jugar">Jugar</a>
+        <br>
+        <a href="/lobby/mis_partidas">Mis Partidas</a>
+        <br>
+        <a href="#">Ver ranking</a>
+    {{/isPlayer}}
 </div>
+
+
+
+
+
 </div>
