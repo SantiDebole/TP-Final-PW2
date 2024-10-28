@@ -43,6 +43,20 @@ class LobbyController {
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function mis_partidas(){
+        $idUsuario = $_SESSION['user_id'];
+
+        $misPartidas= $this->model->traerMisPartidas($idUsuario);
+        var_dump($misPartidas);
+
+        $data = [
+            'misPartidas' => $misPartidas
+        ];
+
+        $this->presenter->show("misPartidas",$data);
+
+    }
 }
 ?>
 
