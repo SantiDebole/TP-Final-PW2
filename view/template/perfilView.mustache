@@ -1,19 +1,48 @@
-<div class="flex-grow-1 ">
-    <div class="container mt-5 mb-5 bg-light">
-        {{#perfil}}
-            <a href="/lobby/listar">Ir al lobby</a>
-            <div class="container">
-                <div class="img-container mx-auto" style="max-width: 300px;">
-                    <img src="{{foto_perfil}}" class="img-fluid" alt="Descripción de la imagen">
-                </div>
-            </div>
-            <h1>Bienvenido usuario con el id: {{loggedUserId}}</h1>
-            <h2>Usuario: {{usuario}}</h2>
-            <h3>Nombre completo: {{nombre_completo}}</h3>
-            <h4>Fecha nacimiento: {{fecha_nacimiento}}</h4>
-            <h5>Genero: {{genero}}</h5>
-            <h6>Email: {{email}}</h6>
-            <h6>Pais: {{pais}}</h6>
-        {{/perfil}}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/stylesPerfil.css">
+    <title>Trivia Master - Perfil</title>
+    <link rel="icon" href="/public/image/logo-cerebro-solo.png" type="image/x-icon">
+</head>
+<body>
+<div class="perfil">
+{{#perfil}}
+    <a href="/lobby/listar">Ir a al lobby</a>
+    <div class="foto_y_nombre">
+        <div class="img-container mx-auto" style="max-width: 300px;">
+            <img src="{{foto_perfil}}" class="img-fluid" alt="imagen de perfil">
+        </div>
+        <h1 class="nombre-usuario">{{usuario}}</h1>
     </div>
+
+    <form id="perfilForm" method="POST" >
+        <div class="informacion">
+
+            <label for="nombreCompleto">Nombre Completo:</label>
+            <input type="text" name="nombreCompleto" id="nombreCompleto" value="{{nombre_completo}}">
+
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" value="{{usuario}}" disabled>
+
+            <label for="anoNacimiento">Año de Nacimiento:</label>
+            <input type="text" name="anoNacimiento" id="anoNacimiento" value="{{fecha_nacimiento}}">
+
+            <label for="pais">País:</label>
+            <input type="text" name="pais" id="pais" value="{{pais}}">
+
+            <label for="genero">Género:</label>
+            <input type="text" name="genero" id="genero" value="{{genero}}">
+
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" value="{{email}}">
+
+        </div>
+    </form>
+    {{/perfil}}
 </div>
+
+</body>
+</html>
