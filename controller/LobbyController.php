@@ -47,11 +47,12 @@ class LobbyController {
     public function mis_partidas(){
         $idUsuario = $_SESSION['user_id'];
 
-        $misPartidas= $this->model->traerMisPartidas($idUsuario);
-        var_dump($misPartidas);
+        $resultados= $this->model->traerMisPartidas($idUsuario);
+        var_dump($resultados);
 
         $data = [
-            'misPartidas' => $misPartidas
+            'misPartidas' => $resultados['partidas'],
+            'mejorPartida' => $resultados['mejor_partida']
         ];
 
         $this->presenter->show("misPartidas",$data);
