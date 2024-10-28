@@ -16,22 +16,23 @@ class LoginController{
         $username = $_POST['username'];
         $password = $_POST['password'];
         $esValido = $this->model->validateLogin($username, $password);
-
         if($esValido){
-            $loggedUserId = $_SESSION["loggedUserId"];
-            $rol = $this->model->getUserRol($loggedUserId);
+            $loggedUserId = $_SESSION["loggedUserId"] ? $_SESSION["loggedUserId"] : null;
 
-            // Guardo la información del usuario en la sesión
-            $_SESSION['user_id'] = $loggedUserId;
-            $_SESSION['username'] = $username;
-            $_SESSION['rol'] = $rol;
+            $data = [
+                'lobby' => [
+                    "loggedUserId" => $loggedUserId,
+                    "username" => $username
+                ]
+            ];
+            $_SESSION['lobby'] = $data;
 
+            //$_SESSION['lobby']['username']
 
-            // Redirecciono en base al rol
-            header("Location: /lobby/listar");
-            exit();
+            //$this->presenter->show("lobby", $data);
 
-
+           header("Location: /lobby/listar");
+           exit();
 
         }else{
             $this->presenter->show("login",["auth_error" => $_SESSION["auth_error"]]);

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Master</title>
+    <link rel="icon" href="/public/image/logo-cerebro-solo.png" type="image/x-icon">
+    <link rel="stylesheet" href="/styles/styleCrearPregunta.css">
+</head>
+<body>
+<div class="container">
+    <a href="/lobby/listar">Ir a al lobby</a>
+    <h1>Sugerir Nueva Pregunta</h1>
+    <input type="text" id="newQuestion" placeholder="Escribe la pregunta">
+    <p>Escriba primero la respuesta correcta y luego las incorrectas</p>
+    <input type="text" id="answer1" placeholder="Respuesta 1 Correcta">
+    <input type="text" id="answer2" placeholder="Respuesta 2 Incorrecta">
+    <input type="text" id="answer3" placeholder="Respuesta 3 Incorrecta">
+    <input type="text" id="answer4" placeholder="Respuesta 4 Incorrecta">
+    <button id="submitBtn">Enviar Pregunta</button>
+</div>
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <h2>Pregunta enviada con éxito</h2>
+        <button id="goBackBtn">Volver al Lobby</button>
+        <button id="newQuestionBtn">Hacer otra pregunta</button>
+    </div>
+</div>
+
+<script src="/scripts/scriptCrearPregunta.js"></script>
+</body>
+</html>
