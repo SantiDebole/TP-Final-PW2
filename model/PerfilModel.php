@@ -29,7 +29,7 @@ class PerfilModel
         // Obtener el resultado
         $result = $stmt->get_result();
         $usuario = $result->fetch_assoc(); // Esto devuelve un array asociativo
-        var_dump($usuario);
+
 
 
 

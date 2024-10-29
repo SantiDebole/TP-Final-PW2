@@ -1,6 +1,5 @@
 <?php
 session_start();
-var_dump($_SESSION);
 //si tenemos la sesion iniciada, deberia ir al lobby
 include_once ("./configuration/Configuration.php");
 
