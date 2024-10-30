@@ -36,9 +36,15 @@ class LobbyController {
     }
 
 
+    public function verRival(){
+        $idBuscado = $_POST["usuarioBuscado"];
+        $data['perfilRival'] = $this->model->buscarDatosDeOtrosJugadores($idBuscado);
+        var_dump($data);
+        $this->presenter->show("perfil",$data);
 
+    }
 
-    public function getUserById($id) {
+    public function getUserById($id) { //ESTO ESTA MAL, TIENE QUE IR EN EL MODELO!!!
         $stmt = $this->conn->prepare("SELECT nombre, puntaje FROM usuarios WHERE id = :id");
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
