@@ -43,6 +43,14 @@ class LobbyController {
         $this->presenter->show("perfil",$data);
 
     }
+    public function verRivalPorQr($usuario){
+        $idBuscado = $usuario;
+        $data['perfilRival'] = $this->model->buscarDatosDeOtrosJugadores($idBuscado);
+        var_dump($data);
+        $this->presenter->show("perfil",$data);
+
+    }
+
 
     public function getUserById($id) { //ESTO ESTA MAL, TIENE QUE IR EN EL MODELO!!!
         $stmt = $this->conn->prepare("SELECT nombre, puntaje FROM usuarios WHERE id = :id");

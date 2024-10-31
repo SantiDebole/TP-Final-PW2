@@ -12,7 +12,6 @@ class Router
         $this->configuration = $configuration;
         $this->defaultController = $defaultController;
         $this->defaultMethod = $defaultMethod;
-       // $this->addRoutes();
     }
 
     public function route($controllerName, $methodName, $param)
@@ -35,8 +34,5 @@ class Router
         call_user_func(array($controller, $validMethod), $param);
     }
 
-  /*  public function addRoutes()
-    {
-        $this->getRouter()->addRoute('GET', '/ingresoPorEmail', 'RegistroController@ingresoPorEmail');
-    }*/
+
 }
