@@ -6,7 +6,7 @@ class GeneradorDeQR{
     public function __constructor(){}
 
     public function generarQRParaPerfil($usuario){
-        $datoQR = "localhost/lobby/verrivalPorQR?usuario=$usuario";
+        $datoQR = "localhost/lobby/verrivalPorQR/$usuario";
         $archivo = "./public/QRs/$usuario.png";
         QRcode::png($datoQR, $archivo, QR_ECLEVEL_L, 10);
     }
