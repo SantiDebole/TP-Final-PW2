@@ -36,8 +36,9 @@ class Configuration
     }
 
     public function getRouter(){
-
-        return new Router($this,"getRegistroController", "listar");
+        if(isset($_SESSION['rol'])){
+            return new Router($this,"getLobbyController", "listar");
+            }else  return new Router($this,"getLoginController", "listar");
 
     }
 
