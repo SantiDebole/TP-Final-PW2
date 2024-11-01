@@ -10,7 +10,7 @@ require 'C:/xampp/htdocs/TP-Final-PW2/vendor/autoload.php'; // Asegúrate de que
 $mustache = new Mustache_Engine;
 
 // Carga la plantilla
-$template = file_get_contents('./registroFinalizadoView.mustache');
+$template = file_get_contents('./crearpreguntaView.mustache');
 
 
 
