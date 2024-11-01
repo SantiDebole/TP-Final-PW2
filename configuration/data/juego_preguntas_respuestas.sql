@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Oct 27, 2024 at 08:42 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 01-11-2024 a las 20:34:50
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `juego_preguntas_respuestas_1`
+-- Base de datos: `juego_preguntas_respuestas`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `categoria`
+-- Estructura de tabla para la tabla `categoria`
 --
 
 CREATE TABLE `categoria` (
@@ -34,7 +34,7 @@ CREATE TABLE `categoria` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `categoria`
+-- Volcado de datos para la tabla `categoria`
 --
 
 INSERT INTO `categoria` (`id`, `descripcion`, `color`) VALUES
@@ -46,7 +46,7 @@ INSERT INTO `categoria` (`id`, `descripcion`, `color`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `partida`
+-- Estructura de tabla para la tabla `partida`
 --
 
 CREATE TABLE `partida` (
@@ -57,7 +57,7 @@ CREATE TABLE `partida` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `partida`
+-- Volcado de datos para la tabla `partida`
 --
 
 INSERT INTO `partida` (`id`, `estado`, `fecha`, `idUsuario`) VALUES
@@ -72,12 +72,13 @@ INSERT INTO `partida` (`id`, `estado`, `fecha`, `idUsuario`) VALUES
 (19, 'inactivo', '2024-10-27 19:48:26', 11),
 (20, 'inactivo', '2024-10-27 20:14:00', 11),
 (21, 'Activo', '2024-10-27 20:15:38', 11),
-(22, 'inactivo', '2024-10-27 20:18:28', 12);
+(22, 'inactivo', '2024-10-27 20:18:28', 12),
+(23, 'inactivo', '2024-11-01 20:20:52', 14);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pregunta`
+-- Estructura de tabla para la tabla `pregunta`
 --
 
 CREATE TABLE `pregunta` (
@@ -88,7 +89,7 @@ CREATE TABLE `pregunta` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `pregunta`
+-- Volcado de datos para la tabla `pregunta`
 --
 
 INSERT INTO `pregunta` (`id`, `descripcion`, `estado`, `idCategoria`) VALUES
@@ -109,7 +110,7 @@ INSERT INTO `pregunta` (`id`, `descripcion`, `estado`, `idCategoria`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `respuesta`
+-- Estructura de tabla para la tabla `respuesta`
 --
 
 CREATE TABLE `respuesta` (
@@ -120,7 +121,7 @@ CREATE TABLE `respuesta` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `respuesta`
+-- Volcado de datos para la tabla `respuesta`
 --
 
 INSERT INTO `respuesta` (`id`, `descripcion`, `esCorrecta`, `idPregunta`) VALUES
@@ -167,39 +168,54 @@ INSERT INTO `respuesta` (`id`, `descripcion`, `esCorrecta`, `idPregunta`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tienen`
+-- Estructura de tabla para la tabla `tienen`
 --
 
 CREATE TABLE `tienen` (
   `idPartida` int(11) NOT NULL,
   `idPregunta` int(11) NOT NULL,
+  `fecha` datetime NOT NULL,
   `puntaje` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tienen`
+-- Volcado de datos para la tabla `tienen`
 --
 
-INSERT INTO `tienen` (`idPartida`, `idPregunta`, `puntaje`) VALUES
-(19, 2, 1),
-(19, 3, 1),
-(19, 4, 0),
-(19, 7, 1),
-(19, 9, 1),
-(19, 10, 1),
-(19, 12, 1),
-(19, 13, 1),
-(20, 1, 1),
-(20, 5, 1),
-(20, 6, 0),
-(20, 8, 1),
-(20, 11, 1),
-(22, 3, 0);
+INSERT INTO `tienen` (`idPartida`, `idPregunta`, `fecha`, `puntaje`) VALUES
+(23, 1, '2024-11-01 20:26:19', 1),
+(23, 1, '2024-11-01 20:27:24', 1),
+(23, 2, '2024-11-01 20:26:23', 1),
+(23, 2, '2024-11-01 20:27:04', 1),
+(23, 2, '2024-11-01 20:28:57', 0),
+(23, 3, '0000-00-00 00:00:00', 1),
+(23, 3, '2024-11-01 20:27:28', 1),
+(23, 4, '2024-11-01 20:26:17', 1),
+(23, 4, '2024-11-01 20:27:06', 1),
+(23, 5, '2024-11-01 20:26:20', 1),
+(23, 5, '2024-11-01 20:27:21', 1),
+(23, 6, '2024-11-01 20:26:22', 1),
+(23, 6, '2024-11-01 20:26:37', 1),
+(23, 7, '0000-00-00 00:00:00', 1),
+(23, 7, '2024-11-01 20:27:22', 1),
+(23, 7, '2024-11-01 20:27:33', 1),
+(23, 8, '0000-00-00 00:00:00', 1),
+(23, 8, '2024-11-01 20:27:18', 1),
+(23, 9, '0000-00-00 00:00:00', 1),
+(23, 9, '2024-11-01 20:26:34', 1),
+(23, 10, '2024-11-01 20:26:24', 1),
+(23, 10, '2024-11-01 20:27:10', 1),
+(23, 11, '0000-00-00 00:00:00', 1),
+(23, 11, '2024-11-01 20:27:05', 1),
+(23, 12, '2024-11-01 20:26:15', 1),
+(23, 12, '2024-11-01 20:27:19', 1),
+(23, 13, '2024-11-01 20:26:25', 1),
+(23, 13, '2024-11-01 20:27:08', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `usuario`
+-- Estructura de tabla para la tabla `usuario`
 --
 
 CREATE TABLE `usuario` (
@@ -220,7 +236,7 @@ CREATE TABLE `usuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `usuario`
+-- Volcado de datos para la tabla `usuario`
 --
 
 INSERT INTO `usuario` (`id`, `nombre_completo`, `usuario`, `fecha_nacimiento`, `genero`, `email`, `password`, `rol`, `foto_perfil`, `pais`, `ciudad`, `fecha_creacion`, `esta_verificado`, `token_verificacion`) VALUES
@@ -239,113 +255,146 @@ INSERT INTO `usuario` (`id`, `nombre_completo`, `usuario`, `fecha_nacimiento`, `
 (13, 'usuariovalidar', 'usuariovalidar', '0000-00-00', 'femenino', 'usuariovalidar', 'usuariovalidar', 'ur', '', 'South Africa', 'Moretele Local Municipality', '0000-00-00', 0, 1),
 (14, 'usuarioleo', 'usuarioleo', '0000-00-00', '', 'leandrojavierloureiro@gmail.com', 'usuarioleo', 'ur', '', '', '', '0000-00-00', 1, 5623866);
 
+-- --------------------------------------------------------
+
 --
--- Indexes for dumped tables
+-- Estructura de tabla para la tabla `usuariopregunta`
+--
+
+CREATE TABLE `usuariopregunta` (
+  `idUsuario` int(11) NOT NULL,
+  `idPregunta` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuariopregunta`
+--
+
+INSERT INTO `usuariopregunta` (`idUsuario`, `idPregunta`) VALUES
+(14, 2),
+(14, 7);
+
+--
+-- Índices para tablas volcadas
 --
 
 --
--- Indexes for table `categoria`
+-- Indices de la tabla `categoria`
 --
 ALTER TABLE `categoria`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `partida`
+-- Indices de la tabla `partida`
 --
 ALTER TABLE `partida`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_usuario` (`idUsuario`);
 
 --
--- Indexes for table `pregunta`
+-- Indices de la tabla `pregunta`
 --
 ALTER TABLE `pregunta`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_idCategoria` (`idCategoria`);
 
 --
--- Indexes for table `respuesta`
+-- Indices de la tabla `respuesta`
 --
 ALTER TABLE `respuesta`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_idPreguntaEnRta` (`idPregunta`);
 
 --
--- Indexes for table `tienen`
+-- Indices de la tabla `tienen`
 --
 ALTER TABLE `tienen`
-  ADD PRIMARY KEY (`idPartida`,`idPregunta`),
-  ADD KEY `fk_idPregunta` (`idPregunta`);
+  ADD PRIMARY KEY (`idPartida`,`idPregunta`,`fecha`),
+  ADD KEY `fk_Pregunta` (`idPregunta`);
 
 --
--- Indexes for table `usuario`
+-- Indices de la tabla `usuario`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- Indices de la tabla `usuariopregunta`
+--
+ALTER TABLE `usuariopregunta`
+  ADD PRIMARY KEY (`idUsuario`,`idPregunta`),
+  ADD KEY `fk_Preg` (`idPregunta`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- AUTO_INCREMENT for table `categoria`
+-- AUTO_INCREMENT de la tabla `categoria`
 --
 ALTER TABLE `categoria`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `partida`
+-- AUTO_INCREMENT de la tabla `partida`
 --
 ALTER TABLE `partida`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
--- AUTO_INCREMENT for table `pregunta`
+-- AUTO_INCREMENT de la tabla `pregunta`
 --
 ALTER TABLE `pregunta`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT for table `respuesta`
+-- AUTO_INCREMENT de la tabla `respuesta`
 --
 ALTER TABLE `respuesta`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
--- AUTO_INCREMENT for table `usuario`
+-- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- Constraints for dumped tables
+-- Restricciones para tablas volcadas
 --
 
 --
--- Constraints for table `partida`
+-- Filtros para la tabla `partida`
 --
 ALTER TABLE `partida`
   ADD CONSTRAINT `fk_usuario` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 
 --
--- Constraints for table `pregunta`
+-- Filtros para la tabla `pregunta`
 --
 ALTER TABLE `pregunta`
   ADD CONSTRAINT `fk_idCategoria` FOREIGN KEY (`idCategoria`) REFERENCES `categoria` (`id`);
 
 --
--- Constraints for table `respuesta`
+-- Filtros para la tabla `respuesta`
 --
 ALTER TABLE `respuesta`
   ADD CONSTRAINT `fk_idPreguntaEnRta` FOREIGN KEY (`idPregunta`) REFERENCES `pregunta` (`id`);
 
 --
--- Constraints for table `tienen`
+-- Filtros para la tabla `tienen`
 --
 ALTER TABLE `tienen`
-  ADD CONSTRAINT `fk_idPartida` FOREIGN KEY (`idPartida`) REFERENCES `partida` (`id`),
-  ADD CONSTRAINT `fk_idPregunta` FOREIGN KEY (`idPregunta`) REFERENCES `pregunta` (`id`);
+  ADD CONSTRAINT `fk_Partida` FOREIGN KEY (`idPartida`) REFERENCES `partida` (`id`),
+  ADD CONSTRAINT `fk_Pregunta` FOREIGN KEY (`idPregunta`) REFERENCES `pregunta` (`id`);
+
+--
+-- Filtros para la tabla `usuariopregunta`
+--
+ALTER TABLE `usuariopregunta`
+  ADD CONSTRAINT `fk_Preg` FOREIGN KEY (`idPregunta`) REFERENCES `pregunta` (`id`),
+  ADD CONSTRAINT `fk_User` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -28,10 +28,10 @@ class PartidaController
                 ];
                 $this->presenter->show("pregunta", $data);
             }else{
-                header("location: /lobby/listar");
+                $this->model->reiniciarRegistroDePreguntasVistasPorUsuario($idUsuario);
+                header("Location: /partida/jugar");
                 exit();
             }
-            //de momento si no hay mas preguntas, que te mande al lobby. Mas adelante tendria que resetear las preguntasVistas
 
         }
     }
@@ -40,16 +40,19 @@ class PartidaController
     public function responder(){
         $idRespuesta = $_POST["idRespuesta"];
         $idPregunta = $_POST["idPregunta"];
+        $idUsuario = $_SESSION["loggedUserId"];
         $acierta = $this->model->validarRespuesta($idRespuesta);
         if($acierta){
             $idPartida = $_SESSION["idPartida"];
             $this->model->registrarPreguntaCorrecta($idPartida, $idPregunta);
+            $this->model->marcarPreguntaVistaPorUsuario($idUsuario, $idPregunta);
 
             header("location: /partida/jugar");
             exit();
         }else{
             $idPartida = $_SESSION["idPartida"];
             $this->model->registrarPreguntaIncorrecta($idPartida, $idPregunta);
+            $this->model->marcarPreguntaVistaPorUsuario($idUsuario, $idPregunta);
             $this->model->desactivarPartida($idPartida);
 
 
