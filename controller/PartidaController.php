@@ -11,6 +11,7 @@ class PartidaController
         $this->presenter = $presenter;
     }
     public function jugar(){
+
         if(isset($_SESSION["loggedUserId"])){
             $idUsuario = $_SESSION["loggedUserId"];
             $pregunta = $this->model->getPregunta($idUsuario);
