@@ -12,7 +12,6 @@ class LoginController{
     }
 
     public function validate(){
-        var_dump($_POST);
         $username = $_POST['username'];
         $password = $_POST['password'];
         $esValido = $this->model->validateLogin($username, $password);
