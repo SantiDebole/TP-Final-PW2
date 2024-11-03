@@ -3,7 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
+<<<<<<< HEAD
 -- Tiempo de generación: 30-10-2024 a las 23:15:25
+=======
+-- Tiempo de generación: 01-11-2024 a las 20:34:50
+>>>>>>> origin/rama_eric2
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -61,6 +65,7 @@ CREATE TABLE `partida` (
 --
 
 INSERT INTO `partida` (`id`, `estado`, `fecha`, `idUsuario`) VALUES
+<<<<<<< HEAD
 (1, 'inactivo', '2024-10-14 16:48:41', 1),
 (2, 'inactivo', '2024-09-16 16:48:41', 2),
 (3, 'inactivo', '2024-08-07 16:48:41', 3),
@@ -159,6 +164,21 @@ INSERT INTO `partida` (`id`, `estado`, `fecha`, `idUsuario`) VALUES
 (118, 'inactivo', '2024-08-26 17:03:22', 8),
 (119, 'inactivo', '2024-08-03 17:03:22', 9),
 (120, 'inactivo', '2024-08-26 17:03:22', 10);
+=======
+(10, 'inactivo', '2024-10-25 00:45:05', 10),
+(11, 'inactivo', '2024-10-25 00:48:33', 10),
+(12, 'inactivo', '2024-10-25 00:53:02', 10),
+(13, 'inactivo', '2024-10-25 00:55:59', 3),
+(15, 'inactivo', '2024-10-25 13:49:15', 11),
+(16, 'inactivo', '2024-10-27 19:39:29', 11),
+(17, 'inactivo', '2024-10-27 19:42:24', 11),
+(18, 'inactivo', '2024-10-27 19:44:23', 11),
+(19, 'inactivo', '2024-10-27 19:48:26', 11),
+(20, 'inactivo', '2024-10-27 20:14:00', 11),
+(21, 'Activo', '2024-10-27 20:15:38', 11),
+(22, 'inactivo', '2024-10-27 20:18:28', 12),
+(23, 'inactivo', '2024-11-01 20:20:52', 14);
+>>>>>>> origin/rama_eric2
 
 -- --------------------------------------------------------
 
@@ -307,6 +327,7 @@ INSERT INTO `respuesta` (`id`, `descripcion`, `esCorrecta`, `idPregunta`) VALUES
 CREATE TABLE `tienen` (
   `idPartida` int(11) NOT NULL,
   `idPregunta` int(11) NOT NULL,
+  `fecha` datetime NOT NULL,
   `puntaje` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -314,6 +335,7 @@ CREATE TABLE `tienen` (
 -- Volcado de datos para la tabla `tienen`
 --
 
+<<<<<<< HEAD
 INSERT INTO `tienen` (`idPartida`, `idPregunta`, `puntaje`) VALUES
 (1, 3, 1),
 (1, 4, 0),
@@ -509,6 +531,37 @@ INSERT INTO `tienen` (`idPartida`, `idPregunta`, `puntaje`) VALUES
 (50, 10, 1),
 (50, 12, 1),
 (50, 20, 1);
+=======
+INSERT INTO `tienen` (`idPartida`, `idPregunta`, `fecha`, `puntaje`) VALUES
+(23, 1, '2024-11-01 20:26:19', 1),
+(23, 1, '2024-11-01 20:27:24', 1),
+(23, 2, '2024-11-01 20:26:23', 1),
+(23, 2, '2024-11-01 20:27:04', 1),
+(23, 2, '2024-11-01 20:28:57', 0),
+(23, 3, '0000-00-00 00:00:00', 1),
+(23, 3, '2024-11-01 20:27:28', 1),
+(23, 4, '2024-11-01 20:26:17', 1),
+(23, 4, '2024-11-01 20:27:06', 1),
+(23, 5, '2024-11-01 20:26:20', 1),
+(23, 5, '2024-11-01 20:27:21', 1),
+(23, 6, '2024-11-01 20:26:22', 1),
+(23, 6, '2024-11-01 20:26:37', 1),
+(23, 7, '0000-00-00 00:00:00', 1),
+(23, 7, '2024-11-01 20:27:22', 1),
+(23, 7, '2024-11-01 20:27:33', 1),
+(23, 8, '0000-00-00 00:00:00', 1),
+(23, 8, '2024-11-01 20:27:18', 1),
+(23, 9, '0000-00-00 00:00:00', 1),
+(23, 9, '2024-11-01 20:26:34', 1),
+(23, 10, '2024-11-01 20:26:24', 1),
+(23, 10, '2024-11-01 20:27:10', 1),
+(23, 11, '0000-00-00 00:00:00', 1),
+(23, 11, '2024-11-01 20:27:05', 1),
+(23, 12, '2024-11-01 20:26:15', 1),
+(23, 12, '2024-11-01 20:27:19', 1),
+(23, 13, '2024-11-01 20:26:25', 1),
+(23, 13, '2024-11-01 20:27:08', 1);
+>>>>>>> origin/rama_eric2
 
 -- --------------------------------------------------------
 
@@ -550,7 +603,29 @@ INSERT INTO `usuario` (`id`, `nombre_completo`, `fecha_nacimiento`, `genero`, `e
 (10, 'Sofía Ramírez', '1987-07-20', 'Femenino', 'sofia.ramirez@example.com', 'sofiaramirez', 'hashed_password10', 'a', 'sofia.jpg', 'Chile', 'Valparaíso', '2023-10-10', 1, NULL),
 (11, 'Juan Pérez', '1990-05-15', 'masculino', 'juan.perez@example.com', 'juanp', 'hashed_password', 'ur', 'juan_foto.jpg', 'México', 'Ciudad de México', '2024-10-17', 1, NULL);
 
+-- --------------------------------------------------------
+
 --
+<<<<<<< HEAD
+=======
+-- Estructura de tabla para la tabla `usuariopregunta`
+--
+
+CREATE TABLE `usuariopregunta` (
+  `idUsuario` int(11) NOT NULL,
+  `idPregunta` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuariopregunta`
+--
+
+INSERT INTO `usuariopregunta` (`idUsuario`, `idPregunta`) VALUES
+(14, 2),
+(14, 7);
+
+--
+>>>>>>> origin/rama_eric2
 -- Índices para tablas volcadas
 --
 
@@ -585,8 +660,8 @@ ALTER TABLE `respuesta`
 -- Indices de la tabla `tienen`
 --
 ALTER TABLE `tienen`
-  ADD PRIMARY KEY (`idPartida`,`idPregunta`),
-  ADD KEY `fk_idPregunta` (`idPregunta`);
+  ADD PRIMARY KEY (`idPartida`,`idPregunta`,`fecha`),
+  ADD KEY `fk_Pregunta` (`idPregunta`);
 
 --
 -- Indices de la tabla `usuario`
@@ -595,6 +670,16 @@ ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id`);
 
 --
+<<<<<<< HEAD
+=======
+-- Indices de la tabla `usuariopregunta`
+--
+ALTER TABLE `usuariopregunta`
+  ADD PRIMARY KEY (`idUsuario`,`idPregunta`),
+  ADD KEY `fk_Preg` (`idPregunta`);
+
+--
+>>>>>>> origin/rama_eric2
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -608,7 +693,11 @@ ALTER TABLE `categoria`
 -- AUTO_INCREMENT de la tabla `partida`
 --
 ALTER TABLE `partida`
+<<<<<<< HEAD
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+=======
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+>>>>>>> origin/rama_eric2
 
 --
 -- AUTO_INCREMENT de la tabla `pregunta`
@@ -654,8 +743,15 @@ ALTER TABLE `respuesta`
 -- Filtros para la tabla `tienen`
 --
 ALTER TABLE `tienen`
-  ADD CONSTRAINT `fk_idPartida` FOREIGN KEY (`idPartida`) REFERENCES `partida` (`id`),
-  ADD CONSTRAINT `fk_idPregunta` FOREIGN KEY (`idPregunta`) REFERENCES `pregunta` (`id`);
+  ADD CONSTRAINT `fk_Partida` FOREIGN KEY (`idPartida`) REFERENCES `partida` (`id`),
+  ADD CONSTRAINT `fk_Pregunta` FOREIGN KEY (`idPregunta`) REFERENCES `pregunta` (`id`);
+
+--
+-- Filtros para la tabla `usuariopregunta`
+--
+ALTER TABLE `usuariopregunta`
+  ADD CONSTRAINT `fk_Preg` FOREIGN KEY (`idPregunta`) REFERENCES `pregunta` (`id`),
+  ADD CONSTRAINT `fk_User` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

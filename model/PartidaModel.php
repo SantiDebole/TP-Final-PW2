@@ -97,17 +97,21 @@ class PartidaModel
     }
 
     public function registrarPreguntaCorrecta($idPartida, $idPregunta){
-        $query = "INSERT INTO tienen (idPartida, idPregunta,puntaje) VALUES (?,?,?)";
+        $fechaHoraActual = new DateTime();
+        $fechaFormateada = $fechaHoraActual->format('Y-m-d H:i:s');
+        $query = "INSERT INTO tienen (idPartida, idPregunta,fecha,puntaje) VALUES (?,?,?,?)";
         $puntaje = 1;
         $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("iii", $idPartida, $idPregunta,$puntaje);
+        $stmt->bind_param("iisi", $idPartida, $idPregunta,$fechaFormateada,$puntaje);
         $stmt->execute();
     }
     public function registrarPreguntaIncorrecta($idPartida, $idPregunta){
-        $query = "INSERT INTO tienen (idPartida, idPregunta,puntaje) VALUES (?,?,?)";
+        $fechaHoraActual = new DateTime();
+        $fechaFormateada = $fechaHoraActual->format('Y-m-d H:i:s');
+        $query = "INSERT INTO tienen (idPartida, idPregunta,fecha,puntaje) VALUES (?,?,?,?)";
         $puntaje = 0;
         $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("iii", $idPartida, $idPregunta,$puntaje);
+        $stmt->bind_param("iisi", $idPartida, $idPregunta,$fechaFormateada,$puntaje);
         $stmt->execute();
     }
 
@@ -116,11 +120,9 @@ class PartidaModel
         $queryFuncional = "SELECT pr.id AS idPreguntaNoVista 
                    FROM pregunta pr
                    WHERE pr.id NOT IN (
-                       SELECT pr2.id
+                       SELECT up.idPregunta as id
                        FROM usuario u
-                       JOIN partida p ON u.id = p.idUsuario
-                       JOIN tienen t ON p.id = t.idPartida
-                       JOIN pregunta pr2 ON t.idPregunta = pr2.id
+                       JOIN UsuarioPregunta up on u.id = up.idUsuario
                        WHERE u.id = ?
                        ORDER BY u.id
                    );";
@@ -163,5 +165,19 @@ class PartidaModel
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_assoc();
+    }
+
+    public function reiniciarRegistroDePreguntasVistasPorUsuario($idUsuario){
+        $query = "DELETE FROM UsuarioPregunta WHERE idUsuario = ?";
+        $stmt = $this->db->connection->prepare($query);
+        $stmt->bind_param("i", $idUsuario);
+        $stmt->execute();
+    }
+
+    public function marcarPreguntaVistaPorUsuario($idUsuario, $idPregunta){
+        $query = "INSERT INTO UsuarioPregunta (idUsuario, idPregunta) VALUES (?,?)";
+        $stmt = $this->db->connection->prepare($query);
+        $stmt->bind_param("ii", $idUsuario, $idPregunta);
+        $stmt->execute();
     }
 }
