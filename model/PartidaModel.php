@@ -151,7 +151,7 @@ class PartidaModel
 
     public function crearPartida($idUsuario){
         $fecha = date('Y-m-d H:i:s');
-        $estado = "Activo";
+        $estado = "activo";
         $query = "INSERT INTO partida(fecha, estado,idUsuario) VALUES (?,?,?)";
         $stmt = $this->db->connection->prepare($query);
         $stmt->bind_param("ssi", $fecha, $estado, $idUsuario);
