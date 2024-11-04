@@ -42,6 +42,7 @@ class LobbyController {
         var_dump($data);
         $this->presenter->show("perfil",$data);
 
+
     }
     public function verRivalPorQr($usuario){
         $idBuscado = $usuario;
@@ -50,6 +51,7 @@ class LobbyController {
         $this->presenter->show("perfil",$data);
 
     }
+
 
 
     public function getUserById($id) { //ESTO ESTA MAL, TIENE QUE IR EN EL MODELO!!!
@@ -70,6 +72,20 @@ class LobbyController {
         ];
 
         $this->presenter->show("misPartidas",$data);
+
+    }
+    public function ranking(){
+        $resultado = $this->model->obtenerRanking();
+        $data=[
+                    'topPuntosTotales' => $resultado['topPuntosTotales'],
+                    'topPartidasHistorico' =>  $resultado['topPartidasHistorico'],
+                    'topPartidasDelMes' => $resultado['topPartidasDelMes'],
+                    'topPartidasDeLaSemana' => $resultado['topPartidasDeLaSemana'],
+                    'top10MejoresJugadores' => $resultado['top10MejoresJugadores']
+
+            ];
+            $this->presenter->show("ranking", $data);
+
 
     }
 }
