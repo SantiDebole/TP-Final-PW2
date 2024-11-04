@@ -12,8 +12,8 @@ class PartidaController
     }
     public function jugar(){
 
-        if(isset($_SESSION["loggedUserId"])){
-            $idUsuario = $_SESSION["loggedUserId"];
+        if(isset($_SESSION["user_id"])){
+            $idUsuario = $_SESSION["user_id"];
             $pregunta = $this->model->getPregunta($idUsuario);
             if($pregunta){
                 if(!isset($_SESSION["idPartida"])){
@@ -40,7 +40,7 @@ class PartidaController
     public function responder(){
         $idRespuesta = $_POST["idRespuesta"];
         $idPregunta = $_POST["idPregunta"];
-        $idUsuario = $_SESSION["loggedUserId"];
+        $idUsuario = $_SESSION["user_id"];
         $acierta = $this->model->validarRespuesta($idRespuesta);
         if($acierta){
             $idPartida = $_SESSION["idPartida"];
@@ -65,7 +65,7 @@ class PartidaController
 
     public function mostrarPuntos(){
         //generaria la vista donde muestra los puntos obtenidos
-        $idUsuario = $_SESSION["loggedUserId"];
+        $idUsuario = $_SESSION["user_id"];
         $idPartida = $_SESSION["idPartida"];
         $puntaje= $this->model->traerPuntajeDelUsuarioEnLaPartida($idPartida,$idUsuario);
         $data = [

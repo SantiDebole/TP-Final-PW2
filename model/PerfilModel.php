@@ -18,9 +18,8 @@ class PerfilModel
         return $usuario;
     }
 
-    public function traerPerfil() {
+    public function traerPerfil($usuarioId) {
 
-        $usuarioId = $_SESSION["loggedUserId"];
 
         $sql= "SELECT * FROM usuario WHERE id = ?";
         $stmt = $this->database->connection->prepare($sql);
@@ -28,7 +27,7 @@ class PerfilModel
         $stmt->execute();
         // Obtener el resultado
         $result = $stmt->get_result();
-        $usuario = $result->fetch_assoc(); // Esto devuelve un array asociativo
+        $usuario = $result->fetch_assoc();
 
 
 

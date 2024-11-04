@@ -39,7 +39,6 @@ class LobbyController {
     public function verRival(){
         $idBuscado = $_POST["usuarioBuscado"];
         $data['perfilRival'] = $this->model->buscarDatosDeOtrosJugadores($idBuscado);
-        var_dump($data);
         $this->presenter->show("perfil",$data);
 
 
@@ -47,7 +46,6 @@ class LobbyController {
     public function verRivalPorQr($usuario){
         $idBuscado = $usuario;
         $data['perfilRival'] = $this->model->buscarDatosDeOtrosJugadores($idBuscado);
-        var_dump($data);
         $this->presenter->show("perfil",$data);
 
     }
@@ -64,7 +62,6 @@ class LobbyController {
         $idUsuario = $_SESSION['user_id'];
 
         $resultados= $this->model->traerMisPartidas($idUsuario);
-        var_dump($resultados);
 
         $data = [
             'misPartidas' => $resultados['partidas'],
