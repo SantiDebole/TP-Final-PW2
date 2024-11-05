@@ -12,6 +12,13 @@ class ReporteController{
     }
 
     public function reportarPregunta(){
+       $idPreguntaReportada= $_POST['idPreguntaReportada'];
+
+       $data=[
+           'preguntaReportada'=>$idPreguntaReportada
+       ];
+
+        $this->presenter->show('reporte',$data);
 
     }
 

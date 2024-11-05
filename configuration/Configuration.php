@@ -26,6 +26,7 @@ include_once ("./controller/LobbyController.php");
 include_once ("./controller/PerfilController.php");
 include_once ("./controller/PartidaController.php");
 include_once ("./controller/RegistroController.php");
+include_once ("./controller/ReporteController.php");
 
 
 
@@ -61,7 +62,7 @@ class Configuration
     // getCONTROLLERS
 
     public function getReporteController(){
-        return new RegistroController($this->getReporteModel(),$this->getPresenter());
+        return new ReporteController($this->getReporteModel(),$this->getPresenter());
     }
 
     // getMODELS

@@ -66,7 +66,8 @@ class Router
                         'partida/mostrarPuntos',
                         'login/logout',
                         'login/validate',
-                        'perfil/listar'];
+                        'perfil/listar',
+                        'reporte/reportarPregunta'];
                     break;
                 case "e":
                     $rutasPermitidas = [ 'lobby/listar',
