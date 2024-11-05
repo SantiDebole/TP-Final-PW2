@@ -1,7 +1,7 @@
 <?php
-
 class Router
 {
+
     private $defaultController;
     private $defaultMethod;
     private $configuration;
@@ -12,12 +12,16 @@ class Router
         $this->configuration = $configuration;
         $this->defaultController = $defaultController;
         $this->defaultMethod = $defaultMethod;
+
     }
 
     public function route($controllerName, $methodName, $param)
     {
+
+        $this->controlarRutas($controllerName, $methodName);
         $controller = $this->getControllerFrom($controllerName);
         $this->executeMethodFromController($controller, $methodName, $param);
+
     }
 
     private function getControllerFrom($module)
@@ -32,6 +36,66 @@ class Router
         $params = array_slice(func_get_args(), 2);
         $validMethod = method_exists($controller, $method) ? $method : $this->defaultMethod;
         call_user_func(array($controller, $validMethod), $param);
+    }
+
+    private function controlarRutas($controllerName, $methodName)
+    {
+
+        $rutasPermitidas = [];
+        $rutaConstruida = "$controllerName/$methodName";
+        var_dump($rutaConstruida);
+        if (!isset($_SESSION['rol'])) {
+            $rutasPermitidas = ['registro/listar',
+                'registro/validarRegistro',
+                'registro/reenviarEmail',
+                'registro/ingresoPorEmail',
+                'login/listar',
+                'login/validate'
+            ];
+            $this->controlDeRuta($rutaConstruida, $rutasPermitidas);
+        } else {
+            switch ($_SESSION['rol']) {
+                case "ur":
+                    $rutasPermitidas = [ 'lobby/listar',
+                        'lobby/verRival',
+                        'lobby/verRivalPorQR',
+                        'lobby/mis_partidas',
+                        'lobby/ranking',
+                        'partida/jugar',
+                        'partida/responder',
+                        'partida/mostrarPuntos',
+                        'login/logout',
+                        'login/validate',
+                        'perfil/listar'];
+                    break;
+                case "e":
+                    $rutasPermitidas = [ 'lobby/listar',
+                                         'login/validate',
+                                         'login/logout'];
+                    break;
+                case "a":
+                    $rutasPermitidas = [ 'lobby/listar',
+                                         'login/validate',
+                                         'login/logout'];
+                                         break;
+            }
+            $this->controlDeRuta($rutaConstruida, $rutasPermitidas);
+        }
+
+
+    }
+
+    private function controlDeRuta($rutaConstruida, $rutasPermitidas)
+    {
+
+        foreach ($rutasPermitidas as $rutaPermitida) {
+            if ($rutaPermitida == $rutaConstruida) return true;
+        }
+        if(isset($_SESSION['rol'])) {header("Location: /lobby/listar");
+        exit();}
+        else {header("Location: /login/listar");
+            exit();}
+
     }
 
 
