@@ -16,6 +16,7 @@ include_once ("./model/LobbyModel.php");
 include_once ("./model/PerfilModel.php");
 
 include_once ("./model/PartidaModel.php");
+include_once ("./model/ReporteModel.php");
 
 
 //controladores
@@ -24,6 +25,7 @@ include_once ("./controller/RegistroController.php");
 include_once ("./controller/LobbyController.php");
 include_once ("./controller/PerfilController.php");
 include_once ("./controller/PartidaController.php");
+include_once ("./controller/RegistroController.php");
 
 
 
@@ -57,6 +59,15 @@ class Configuration
         return new MustachePresenter("./view/template");
     }
     // getCONTROLLERS
+
+    public function getReporteController(){
+        return new RegistroController($this->getReporteModel(),$this->getPresenter());
+    }
+
+    // getMODELS
+    public function getReporteModel(){
+        return new ReporteModel($this->getDatabase());
+    }
     public function getLoginController(){
         return new LoginController($this->getLoginModel(),$this->getPresenter());
     }
