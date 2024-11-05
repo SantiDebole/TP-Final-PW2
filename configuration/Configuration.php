@@ -7,7 +7,8 @@ include_once('./vendor/autoload.php');
 include_once ("./helper/MustachePresenter.php");
 include_once ("./helper/Database.php");
 include_once ("./helper/Router.php");
-
+include_once ("./helper/Mailer.php");
+include_once ("./helper/GeneradorDeQR.php");
 //model
 include_once ("./model/RegistroModel.php");
 include_once("./model/LoginModel.php");
@@ -22,9 +23,6 @@ include_once("./controller/LoginController.php");
 include_once ("./controller/RegistroController.php");
 include_once ("./controller/LobbyController.php");
 include_once ("./controller/PerfilController.php");
-
-
-
 include_once ("./controller/PartidaController.php");
 
 
@@ -38,11 +36,14 @@ class Configuration
     }
 
     public function getRouter(){
-
-        return new Router($this,"getRegistroController", "listar");
-
+        if(isset($_SESSION['rol'])){
+            return new Router($this,"getLobbyController", "listar");
+            }else  return new Router($this,"getLoginController", "listar");
 
     }
+
+
+
 
     public function getDatabase(){
         $config = parse_ini_file("./configuration/config.ini");
@@ -92,6 +93,7 @@ class Configuration
     public function getRegistroModel(){
         return new RegistroModel($this->getDatabase());
     }
+
 
     public function getPartidaController()
     {

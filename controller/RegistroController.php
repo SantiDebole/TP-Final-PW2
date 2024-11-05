@@ -53,7 +53,7 @@ class RegistroController{
         /*var_dump($data);
         var_dump($data['errores']);*/
         if(empty($data['errores'])){
-            $retorno['registro']=$data['nombreArchivo'];
+            $retorno['registro']=$data['email'];
             $this->presenter->show('validarEmail',$retorno);
         }else{
 
@@ -61,18 +61,21 @@ class RegistroController{
             $data = $this->cargaDeDatosParaRenderizacionDeFormulario($datos_usuario);
             $this->presenter->show('registro',$data);
         }
-
-
-
     }
-    public function validarEmail(){
-      if(isset($_POST['hash'])){
-        $rutaArchivo='./data/'.$_POST['hash'].'.json';
-             if(file_exists($rutaArchivo)){ $data['registro']=$this->model->emailConfirmacion($rutaArchivo);
-               } else $data['registro']="error en la confirmacion";
-                } else $data['registro']="error en la confirmacion";
 
-        $this->presenter->show('registroFinalizado', $data);
+    public function  reenviarEmail()
+        {
+            $email= $_POST['email'];
+            $data['reenviado'] = $this->model->reenviarEmail($email);
+            $data['registro'] = $_POST['email'];
+            $this->presenter->show('validarEmail', $data);
+
+        }
+
+
+    public function ingresoPorEmail($token){
+        $data['registro']= $this->model->ingresoPorEmail($token);
+    $this->presenter->show('registroFinalizado', $data);
 
     }
     private function cargaDeDatosParaRenderizacionDeFormulario ($data)
@@ -95,9 +98,7 @@ class RegistroController{
                 $datos[$campo] = $data[$campo];
             }else $datos[$campo]='';
         }
-
-        var_dump($datos);
-return $datos;
+    return $datos;
     }
 
 }

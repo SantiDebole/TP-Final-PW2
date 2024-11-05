@@ -7,13 +7,148 @@
                     <img src="{{foto_perfil}}" class="img-fluid" alt="Descripción de la imagen">
                 </div>
             </div>
-            <h1>Bienvenido usuario con el id: {{loggedUserId}}</h1>
+            <h1>Bienvenido usuario con el id: {{id}}</h1>
             <h2>Usuario: {{usuario}}</h2>
             <h3>Nombre completo: {{nombre_completo}}</h3>
             <h4>Fecha nacimiento: {{fecha_nacimiento}}</h4>
             <h5>Genero: {{genero}}</h5>
             <h6>Email: {{email}}</h6>
-            <h6>Pais: {{pais}}</h6>
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-12">
+                    <div id="map" style="width: 100%; height: 400px;"></div>
+                    <h6>Es de {{ciudad}}, {{pais}}</h6>
+                </div>
+            </div>
         {{/perfil}}
+
+        {{#perfilRival}}
+            <a href="/lobby/listar">Ir al lobby</a>
+            <div class="container">
+                <div class="img-container mx-auto" style="max-width: 300px;">
+                    <img src="{{foto_perfil}}" class="img-fluid" alt="Descripción de la imagen">
+                    <img src="/public/QRs/{{usuario}}.png" class="img-fluid" alt="qr">
+                </div>
+            </div>
+            <h2>Usuario: {{usuario}}</h2>
+            <h3>Nombre completo: {{nombre_completo}}</h3>
+            <h4>Fecha nacimiento: {{fecha_nacimiento}}</h4>
+            <h5>Genero: {{genero}}</h5>
+            <h6>Email: {{email}}</h6>
+            <h6>Juega desde : {{fecha_creacion}}</h6>
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col-12">
+                        <div id="map" style="width: 100%; height: 400px;"></div>
+                        <h6>Es de {{ciudad}}, {{pais}}</h6>
+                    </div>
+                </div>
+
+
+
+
+        <h2>Puntaje total acumulado: {{puntaje_total}}</h2>
+
+            <h1 class="text-center mb-4">Mejor partida:</h1>
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped align-middle">
+                    <thead class="table-dark text-center">
+                    <tr>
+                        <th scope="col">ID de Partida</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Puntaje</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {{#mejor_partida}}
+                        <tr class="text-center">
+                            <td>{{id_partida}}</td>
+                            <td>{{fecha_partida}}</td>
+                            <td>{{estado_partida}}</td>
+                            <td>{{puntaje_total}}</td>
+                        </tr>
+                    {{/mejor_partida}}
+                    </tbody>
+                </table>
+            </div>
+            <h1 class="text-center mb-4">Todas las Partidas</h1>
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped align-middle">
+                    <thead class="table-dark text-center">
+                    <tr>
+                        <th scope="col">ID de Partida</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Puntaje</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#partidas}}
+                        <tr class="text-center">
+                            <td>{{id_partida}}</td>
+                            <td>{{fecha_partida}}</td>
+                            <td>{{estado_partida}}</td>
+                            <td>{{puntaje_total}}</td>
+                        </tr>
+                    {{/partidas}}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {{/perfilRival}}
+    </div>
+
     </div>
 </div>
+<script>
+// Inicializar el mapa en una ubicación predeterminada (puedes ajustarlo según tu preferencia)
+var map = L.map('map').setView([20.5937, 78.9629], 2); // Latitud y longitud de India (puedes cambiarlo)
+
+// Cargar los tiles de OpenStreetMap
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+{{#perfilRival}}
+// Variables que llegan desde el backend
+var pais = '{{pais}}'; // Asigna el valor de país desde Mustache
+var ciudad = '{{ciudad}}'; // Asigna el valor de ciudad desde Mustache
+    {{/perfilRival}}
+    {{#perfil}}
+    // Variables que llegan desde el backend
+    var pais = '{{pais}}'; // Asigna el valor de país desde Mustache
+    var ciudad = '{{ciudad}}'; // Asigna el valor de ciudad desde Mustache
+    {{/perfil}}
+// Función para obtener coordenadas a partir de país y ciudad (usando Nominatim)
+function getCoordinates(country, city) {
+var url = `https://nominatim.openstreetmap.org/search?format=json&country=${country}&city=${city}`;
+
+fetch(url)
+.then(response => response.json())
+.then(data => {
+if (data.length > 0) {
+var lat = data[0].lat;
+var lon = data[0].lon;
+
+// Mover el mapa a las coordenadas encontradas
+map.setView([lat, lon], 10); // Puedes ajustar el zoom si es necesario
+
+// Crear un marcador en la ubicación
+L.marker([lat, lon]).addTo(map).bindPopup(`Ciudad: ${city}, País: ${country}`);
+} else {
+console.log('No se encontraron coordenadas para la ciudad y país especificados.');
+}
+})
+.catch(error => {
+console.log('Error fetching data: ', error);
+});
+}
+
+// Llama a la función con el país y la ciudad
+getCoordinates(pais, ciudad);
+</script>

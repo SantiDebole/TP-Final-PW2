@@ -14,8 +14,10 @@ class PerfilController {
     }
 
     public function listar(){
+        $idUsuario = $_SESSION['user_id'];
 
-        $data['perfil'] = $this->model->traerPerfil();
+
+        $data['perfil'] = $this->model->traerPerfil($idUsuario);
 
         $this->presenter->show('perfil',$data);
     }
