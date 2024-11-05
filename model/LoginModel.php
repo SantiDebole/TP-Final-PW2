@@ -9,8 +9,10 @@ class LoginModel {
 
     public function validateLogin($username, $password){
         $user = $this->getUser($username);
-        if($user){
-            return $password === $user["password"];
+
+        if($user && $password === $user["password"]){
+            return $user['id'];
+
         }
         return false;
     }

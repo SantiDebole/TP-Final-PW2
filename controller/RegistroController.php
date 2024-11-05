@@ -21,6 +21,10 @@ class RegistroController{
 
     public function validarRegistro(){
         //validar semantica del formulario
+        foreach($_POST as $campo => $valor){
+            var_dump($campo);
+            if(empty($valor)) $data['errores'][] ="Falta completar el campo $campo";
+        }
         $nombre_completo= $_POST['nombre_completo'];
         $fecha_nacimiento= $_POST['fecha_nacimiento'];
         $genero= isset($_POST['genero'])?$_POST['genero']:'';
@@ -44,12 +48,10 @@ class RegistroController{
             'repeat_password' => $repeat_password,
             'foto_perfil' => $foto_perfil,
             'pais' => $pais,
-            'ciudad' => $ciudad
-        ];
+            'ciudad' => $ciudad];
 
 
-
-        $data = $this->model->registrar($datos_usuario);
+        if(empty($data['errores'])) $data = $this->model->registrar($datos_usuario);
         /*var_dump($data);
         var_dump($data['errores']);*/
         if(empty($data['errores'])){

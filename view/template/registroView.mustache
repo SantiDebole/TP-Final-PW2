@@ -172,6 +172,7 @@
 
     // Escuchar el evento de clic en el mapa
     map.on('click', onMapClick);
+
 </script>
 
 <script>
@@ -190,20 +191,51 @@
     function getCountryAndCity(lat, lon) {
         var url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
 
+
+    var pais = '{{pais}}'; // Asigna el valor de país desde Mustache
+    var ciudad = '{{ciudad}}'; // Asigna el valor de ciudad desde Mustache
+    if (pais && ciudad) {
+        document.getElementById('pais').value = pais;
+        document.getElementById('ciudad').value = ciudad;
+        getCoordinates(pais, ciudad);
+    }
+    function getCoordinates(country, city) {
+        var url = `https://nominatim.openstreetmap.org/search?format=json&country=${country}&city=${city}`;
+
+
         fetch(url)
                 .then(response => response.json())
                 .then(data => {
+
                     var country = data.address.country || '';
                     var city = data.address.city || data.address.town || data.address.village || '';
 
                     // Asignar los valores al formulario
                     document.getElementById('pais').value = country;
                     document.getElementById('ciudad').value = city;
+
+                    if (data.length > 0) {
+                        var lat = data[0].lat;
+                        var lon = data[0].lon;
+
+                        // Mover el mapa a las coordenadas encontradas
+                        map.setView([lat, lon], 10); // Puedes ajustar el zoom si es necesario
+
+                        // Mover el marcador a la nueva ubicación si ya existe
+                        marker.setLatLng([lat, lon]);
+
+                        // Agregar un popup al marcador
+                      //  marker.bindPopup(`Ciudad: ${city}, País: ${country}`).openPopup();
+                    } else {
+                        console.log('No se encontraron coordenadas para la ciudad y país especificados.');
+                    }
+
                 })
                 .catch(error => {
                     console.log('Error fetching data: ', error);
                 });
     }
+
 
     // Función que se ejecuta al hacer clic en el mapa
     function onMapClick(e) {
@@ -219,7 +251,11 @@
 
     // Escuchar el evento de clic en el mapa
     map.on('click', onMapClick);
+
+
 </script>
+
+
 
 
 
