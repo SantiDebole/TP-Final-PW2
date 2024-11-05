@@ -17,13 +17,13 @@ class LoginController{
         $esValido = $this->model->validateLogin($username, $password);
 
         if($esValido){
-            $usuario = $this->model->getUser($username);
-            $loggedUserId = $usuario["id"];
+            $loggedUserId = $_SESSION["loggedUserId"];
+            $rol = $this->model->getUserRol($loggedUserId);
+
             // Guardo la información del usuario en la sesión
             $_SESSION['user_id'] = $loggedUserId;
             $_SESSION['username'] = $username;
-            $_SESSION['rol'] = $usuario["rol"];
-
+            $_SESSION['rol'] = $rol;
 
 
             // Redirecciono en base al rol
@@ -33,7 +33,7 @@ class LoginController{
 
 
         }else{
-            $this->presenter->show("login",["auth_error" => "Error, usuario y/o contraseña incorrectos."]);
+            $this->presenter->show("login",["auth_error" => $_SESSION["auth_error"]]);
         }
 
     }
