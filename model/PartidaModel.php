@@ -75,7 +75,7 @@ class PartidaModel
                 "idRta" => $row["idRta"]
             ];
         }
-
+        //shuffle($data['respuestas']);
         return $data;
         }
         return null;
@@ -117,7 +117,42 @@ class PartidaModel
 
     private function getPreguntasNoVistasPorUsuario($idUsuario)
     {
-        $queryFuncional = "SELECT pr.id AS idPreguntaNoVista 
+        $dificultad['dificil'] = "WITH PreguntasDificiles AS (
+    SELECT tienen.idPregunta AS idPreguntaDificil,
+           AVG(tienen.puntaje) AS promedio
+    FROM tienen
+    GROUP BY tienen.idPregunta
+    HAVING promedio < 0.3
+)";
+        $dificultad['medio'] = "WITH PreguntasDificiles AS (
+    SELECT tienen.idPregunta AS idPreguntaDificil,
+           AVG(tienen.puntaje) AS promedio
+    FROM tienen
+    GROUP BY tienen.idPregunta
+    HAVING promedio > 0.3 and < 0.7
+)";
+        $dificultad['facil'] = "WITH PreguntasDificiles AS (
+    SELECT tienen.idPregunta AS idPreguntaDificil,
+           AVG(tienen.puntaje) AS promedio
+    FROM tienen
+    GROUP BY tienen.idPregunta
+    HAVING promedio > 0.7
+)";
+
+        $queryFuncional = "{$dificultad['dificil']} 
+SELECT pr.id AS idPreguntaNoVista
+FROM pregunta pr
+WHERE pr.id NOT IN (
+    SELECT up.idPregunta
+    FROM usuario u
+    JOIN UsuarioPregunta up ON u.id = up.idUsuario
+    WHERE u.id = ?
+)
+AND pr.id IN (
+    SELECT idPreguntaDificil
+    FROM PreguntasDificiles
+);";
+            /*"SELECT pr.id AS idPreguntaNoVista
                    FROM pregunta pr
                    WHERE pr.id NOT IN (
                        SELECT up.idPregunta as id
@@ -125,7 +160,7 @@ class PartidaModel
                        JOIN UsuarioPregunta up on u.id = up.idUsuario
                        WHERE u.id = ?
                        ORDER BY u.id
-                   );";
+                   );";*/
         $stmt = $this->db->connection->prepare($queryFuncional);
         $stmt->bind_param("i", $idUsuario);
         $stmt->execute();
