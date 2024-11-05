@@ -9,18 +9,9 @@ class LoginModel {
 
     public function validateLogin($username, $password){
         $user = $this->getUser($username);
-
-        if($user){
-            if($password === $user["password"]){
-                if(isset($_SESSION["auth_error"])){
-                    unset($_SESSION["auth_error"]);
-                }
-                $_SESSION["loggedUserId"] = $user["id"];
-                $_SESSION["loggedUsername"] = $user["usuario"];
-                return true;
-            }
+        if($user && $password === $user["password"]){
+            return $user['id'];
         }
-        $_SESSION["auth_error"] = 1;
         return false;
     }
 
