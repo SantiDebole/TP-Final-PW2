@@ -8,6 +8,7 @@ include_once ("./helper/MustachePresenter.php");
 include_once ("./helper/Database.php");
 include_once ("./helper/Router.php");
 include_once ("./helper/Mailer.php");
+include_once ("./helper/GeneradorDeQR.php");
 //model
 include_once ("./model/RegistroModel.php");
 include_once("./model/LoginModel.php");
@@ -35,9 +36,9 @@ class Configuration
     }
 
     public function getRouter(){
-
-
-        return new Router($this,"getRegistroController", "listar");
+        if(isset($_SESSION['rol'])){
+            return new Router($this,"getLobbyController", "listar");
+        }else  return new Router($this,"getLoginController", "listar");
 
     }
 
