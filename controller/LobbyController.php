@@ -36,9 +36,23 @@ class LobbyController {
     }
 
 
+    public function verRival(){
+        $idBuscado = $_POST["usuarioBuscado"];
+        $data['perfilRival'] = $this->model->buscarDatosDeOtrosJugadores($idBuscado);
+        $this->presenter->show("perfil",$data);
 
 
-    public function getUserById($id) {
+    }
+    public function verRivalPorQr($usuario){
+        $idBuscado = $usuario;
+        $data['perfilRival'] = $this->model->buscarDatosDeOtrosJugadores($idBuscado);
+        $this->presenter->show("perfil",$data);
+
+    }
+
+
+
+    public function getUserById($id) { //ESTO ESTA MAL, TIENE QUE IR EN EL MODELO!!!
         $stmt = $this->conn->prepare("SELECT nombre, puntaje FROM usuarios WHERE id = :id");
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -48,7 +62,6 @@ class LobbyController {
         $idUsuario = $_SESSION['user_id'];
 
         $resultados= $this->model->traerMisPartidas($idUsuario);
-        var_dump($resultados);
 
         $data = [
             'misPartidas' => $resultados['partidas'],
@@ -56,6 +69,20 @@ class LobbyController {
         ];
 
         $this->presenter->show("misPartidas",$data);
+
+    }
+    public function ranking(){
+        $resultado = $this->model->obtenerRanking();
+        $data=[
+                    'topPuntosTotales' => $resultado['topPuntosTotales'],
+                    'topPartidasHistorico' =>  $resultado['topPartidasHistorico'],
+                    'topPartidasDelMes' => $resultado['topPartidasDelMes'],
+                    'topPartidasDeLaSemana' => $resultado['topPartidasDeLaSemana'],
+                    'top10MejoresJugadores' => $resultado['top10MejoresJugadores']
+
+            ];
+            $this->presenter->show("ranking", $data);
+
 
     }
 }

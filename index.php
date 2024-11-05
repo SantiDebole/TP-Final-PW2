@@ -17,4 +17,6 @@ $action = isset($_GET["action"]) ? $_GET["action"] : "" ;
 
 $param =  isset($_GET["param"])? $_GET["param"]:"";
 
+
+
 $router->route($controller, $action, $param);

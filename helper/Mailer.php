@@ -1,6 +1,6 @@
 <?php
 require './vendor/PHPMailer/src/Exception.php';
-require './vendor/PHPMailer/src/PHPMailer.php';
+require  './vendor/PHPMailer/src/PHPMailer.php';
 require './vendor/PHPMailer/src/SMTP.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -20,8 +20,8 @@ class Mailer
             $this->mail->isSMTP();
             $this->mail->Host = 'smtp.gmail.com'; // Servidor SMTP
             $this->mail->SMTPAuth = true;
-            $this->mail->Username = 'pyr_pw2@gmail.com'; // Correo remitente
-            $this->mail->Password = 'wfms jcev uayh rwgk'; // Contraseña SMTP
+            $this->mail->Username = 'ursomartin89@gmail.com'; // Correo remitente
+            $this->mail->Password = 'wxbw rqzx qzbl qqlz'; // Contraseña SMTP
             $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $this->mail->Port = 587;
 

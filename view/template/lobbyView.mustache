@@ -33,6 +33,15 @@
         <br>
         <a href="/lobby/mis_partidas">Mis Partidas</a>
         <br>
+        <a href="/lobby/ranking">Ver ranking</a>
+        <br>
+        <form action="/lobby/verRival" method="post" enctype="multipart/form-data" class="row g-3 needs-validation" novalidate>
+           <div>
+            <label for="usuarioBuscado" class="form-label">Ingrese nombre de usuario que desea buscar</label>
+            <input type="text" class="form-control" id="usuarioBuscado" name="usuarioBuscado" >
+            <button class="btn btn-primary" type="submit">Buscar</button>
+           </div>
+        </form>
         <a href="#">Ver ranking</a>
     {{/isPlayer}}
 </div>

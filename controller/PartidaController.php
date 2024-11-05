@@ -11,8 +11,9 @@ class PartidaController
         $this->presenter = $presenter;
     }
     public function jugar(){
-        if(isset($_SESSION["loggedUserId"])){
-            $idUsuario = $_SESSION["loggedUserId"];
+
+        if(isset($_SESSION["user_id"])){
+            $idUsuario = $_SESSION["user_id"];
             $pregunta = $this->model->getPregunta($idUsuario);
             if($pregunta){
                 if(!isset($_SESSION["idPartida"])){
@@ -27,10 +28,10 @@ class PartidaController
                 ];
                 $this->presenter->show("pregunta", $data);
             }else{
-                header("location: /lobby/listar");
+                $this->model->reiniciarRegistroDePreguntasVistasPorUsuario($idUsuario);
+                header("Location: /partida/jugar");
                 exit();
             }
-            //de momento si no hay mas preguntas, que te mande al lobby. Mas adelante tendria que resetear las preguntasVistas
 
         }
     }
@@ -39,16 +40,19 @@ class PartidaController
     public function responder(){
         $idRespuesta = $_POST["idRespuesta"];
         $idPregunta = $_POST["idPregunta"];
+        $idUsuario = $_SESSION["user_id"];
         $acierta = $this->model->validarRespuesta($idRespuesta);
         if($acierta){
             $idPartida = $_SESSION["idPartida"];
             $this->model->registrarPreguntaCorrecta($idPartida, $idPregunta);
+            $this->model->marcarPreguntaVistaPorUsuario($idUsuario, $idPregunta);
 
             header("location: /partida/jugar");
             exit();
         }else{
             $idPartida = $_SESSION["idPartida"];
             $this->model->registrarPreguntaIncorrecta($idPartida, $idPregunta);
+            $this->model->marcarPreguntaVistaPorUsuario($idUsuario, $idPregunta);
             $this->model->desactivarPartida($idPartida);
 
 
@@ -61,7 +65,7 @@ class PartidaController
 
     public function mostrarPuntos(){
         //generaria la vista donde muestra los puntos obtenidos
-        $idUsuario = $_SESSION["loggedUserId"];
+        $idUsuario = $_SESSION["user_id"];
         $idPartida = $_SESSION["idPartida"];
         $puntaje= $this->model->traerPuntajeDelUsuarioEnLaPartida($idPartida,$idUsuario);
         $data = [

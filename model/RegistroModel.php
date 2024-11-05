@@ -14,13 +14,14 @@ class RegistroModel
 
     $resultado="Error, la activacion no se ha podido realizar";
     $idUser="";
-        $sql = "SELECT id FROM usuario WHERE token_verificacion = ? and esta_verificado=0";
+    $usuario="";
+        $sql = "SELECT id, usuario FROM usuario WHERE token_verificacion = ? and esta_verificado=0";
     $stmt = $this->database->connection->prepare($sql);
     if($stmt){
         $stmt->bind_param("s", $token);
         if($stmt->execute()){
             $stmt->store_result();
-            $stmt->bind_result($idUser);
+            $stmt->bind_result($idUser, $usuario);
             $stmt->fetch();
             }
         $stmt->close();
@@ -34,6 +35,8 @@ class RegistroModel
             $stmt->bind_param("s", $idUser);
             $stmt->execute();
             if ($stmt->affected_rows > 0) $resultado = "La activacion se ha realizado con exito";
+            $generadorDeQR= new GeneradorDeQR();
+            $generadorDeQR->generarQRParaPerfil($usuario);
         }
         $stmt->close();
 
@@ -249,11 +252,6 @@ class RegistroModel
     }
 
 
-    /**
-     * @param $datos_usuario
-     * @param int $errores
-     * @return array
-     */
     private function validarDatos($datos_usuario, int $errores): array
     {
         $validacionPasswordSeanIguales = $this->validarPassword($datos_usuario['password'], $datos_usuario['repeat_password']);
