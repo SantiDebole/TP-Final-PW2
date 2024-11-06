@@ -75,7 +75,7 @@ class PartidaModel
                 "idRta" => $row["idRta"]
             ];
         }
-        //shuffle($data['respuestas']);
+        shuffle($data['respuestas']);
         return $data;
         }
         return null;
