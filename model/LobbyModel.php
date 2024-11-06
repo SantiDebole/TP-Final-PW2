@@ -93,6 +93,12 @@ class LobbyModel
 
     public function obtenerRanking()
     {
+        $resultado['topPuntosTotales'] = $this->obtenerTop10PorPuntosTotales();
+        $resultado['topPartidasHistorico'] = $this->obtenerPartidasHistorico();
+        $resultado['topPartidasDelMes'] = $this->obtenerPartidasDelMes();
+        $resultado['topPartidasDeLaSemana'] = $this->obtenerPartidasDeLaSemana();
+        $resultado['top10MejoresJugadores'] = $this->obtenerMejoresJugadores();
+        return $resultado;
     }
 
     private function obtenerTop10PorPuntosTotales()
