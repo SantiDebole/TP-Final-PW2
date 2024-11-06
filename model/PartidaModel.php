@@ -117,7 +117,7 @@ class PartidaModel
 
     private function getPreguntasNoVistasPorUsuario($idUsuario)
     {
-        $dificultad['dificil'] = "WITH PreguntasDificiles AS (
+        /*$dificultad['dificil'] = "WITH PreguntasDificiles AS (
     SELECT tienen.idPregunta AS idPreguntaDificil,
            AVG(tienen.puntaje) AS promedio
     FROM tienen
@@ -151,8 +151,8 @@ WHERE pr.id NOT IN (
 AND pr.id IN (
     SELECT idPreguntaDificil
     FROM PreguntasDificiles
-);";
-            /*"SELECT pr.id AS idPreguntaNoVista
+);";*/
+            $queryFuncional = "SELECT pr.id AS idPreguntaNoVista
                    FROM pregunta pr
                    WHERE pr.id NOT IN (
                        SELECT up.idPregunta as id
@@ -160,7 +160,7 @@ AND pr.id IN (
                        JOIN UsuarioPregunta up on u.id = up.idUsuario
                        WHERE u.id = ?
                        ORDER BY u.id
-                   );";*/
+                   );";
         $stmt = $this->db->connection->prepare($queryFuncional);
         $stmt->bind_param("i", $idUsuario);
         $stmt->execute();
