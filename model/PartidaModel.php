@@ -40,7 +40,7 @@ class PartidaModel
 
 
 
-    public function getPregunta($idUsuario){
+    public function getPreguntaConRespuestas($idUsuario){
         $nivel = $this->calcularNivelDelUsuario($idUsuario);
         $preguntasNoVistasPorUsuario = $this->getPreguntasNoVistasPorUsuario($idUsuario,$nivel);
         if($preguntasNoVistasPorUsuario){
@@ -100,19 +100,28 @@ class PartidaModel
     public function registrarPreguntaCorrecta($idPartida, $idPregunta){
         $fechaHoraActual = new DateTime();
         $fechaFormateada = $fechaHoraActual->format('Y-m-d H:i:s');
-        $query = "INSERT INTO tienen (idPartida, idPregunta,fecha,puntaje) VALUES (?,?,?,?)";
         $puntaje = 1;
+        $query = "UPDATE tienen SET puntaje = ?, fecha = ? WHERE idPartida = ? AND idPregunta = ?";
+
         $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("iisi", $idPartida, $idPregunta,$fechaFormateada,$puntaje);
+        $stmt->bind_param("isii", $puntaje, $fechaFormateada,$idPartida,$idPregunta);
+        $stmt->execute();
+    }
+
+    public function registrarPregunta($idPartida, $idPregunta){
+        $query = "INSERT INTO tienen (idPartida, idPregunta) VALUES (?,?)";
+        $stmt = $this->db->connection->prepare($query);
+        $stmt->bind_param("ii", $idPartida, $idPregunta);
         $stmt->execute();
     }
     public function registrarPreguntaIncorrecta($idPartida, $idPregunta){
         $fechaHoraActual = new DateTime();
         $fechaFormateada = $fechaHoraActual->format('Y-m-d H:i:s');
-        $query = "INSERT INTO tienen (idPartida, idPregunta,fecha,puntaje) VALUES (?,?,?,?)";
         $puntaje = 0;
+        $query = "UPDATE tienen SET puntaje = ?, fecha = ? WHERE idPartida = ? AND idPregunta = ?";
+
         $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("iisi", $idPartida, $idPregunta,$fechaFormateada,$puntaje);
+        $stmt->bind_param("isii", $puntaje, $fechaFormateada,$idPartida,$idPregunta);
         $stmt->execute();
     }
 

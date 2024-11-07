@@ -14,16 +14,19 @@ class PartidaController
 
         if(isset($_SESSION["user_id"])){
             $idUsuario = $_SESSION["user_id"];
-            $pregunta = $this->model->getPregunta($idUsuario);
-            if($pregunta){
+            $preguntaConRespuestas = $this->model->getPreguntaConRespuestas($idUsuario);
+            $idPregunta = $preguntaConRespuestas["pregunta"]["idPregunta"];
+
+            if($preguntaConRespuestas){
                 if(!isset($_SESSION["idPartida"])){
                     $this->crearPartida($idUsuario);
                 }
                 $idPartida = $_SESSION["idPartida"];
+                $this->model->registrarPregunta($idPartida, $idPregunta);
                 $puntaje= $this->model->traerPuntajeDelUsuarioEnLaPartida($idPartida,$idUsuario);
                 $data = [
                     "loggedUserId" => $idUsuario,
-                    "pregunta" => $pregunta,
+                    "pregunta" => $preguntaConRespuestas,
                     "puntaje" => $puntaje
                 ];
                 $this->presenter->show("pregunta", $data);
@@ -41,16 +44,15 @@ class PartidaController
         $idRespuesta = $_POST["idRespuesta"];
         $idPregunta = $_POST["idPregunta"];
         $idUsuario = $_SESSION["user_id"];
+        $idPartida = $_SESSION["idPartida"];
         $acierta = $this->model->validarRespuesta($idRespuesta);
         if($acierta){
-            $idPartida = $_SESSION["idPartida"];
             $this->model->registrarPreguntaCorrecta($idPartida, $idPregunta);
             $this->model->marcarPreguntaVistaPorUsuario($idUsuario, $idPregunta);
 
             header("location: /partida/jugar");
             exit();
         }else{
-            $idPartida = $_SESSION["idPartida"];
             $this->model->registrarPreguntaIncorrecta($idPartida, $idPregunta);
             $this->model->marcarPreguntaVistaPorUsuario($idUsuario, $idPregunta);
             $this->model->desactivarPartida($idPartida);
