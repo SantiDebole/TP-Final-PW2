@@ -10,11 +10,44 @@ class PartidaController
         $this->model = $model;
         $this->presenter = $presenter;
     }
-    public function jugar(){
 
+    public function iniciarPartida()
+    {
+
+        if (isset($_SESSION["user_id"])) {
+            $idUsuario = $_SESSION["user_id"];
+            if ($this->model->consultarPartidaDisponible($idUsuario)) {
+                $this->presenter->show("reanudarPartida");
+            } else {
+                $this->crearPartida();
+            }
+        }
+    }
+    public function jugarNuevaPartida(){
+        if (isset($_SESSION["user_id"])) {
+        $idUsuario = $_SESSION["user_id"];
+        $this->model->terminarPartida($idUsuario);
+            header("Location: /partida/crearPartida ");
+        }
+    }
+
+    }
+    public function crearPartida(){
+        $idUsuario = $_SESSION["user_id"];
+
+        $this->model->crearPartida($idUsuario);
+
+    }
+    public function reanudarPartida(){}
+
+
+}
+
+
+/*
         if(isset($_SESSION["user_id"])){
             $idUsuario = $_SESSION["user_id"];
-            $pregunta = $this->model->getPregunta($idUsuario);
+            $pregunta = $this->model->jugar($idUsuario);
             if($pregunta){
                 if(!isset($_SESSION["idPartida"])){
                     $this->crearPartida($idUsuario);
@@ -86,4 +119,4 @@ class PartidaController
 
 
 
-}
+}*/

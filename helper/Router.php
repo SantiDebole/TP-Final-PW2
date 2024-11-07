@@ -18,7 +18,7 @@ class Router
     public function route($controllerName, $methodName, $param)
     {
 
-        $this->controlarRutas($controllerName, $methodName);
+       // $this->controlarRutas($controllerName, $methodName);
         $controller = $this->getControllerFrom($controllerName);
         $this->executeMethodFromController($controller, $methodName, $param);
 

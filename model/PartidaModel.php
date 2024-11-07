@@ -9,6 +9,73 @@ class PartidaModel
         $this->db = $db;
     }
 
+    public function consultarPartidaDisponible($idUsuario)
+    { var_dump($idUsuario);
+        $partidaDisponible = $this->tienePartidaDisponible($idUsuario);
+        if($partidaDisponible){
+            $pregunta = $this->tienePreguntaDisponible($partidaDisponible['id']);
+            if($pregunta) {
+                if ($this->controladorDeExpiracionDePregunta($pregunta['fecha'])) {
+                    return true;
+                }else {$this->marcarPreguntaComoIncorrecta($pregunta);
+                    $this->marcarPartidaComoFinalizada($partidaDisponible);
+                return false;}
+            }else return true;
+        } return false;
+
+    }
+private function marcarPartidaComoFinalizada($partidaDisponible){
+        $query="update partida
+        set estado = 'inactivo'
+        where id = ?";
+    $stmt = $this->db->connection->prepare($query);
+    $stmt->bind_param("i", $partidaDisponible['id']);
+    $stmt->execute();
+
+}
+private function marcarPreguntaComoIncorrecta($pregunta){
+        $query="update tienen
+        set puntaje = 0
+        where idPartida = ? and idPregunta = ? and fecha= ?";
+        $stmt = $this->db->connection->prepare($query);
+        $stmt->bind_param("iis", $pregunta['idPartida'], $pregunta['idPregunta'], $pregunta['fecha']);
+        $stmt->execute();
+    }
+private function controladorDeExpiracionDePregunta($horario){
+            $fechaPregunta = new DateTime($horario);
+            $fechaActual = new DateTime();
+           // var_dump($fechaActual);
+            $intervalo = $fechaPregunta->diff($fechaActual); //Diff devuelve un DateInterval
+            if ($intervalo->i < 1 && $intervalo->h == 0 && $intervalo->d == 0 && $intervalo->m == 0 && $intervalo->y == 0) return true;
+            return false;
+        }
+private function tienePartidaDisponible($idUsuario){
+        $query= "SELECT id 
+        from partida
+        where idUsuario = ?
+        and estado = 'activo'";
+    $stmt = $this->db->connection->prepare($query);
+    $stmt->bind_param("i", $idUsuario);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_assoc();
+
+    return $resultado;
+    }
+private function tienePreguntaDisponible($idPartida){
+        $query="SELECT idPartida, idPregunta, fecha
+        from tienen
+        where idPartida = ?
+        and puntaje IS NULL";
+        $stmt = $this->db->connection->prepare($query);
+        $stmt->bind_param("i", $idPartida);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+}
+    
+    /*
     public function traerPuntajeDelUsuarioEnLaPartida($idPartida, $idUsuario) {
         // Preparar la consulta SQL
         $query = "SELECT SUM(t.puntaje) AS total_puntaje
@@ -151,7 +218,7 @@ WHERE pr.id NOT IN (
 AND pr.id IN (
     SELECT idPreguntaDificil
     FROM PreguntasDificiles
-);";*/
+);";*//*
             $queryFuncional = "SELECT pr.id AS idPreguntaNoVista
                    FROM pregunta pr
                    WHERE pr.id NOT IN (
@@ -215,4 +282,4 @@ AND pr.id IN (
         $stmt->bind_param("ii", $idUsuario, $idPregunta);
         $stmt->execute();
     }
-}
+}*/
