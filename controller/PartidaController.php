@@ -16,6 +16,7 @@ class PartidaController
 
         if (isset($_SESSION["user_id"])) {
             $idUsuario = $_SESSION["user_id"];
+            var_dump($this->model->consultarPartidaDisponible($idUsuario));
             if ($this->model->consultarPartidaDisponible($idUsuario)) {
                 $this->presenter->show("reanudarPartida");
             } else {
@@ -31,14 +32,16 @@ class PartidaController
         }
     }
 
-    }
+
     public function crearPartida(){
         $idUsuario = $_SESSION["user_id"];
-
-        $this->model->crearPartida($idUsuario);
+        //$this->model->crearPartida($idUsuario);
 
     }
-    public function reanudarPartida(){}
+    public function reanudarPartida(){
+
+
+}
 
 
 }

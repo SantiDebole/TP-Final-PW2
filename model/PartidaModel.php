@@ -24,6 +24,12 @@ class PartidaModel
         } return false;
 
     }
+    public function terminarPartida($idUsuario){
+        $partidaDisponible = $this->tienePartidaDisponible($idUsuario);
+        $pregunta = $this->tienePreguntaDisponible($partidaDisponible['id']);
+        $this->marcarPreguntaComoIncorrecta($pregunta);
+        $this->marcarPartidaComoFinalizada($partidaDisponible);
+    }
 private function marcarPartidaComoFinalizada($partidaDisponible){
         $query="update partida
         set estado = 'inactivo'
