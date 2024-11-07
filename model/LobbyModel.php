@@ -79,12 +79,17 @@ class LobbyModel
     private function buscarUsuario($idUsuario)
     {
         $query = "SELECT id, usuario, nombre_completo, fecha_nacimiento, genero, email, pais, ciudad, fecha_creacion FROM usuario where usuario = ?";
+        $param = "s";
+        return $this->ejecucionDeConsultaConFetch_assocConUnParametro($query, $param, $idUsuario);
+    }
+        private function ejecucionDeConsultaConFetch_assocConUnParametro($query, $param, $variable){
         $stmt = $this->database->connection->prepare($query);
-        $stmt->bind_param("s", $idUsuario);
+        $stmt->bind_param($param, $variable);
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_assoc();
     }
+
 
     public function obtenerRanking()
     {
@@ -193,12 +198,25 @@ class LobbyModel
     }
 
     private function ejecucionDeConsultaFetchAllSinParametros($query){
+        try {
+
     $stmt = $this->database->connection->prepare($query);
     $stmt->execute();
     $result = $stmt->get_result();
-    return $result->fetch_all(MYSQLI_ASSOC);
+    return $result->fetch_all(MYSQLI_ASSOC);}
+        catch (Exception $e) {
+                // Manejo de la excepción, por ejemplo, registrar el error o lanzar una excepción personalizada
+              //  header("Location: lobby/mostrarError?error=$e");
+            echo "hay un error";}
+
 }
 
+
+//Las primeras 10 preguntas son rdm y no dependen del nivel.
+
+// promedio < a 2 les damos las de 70% acetadas para arriba (malos)
+// promedio > a 2 y < a 4 (intermedio)
+// promedio > a 4 (experto)
 
 
 }

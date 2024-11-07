@@ -1,53 +1,54 @@
-<div class="flex-grow-1 ">
-<div class="container mt-5 mb-5 bg-light">
-    {{#lobby}}
-        <a href="/login/logout">Logout</a>
-        <br>
-        <a href="/perfil/mostrarPerfil">Ir a mi perfil</a>
-        <h1>Bienvenido usuario con el id: {{loggedUserId}}</h1>
-        <h2>Usuario: {{username}}</h2>
+<div class="flex-grow-1 d-flex justify-content-center">
+    <div class="container mt-5 mb-5 bg-light rounded-3 p-5 shadow-lg" style="max-width: 800px;">
+        <!-- Sección de botones superiores -->
+        <div class="d-flex justify-content-end mb-4">
+            <a href="/login/logout" class="btn btn-danger me-2">Logout</a>
+            <a href="/perfil/listar" class="btn btn-info">Ir a mi perfil</a>
+        </div>
+        {{#lobby}}
+        <!-- Bienvenida -->
+        <h1 class="h3 mb-3 text-center">Bienvenido, usuario con ID: <span class="text-danger">{{loggedUserId}}</span></h1>
+        <h2 class="h5 mb-3 text-center">Usuario: <span class="text-danger">{{username}}</span></h2>
+        <h2 class="h5 mb-4 text-center">Tipo de usuario: <span class="text-danger">{{rol}}</span></h2>
+        {{/lobby}}
+        <!-- Rol Administrador -->
+        {{#isAdmin}}
+            <div class="text-center">
+                <h2 class="h5 text-primary mb-3">Rol Administrador</h2>
+                <a href="#" class="btn btn-primary mb-2">Dashboard Admin</a>
+                <a href="#" class="btn btn-primary mb-2">Gestionar Preguntas</a>
+            </div>
+        {{/isAdmin}}
 
+        <!-- Rol Editor -->
+        {{#isEditor}}
+            <div class="text-center">
+                <h2 class="h5 text-warning mb-3">Editor</h2>
+                <a href="#" class="btn btn-warning mb-2">Dashboard Editor</a>
+                <a href="#" class="btn btn-warning mb-2">Reportar Preguntas</a>
+            </div>
+        {{/isEditor}}
 
+        <!-- Rol Jugador -->
+        {{#isPlayer}}
+            <div class="text-center">
+                <h2 class="h5 text-dark mb-3">Jugador</h2>
+                <a href="/partida/jugar" class="btn btn-primary mb-2 me-2">Jugar</a>
+                <a href="/lobby/mis_partidas" class="btn btn-info mb-2 me-2">Mis Partidas</a>
+                <a href="/lobby/ranking" class="btn btn-info mb-2">Ver Ranking</a>
+            </div>
 
-        <h2>tipo usuario: {{rol}}</h2>
-
-    {{/lobby}}
-
-    {{#isAdmin}}
-        <h2>Rol Administrador</h2>
-        <a href="#">Dashboard Admin</a>
-        <br>
-        <a href="#">Gestionar Preguntas</a>
-    {{/isAdmin}}
-
-    {{#isEditor}}
-        <h2>Editor</h2>
-        <a href="#">Dashboard Editor</a>
-        <br>
-        <a href="#">Reportar Preguntas</a>
-    {{/isEditor}}
-
-    {{#isPlayer}}
-
-        <a href="/partida/jugar">Jugar</a>
-        <br>
-        <a href="/lobby/mis_partidas">Mis Partidas</a>
-        <br>
-        <a href="/lobby/ranking">Ver ranking</a>
-        <br>
-        <form action="/lobby/verRival" method="post" enctype="multipart/form-data" class="row g-3 needs-validation" novalidate>
-           <div>
-            <label for="usuarioBuscado" class="form-label">Ingrese nombre de usuario que desea buscar</label>
-            <input type="text" class="form-control" id="usuarioBuscado" name="usuarioBuscado" >
-            <button class="btn btn-primary" type="submit">Buscar</button>
-           </div>
-        </form>
-        <a href="#">Ver ranking</a>
-    {{/isPlayer}}
+            <!-- Formulario de búsqueda de usuario -->
+            <form action="/lobby/verRival" method="post" enctype="multipart/form-data" class="mt-4">
+                <div class="mb-3">
+                    <label for="usuarioBuscado" class="form-label">Ingrese nombre de usuario que desea buscar:</label>
+                    <input type="text" class="form-control" id="usuarioBuscado" name="usuarioBuscado">
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary" type="submit">Buscar</button>
+                </div>
+            </form>
+        {{/isPlayer}}
+    </div>
 </div>
 
-
-
-
-
-</div>

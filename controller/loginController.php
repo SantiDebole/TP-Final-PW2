@@ -1,7 +1,7 @@
 <?php
 
 
-class LoginController{
+class loginController{
 
     private $model;
     private $presenter;
@@ -14,9 +14,9 @@ class LoginController{
     public function validate(){
         $username = $_POST['username'];
         $password = $_POST['password'];
-        $esValido = $this->model->validateLogin($username, $password);
+        $_SESSION["loggedUserId"] = $this->model->validateLogin($username, $password);
 
-        if($esValido){
+        if($_SESSION["loggedUserId"]){
             $loggedUserId = $_SESSION["loggedUserId"];
             $rol = $this->model->getUserRol($loggedUserId);
 
@@ -33,6 +33,7 @@ class LoginController{
 
 
         }else{
+            $_SESSION["auth_error"]="Usuario/Contraseña invalido";
             $this->presenter->show("login",["auth_error" => $_SESSION["auth_error"]]);
         }
 

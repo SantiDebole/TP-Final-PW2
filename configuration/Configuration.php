@@ -19,7 +19,7 @@ include_once ("./model/PartidaModel.php");
 
 
 //controladores
-include_once("./controller/LoginController.php");
+include_once("./controller/loginController.php");
 include_once ("./controller/RegistroController.php");
 include_once ("./controller/LobbyController.php");
 include_once ("./controller/PerfilController.php");
@@ -58,7 +58,7 @@ class Configuration
     }
     // getCONTROLLERS
     public function getLoginController(){
-        return new LoginController($this->getLoginModel(),$this->getPresenter());
+        return new loginController($this->getLoginModel(),$this->getPresenter());
     }
 
     // getMODELS
