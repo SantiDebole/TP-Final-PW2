@@ -41,7 +41,8 @@ class PartidaModel
 
 
     public function getPregunta($idUsuario){
-        $preguntasNoVistasPorUsuario = $this->getPreguntasNoVistasPorUsuario($idUsuario);
+        $nivel = $this->calcularNivelDelUsuario($idUsuario);
+        $preguntasNoVistasPorUsuario = $this->getPreguntasNoVistasPorUsuario($idUsuario,$nivel);
         if($preguntasNoVistasPorUsuario){
 
 
@@ -75,7 +76,7 @@ class PartidaModel
                 "idRta" => $row["idRta"]
             ];
         }
-        shuffle($data['respuestas']);
+        //shuffle($data['respuestas']);
         return $data;
         }
         return null;
@@ -115,53 +116,25 @@ class PartidaModel
         $stmt->execute();
     }
 
-    private function getPreguntasNoVistasPorUsuario($idUsuario)
+    private function getPreguntasNoVistasPorUsuario($idUsuario,$nivel)
     {
-        /*$dificultad['dificil'] = "WITH PreguntasDificiles AS (
-    SELECT tienen.idPregunta AS idPreguntaDificil,
-           AVG(tienen.puntaje) AS promedio
-    FROM tienen
-    GROUP BY tienen.idPregunta
-    HAVING promedio < 0.3
-)";
-        $dificultad['medio'] = "WITH PreguntasDificiles AS (
-    SELECT tienen.idPregunta AS idPreguntaDificil,
-           AVG(tienen.puntaje) AS promedio
-    FROM tienen
-    GROUP BY tienen.idPregunta
-    HAVING promedio > 0.3 and < 0.7
-)";
-        $dificultad['facil'] = "WITH PreguntasDificiles AS (
-    SELECT tienen.idPregunta AS idPreguntaDificil,
-           AVG(tienen.puntaje) AS promedio
-    FROM tienen
-    GROUP BY tienen.idPregunta
-    HAVING promedio > 0.7
-)";
+        $dificultad = $this->filtrarPreguntasPorNivelDeUsuario($nivel);
 
-        $queryFuncional = "{$dificultad['dificil']} 
-SELECT pr.id AS idPreguntaNoVista
-FROM pregunta pr
-WHERE pr.id NOT IN (
-    SELECT up.idPregunta
-    FROM usuario u
-    JOIN UsuarioPregunta up ON u.id = up.idUsuario
-    WHERE u.id = ?
-)
-AND pr.id IN (
-    SELECT idPreguntaDificil
-    FROM PreguntasDificiles
-);";*/
-            $queryFuncional = "SELECT pr.id AS idPreguntaNoVista
-                   FROM pregunta pr
-                   WHERE pr.id NOT IN (
-                       SELECT up.idPregunta as id
-                       FROM usuario u
-                       JOIN UsuarioPregunta up on u.id = up.idUsuario
-                       WHERE u.id = ?
-                       ORDER BY u.id
-                   );";
-        $stmt = $this->db->connection->prepare($queryFuncional);
+        $queryFuncional = "
+            SELECT pr.id AS idPreguntaNoVista
+            FROM pregunta pr
+            WHERE pr.id NOT IN (
+                SELECT up.idPregunta
+                FROM usuario u
+                JOIN UsuarioPregunta up ON u.id = up.idUsuario
+                WHERE u.id = ?
+            )
+            AND pr.id IN (
+                SELECT idPreguntaFiltrada
+                FROM PreguntasFiltradasPorNivel
+            );";
+        $queryFinal = $dificultad . $queryFuncional;
+        $stmt = $this->db->connection->prepare($queryFinal);
         $stmt->bind_param("i", $idUsuario);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -214,5 +187,59 @@ AND pr.id IN (
         $stmt = $this->db->connection->prepare($query);
         $stmt->bind_param("ii", $idUsuario, $idPregunta);
         $stmt->execute();
+    }
+
+    private function filtrarPreguntasPorNivelDeUsuario($nivel): string
+    {
+          $dificultad = "";
+          if($nivel === "alto"){
+              $dificultad = '
+                WITH PreguntasFiltradasPorNivel AS (
+                    SELECT tienen.idPregunta AS idPreguntaFiltrada,
+                           AVG(tienen.puntaje) AS promedio
+                    FROM tienen
+                    GROUP BY tienen.idPregunta
+                    HAVING promedio < 0.3
+                )';
+                          }elseif ($nivel === "medio"){
+                              $dificultad = '
+                WITH PreguntasFiltradasPorNivel AS (
+                    SELECT tienen.idPregunta AS idPreguntaFiltrada,
+                           AVG(tienen.puntaje) AS promedio
+                    FROM tienen
+                    GROUP BY tienen.idPregunta
+                    HAVING promedio > 0.3 AND promedio < 0.7
+                )';
+                          } else{
+                              $dificultad = '
+                WITH PreguntasFiltradasPorNivel AS (
+                    SELECT tienen.idPregunta AS idPreguntaFiltrada,
+                           AVG(tienen.puntaje) AS promedio
+                    FROM tienen
+                    GROUP BY tienen.idPregunta
+                    HAVING promedio > 0.7
+                )';
+          }
+        return $dificultad;
+    }
+
+    private function calcularNivelDelUsuario($idUsuario)
+    {
+        $query = "SELECT AVG(tienen.puntaje) AS promedioDeAciertoDelUsuario
+                    FROM tienen join partida on tienen.idPartida = partida.id
+                    where partida.idUsuario = ?
+                    GROUP BY partida.idUsuario";
+        $stmt = $this->db->connection->prepare($query);
+        $stmt->bind_param("i", $idUsuario);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $result = $result->fetch_assoc();
+        if($result['promedioDeAciertoDelUsuario'] < 0.3){
+            return "bajo";
+        }elseif($result['promedioDeAciertoDelUsuario'] > 0.3 && $result['promedioDeAciertoDelUsuario'] < 0.7){
+            return "medio";
+        }else{
+            return "alto";
+        }
     }
 }
