@@ -41,14 +41,17 @@ class PartidaController
         $idRespuesta = $_POST["idRespuesta"];
         $idPregunta = $_POST["idPregunta"];
         $idUsuario = $_SESSION["user_id"];
+        var_dump($_SESSION);
         $acierta = $this->model->validarRespuesta($idRespuesta);
         if($acierta){
             $idPartida = $_SESSION["idPartida"];
             $this->model->registrarPreguntaCorrecta($idPartida, $idPregunta);
             $this->model->marcarPreguntaVistaPorUsuario($idUsuario, $idPregunta);
-
-            header("location: /partida/jugar");
+            $_SESSION['idPregunta']=$idPregunta;
+            header("location: /reporte/reportarPregunta");
             exit();
+            //header("location: /partida/jugar");
+            //exit();
         }else{
             $idPartida = $_SESSION["idPartida"];
             $this->model->registrarPreguntaIncorrecta($idPartida, $idPregunta);

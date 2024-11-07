@@ -12,13 +12,26 @@ class ReporteController{
     }
 
     public function reportarPregunta(){
-       $idPreguntaReportada= $_POST['idPreguntaReportada'];
+        var_dump($_SESSION);
+       $idPreguntaReportada= $_SESSION['idPregunta'];
 
        $data=[
            'preguntaReportada'=>$idPreguntaReportada
        ];
 
         $this->presenter->show('reporte',$data);
+
+    }
+
+    public function reportaEnviado(){
+        var_dump($_SESSION);
+        $idPreguntaReportada= $_SESSION['idPregunta'];
+
+        $data=[
+            'preguntaReportada'=>$idPreguntaReportada
+        ];
+
+        $this->presenter->show('reporteEnviado',$data);
 
     }
 
