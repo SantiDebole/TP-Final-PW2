@@ -12,19 +12,43 @@ class ReporteController{
     }
 
     public function reportarPregunta(){
-        var_dump($_SESSION);
-       $idPreguntaReportada= $_SESSION['idPregunta'];
+        $idPregunta= $_SESSION['idPregunta'];
+        $idPartida = $_SESSION["idPartida"];
+        $idUsuario = $_SESSION["user_id"];
 
-       $data=[
-           'preguntaReportada'=>$idPreguntaReportada
-       ];
+        $puntajePartida= $this->model->traerPuntajeDelUsuarioEnLaPartida($idPartida,$idUsuario);
 
-        $this->presenter->show('reporte',$data);
+        $resultadoDeLaUltimaPregunta = $this->model->verificarPuntajeDeLaUltimaPreguntaConIdPartidaIdUsuarioYIdPregunta($idPartida,$idUsuario, $idPregunta);
+
+        if($resultadoDeLaUltimaPregunta == "respuesta correcta"){
+            $data=[
+                'preguntaReportada'=>$idPregunta,
+                'puntajePartida' => $puntajePartida,
+                'resultadoDeLaUltimaPregunta'=>$resultadoDeLaUltimaPregunta
+            ];
+            $this->presenter->show('reporteCorrecta',$data);
+
+        }else{
+
+            $data=[
+                'preguntaReportada'=>$idPregunta,
+                'puntajePartida' => $puntajePartida,
+                'resultadoDeLaUltimaPregunta'=>$resultadoDeLaUltimaPregunta
+            ];
+            unset($_SESSION["idPartida"]);
+            unset($_SESSION["idPregunta"]);
+            $this->presenter->show('reporteIncorrecta',$data);
+        }
+
+
+
+
 
     }
 
+
     public function reportaEnviado(){
-        var_dump($_SESSION);
+
         $idPreguntaReportada= $_SESSION['idPregunta'];
 
         $data=[

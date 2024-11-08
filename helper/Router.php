@@ -43,7 +43,7 @@ class Router
 
         $rutasPermitidas = [];
         $rutaConstruida = "$controllerName/$methodName";
-        var_dump($rutaConstruida);
+
         if (!isset($_SESSION['rol'])) {
             $rutasPermitidas = ['registro/listar',
                 'registro/validarRegistro',

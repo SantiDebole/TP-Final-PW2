@@ -46,8 +46,9 @@ class PartidaModel
 
 
         $idPregunta = $this->getPreguntaAleatoria($preguntasNoVistasPorUsuario);
-        $query = "SELECT p.id as idPregunta, p.descripcion as pregunta, r.descripcion as respuesta, r.id as idRta
+        $query = "SELECT p.id as idPregunta, p.descripcion as pregunta, r.descripcion as respuesta, r.id as idRta,c.descripcion as categoria_descripcion, c.color as color_categoria
               FROM pregunta p 
+              JOIN categoria c ON p.idCategoria = c.id
               JOIN respuesta r ON p.id = r.idPregunta 
               WHERE p.id = ?";
 
@@ -59,7 +60,9 @@ class PartidaModel
         $data = [
             "pregunta" => [
                 "idPregunta" => null,
-                "descripcion" => ""
+                "descripcion" => "",
+                "color_categoria" => "",
+                "categoria_descripcion" => "",
             ],
             "respuestas" => []
         ];
@@ -68,6 +71,8 @@ class PartidaModel
             if ($data["pregunta"]["idPregunta"] === null) {
                 $data["pregunta"]["idPregunta"] = $row["idPregunta"];
                 $data["pregunta"]["descripcion"] = $row["pregunta"];
+                $data["pregunta"]["color_categoria"] = $row["color_categoria"];
+                $data["pregunta"]["categoria_descripcion"] = $row["categoria_descripcion"];
             }
 
             $data["respuestas"][] = [

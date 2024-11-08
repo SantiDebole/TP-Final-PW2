@@ -21,10 +21,14 @@ class PartidaController
                 }
                 $idPartida = $_SESSION["idPartida"];
                 $puntaje= $this->model->traerPuntajeDelUsuarioEnLaPartida($idPartida,$idUsuario);
+                $color = $pregunta["pregunta"]["color_categoria"];
+                $categoria_descripcion = $pregunta["pregunta"]["categoria_descripcion"];
                 $data = [
                     "loggedUserId" => $idUsuario,
                     "pregunta" => $pregunta,
-                    "puntaje" => $puntaje
+                    "puntaje" => $puntaje,
+                    "color" => $color,
+                    "categoria_descripcion" => $categoria_descripcion
                 ];
                 $this->presenter->show("pregunta", $data);
             }else{
@@ -39,32 +43,44 @@ class PartidaController
 
     public function responder(){
         $idRespuesta = $_POST["idRespuesta"];
+
         $idPregunta = $_POST["idPregunta"];
+        $_SESSION['idPregunta']=$idPregunta;
+
         $idUsuario = $_SESSION["user_id"];
-        var_dump($_SESSION);
+
+        $idPartida = $_SESSION["idPartida"];
+
+
         $acierta = $this->model->validarRespuesta($idRespuesta);
         if($acierta){
-            $idPartida = $_SESSION["idPartida"];
             $this->model->registrarPreguntaCorrecta($idPartida, $idPregunta);
             $this->model->marcarPreguntaVistaPorUsuario($idUsuario, $idPregunta);
-            $_SESSION['idPregunta']=$idPregunta;
             header("location: /reporte/reportarPregunta");
             exit();
             //header("location: /partida/jugar");
             //exit();
         }else{
-            $idPartida = $_SESSION["idPartida"];
             $this->model->registrarPreguntaIncorrecta($idPartida, $idPregunta);
             $this->model->marcarPreguntaVistaPorUsuario($idUsuario, $idPregunta);
             $this->model->desactivarPartida($idPartida);
-
-
             // se destruye la variable de la sesion que contiene el id de la partida actual al finalizar la partida.
-
-            header("location: /partida/mostrarPuntos");
+            //unset($_SESSION["idPartida"]);
+            header("location: /reporte/reportarPregunta");
             exit();
+            //header("location: /partida/mostrarPuntos");
+
         }
     }
+
+    /*public function salirDelJuego(){
+
+        $idPartida = $_SESSION["idPartida"];
+        $this->model->desactivarPartida($idPartida);
+        unset($_SESSION["idPartida"]);
+        header("location: /lobby/listar");
+        exit();
+    }*/
 
     public function mostrarPuntos(){
         //generaria la vista donde muestra los puntos obtenidos

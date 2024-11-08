@@ -22,7 +22,7 @@ class RegistroController{
     public function validarRegistro(){
         //validar semantica del formulario
         foreach($_POST as $campo => $valor){
-            var_dump($campo);
+
             if(empty($valor)) $data['errores'][] ="Falta completar el campo $campo";
         }
         $nombre_completo= $_POST['nombre_completo'];
