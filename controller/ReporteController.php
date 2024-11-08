@@ -22,21 +22,23 @@ class ReporteController{
 
         if($resultadoDeLaUltimaPregunta == "respuesta correcta"){
             $data=[
-                'preguntaReportada'=>$idPregunta,
+                'idPregunta'=>$idPregunta,
                 'puntajePartida' => $puntajePartida,
-                'resultadoDeLaUltimaPregunta'=>$resultadoDeLaUltimaPregunta
+                'resultadoDeLaUltimaPregunta'=>$resultadoDeLaUltimaPregunta,
+                'idUsuario'=>$idUsuario
             ];
             $this->presenter->show('reporteCorrecta',$data);
 
         }else{
 
             $data=[
-                'preguntaReportada'=>$idPregunta,
+                'idPregunta'=>$idPregunta,
                 'puntajePartida' => $puntajePartida,
-                'resultadoDeLaUltimaPregunta'=>$resultadoDeLaUltimaPregunta
+                'resultadoDeLaUltimaPregunta'=>$resultadoDeLaUltimaPregunta,
+                'idUsuario'=>$idUsuario
             ];
-            unset($_SESSION["idPartida"]);
-            unset($_SESSION["idPregunta"]);
+            //unset($_SESSION["idPartida"]);
+            //unset($_SESSION["idPregunta"]);
             $this->presenter->show('reporteIncorrecta',$data);
         }
 
@@ -47,15 +49,33 @@ class ReporteController{
     }
 
 
-    public function reportaEnviado(){
+    public function reporteEnviadoCorrecta(){
 
         $idPreguntaReportada= $_SESSION['idPregunta'];
-
+        $idUsuarioQueReporta= $_SESSION["user_id"];
+        $textoDelReporte = $_POST["textoReportePregunta"];
+        $this->model->reportarPreguntaYCambiarEstado($idPreguntaReportada,$idUsuarioQueReporta,$textoDelReporte);
         $data=[
-            'preguntaReportada'=>$idPreguntaReportada
+            'preguntaReportada'=>$idPreguntaReportada,
+            'idUsuarioQueReporta'=>$idUsuarioQueReporta
         ];
 
-        $this->presenter->show('reporteEnviado',$data);
+        $this->presenter->show('reporteEnviadoCorrecta',$data);
+
+    }
+
+    public function reporteEnviadoIncorrecta(){
+
+        $idPreguntaReportada= $_SESSION['idPregunta'];
+        $idUsuarioQueReporta= $_SESSION["user_id"];
+        $textoDelReporte = $_POST["textoReportePregunta"];
+        $this->model->reportarPreguntaYCambiarEstado($idPreguntaReportada,$idUsuarioQueReporta,$textoDelReporte);
+        $data=[
+            'preguntaReportada'=>$idPreguntaReportada,
+            'idUsuarioQueReporta'=>$idUsuarioQueReporta
+        ];
+
+        $this->presenter->show('reporteEnviadoIncorrecta',$data);
 
     }
 

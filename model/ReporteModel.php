@@ -54,6 +54,33 @@ class ReporteModel
 
     }
 
+    public function reportarPreguntaYCambiarEstado($idPreguntaReportada, $idUsuarioQueReporta, $textoDelReporte) {
+        // Insertar el reporte en la tabla reporte
+        $queryReporte = "INSERT INTO reporte (usuario_id, pregunta_id, texto) VALUES (?, ?, ?)";
+        $stmtReporte = $this->db->connection->prepare($queryReporte);
+        $stmtReporte->bind_param("iis", $idUsuarioQueReporta, $idPreguntaReportada, $textoDelReporte);
+
+        if ($stmtReporte->execute()) {
+            echo "Reporte insertado correctamente.";
+
+            // Cambiar el estado de la pregunta reportada a 'inactiva'
+            $queryEstado = "UPDATE pregunta SET estado = 'reportada' WHERE id = ?";
+            $stmtEstado = $this->db->connection->prepare($queryEstado);
+            $stmtEstado->bind_param("i", $idPreguntaReportada);
+
+            if ($stmtEstado->execute()) {
+                echo "Estado de la pregunta cambiado a reportada.";
+            } else {
+                echo "Error al cambiar el estado de la pregunta: " . $stmtEstado->error;
+            }
+            $stmtEstado->close();
+        } else {
+            echo "Error al insertar el reporte: " . $stmtReporte->error;
+        }
+        $stmtReporte->close();
+    }
+
+
 
 
 

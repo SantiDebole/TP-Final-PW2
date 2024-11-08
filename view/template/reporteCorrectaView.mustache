@@ -3,7 +3,7 @@
 
     <div class="container mt-5 ">
         <h2 class="mb-4">PUNTAJE: {{puntajePartida}}</h2>
-        <h2 class="mb-4">Resultado ultima pregunta: {{resultadoDeLaUltimaPregunta}}</h2>
+        <h2 class="mb-4">Resultado ultima pregunta: <span class="text-primary">{{resultadoDeLaUltimaPregunta}}</span></h2>
         <h2>Seguir con el juego: </h2>
         <br>
         <a href="/partida/jugar" class="btn btn-info">Siguiente pregunta</a>
@@ -12,7 +12,8 @@
 
     <div class="container mt-5 ">
         <!-- Encabezado h2 -->
-        <h1 class="mb-4">Hubo algun problema con la pregunta con el ID: {{preguntaReportada}}? </h1>
+        <h1 class="mb-4">Hubo algun problema con la pregunta con el ID: {{idPregunta}}? </h1>
+        <h2 class="mb-4">ID DEL USUARIO: {{idUsuario}}</h2>
 
         <div class="container mt-5">
             <div class="row justify-content-center">
@@ -22,10 +23,12 @@
                             <h4>Reportar Pregunta</h4>
                         </div>
                         <div class="card-body">
-                            <form action="/reporte/reporteEnviado" method="post" enctype="multipart/form-data">
+                            <form action="/reporte/reporteEnviadoCorrecta" method="post" enctype="multipart/form-data">
                                 <div class="form-group">
-                                    <label for="questionReport">Describe el problema con la pregunta:</label>
-                                    <textarea class="form-control" id="questionReport" rows="4" placeholder="Escribe aquí los detalles..."></textarea>
+                                    <label for="textoReportePregunta">Describe el problema con la pregunta:</label>
+                                    <input type="hidden" name="idUsuario" value="{{idUsuario}}">
+                                    <input type="hidden" name="idPregunta" value="{{idPregunta}}">
+                                    <textarea class="form-control" id="textoReportePregunta" name="textoReportePregunta" rows="4" placeholder="Escribe aquí los detalles..."></textarea>
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-block">Enviar Reporte</button>
                             </form>
