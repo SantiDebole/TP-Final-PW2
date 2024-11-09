@@ -204,6 +204,57 @@ class LobbyModel
         return $this->ejecucionDeConsultaFetchAllSinParametros($query);
     }
 
+    public function getPosicionRankingMejoresJugadores($userNombre) {
+        $query = "WITH PartidasOrdenadas AS (
+    SELECT
+        usuario.usuario AS usuario,
+        partida.id AS id_partida,
+        partida.fecha AS fecha_partida,
+        partida.estado AS estado_partida,
+        ROW_NUMBER() OVER (PARTITION BY usuario.id ORDER BY partida.fecha DESC) AS rn
+    FROM partida
+    JOIN usuario ON partida.idUsuario = usuario.id
+)
+    
+SELECT
+    usuario,
+    AVG(puntaje_total) AS promedio_respuestas,
+    ROW_NUMBER() OVER (ORDER BY AVG(puntaje_total) DESC) AS puesto_ranking
+FROM (
+    SELECT
+        usuario,
+        SUM(tienen.puntaje) AS puntaje_total
+    FROM PartidasOrdenadas
+    JOIN tienen ON tienen.idPartida = id_partida
+    WHERE rn <= 25
+    GROUP BY usuario, id_partida
+    HAVING COUNT(id_partida) > 2
+) AS subconsulta
+WHERE usuario = ?
+GROUP BY usuario
+ORDER BY puesto_ranking;
+    ";
+
+        // Preparar y ejecutar la consulta usando el parámetro userId
+        $stmt = $this->database->connection->prepare($query);
+        $stmt->bind_param("s", $userNombre);  // El tipo "i" es para un parámetro entero (userId)
+        $stmt->execute();
+
+        // Obtener el resultado como un arreglo asociativo
+        $resultado = $stmt->get_result()->fetch_assoc();
+
+        // Verificar si el resultado contiene datos
+        if ($resultado) {
+            return $resultado; // Retorna el resultado, que incluirá el puesto en el ranking y el promedio
+        } else {
+            // Si no se encuentra ningún resultado, puedes devolver null o un mensaje
+            return null;
+        }
+    }
+
+
+
+
     private function ejecucionDeConsultaFetchAllSinParametros($query){
         try {
 

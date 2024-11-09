@@ -17,13 +17,17 @@ class LobbyController {
         $rol = $_SESSION['rol'];
         $userId = $_SESSION['user_id'];
         $username = $_SESSION['username'];
+        $posicionRanking = $this->model->getPosicionRankingMejoresJugadores($username);
+        var_dump($posicionRanking);
+        var_dump($posicionRanking['puesto_ranking']);
 
         // Preparar los datos para la vista
         $data = [
             'lobby' => [
                 'loggedUserId' => $userId,
                 'username' => $username,
-                'rol' => $rol
+                'rol' => $rol,
+                'posicionRanking' => $posicionRanking['puesto_ranking']
             ],
             'rol' => $rol,
             'isAdmin' => ($rol === 'a'),

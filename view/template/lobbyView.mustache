@@ -10,6 +10,10 @@
         <h1 class="h3 mb-3 text-center">Bienvenido, usuario con ID: <span class="text-danger">{{loggedUserId}}</span></h1>
         <h2 class="h5 mb-3 text-center">Usuario: <span class="text-danger">{{username}}</span></h2>
         <h2 class="h5 mb-4 text-center">Tipo de usuario: <span class="text-danger">{{rol}}</span></h2>
+            <div class="text-center">
+                <h4 class="h5 text-dark mb-3">POSICION EN EL RANKING DE MEJORES JUGADORES: #<span class="text-danger">{{posicionRanking}}</span></h4>
+
+            </div>
         {{/lobby}}
         <!-- Rol Administrador -->
         {{#isAdmin}}
@@ -31,6 +35,7 @@
 
         <!-- Rol Jugador -->
         {{#isPlayer}}
+
             <div class="text-center">
                 <h2 class="h5 text-dark mb-3">Jugador</h2>
                 <a href="/partida/jugar" class="btn btn-primary mb-2 me-2">Jugar</a>
