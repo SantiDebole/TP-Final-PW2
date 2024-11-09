@@ -27,7 +27,8 @@ class LobbyController {
                 'loggedUserId' => $userId,
                 'username' => $username,
                 'rol' => $rol,
-                'posicionRanking' => $posicionRanking['puesto_ranking']
+                'posicionRanking' => $posicionRanking['puesto_ranking'],
+                'puntajePosicionRanking' => $posicionRanking['promedio_respuestas']
             ],
             'rol' => $rol,
             'isAdmin' => ($rol === 'a'),
