@@ -1,0 +1,49 @@
+<div class="flex-grow-1 ">
+
+    <div class="container mt-5 ">
+        <h2 class="mb-4">PUNTAJE: {{puntaje}}</h2>
+        <h2 class="mb-4">Resultado ultima pregunta: <span class="text-danger">{{resultadoDeLaUltimaPregunta}}</span></h2>
+       {{#resultado}}
+           <a href="/partida/preguntar" class="btn btn-info">Siguiente pregunta</a>
+       {{/resultado}}
+    {{^resultado}}
+        <h2>Juego finalizado: </h2>
+    {{/resultado}}
+        <br>
+        <a href="/lobby/listar" class="btn btn-info">Ir al lobby</a>
+
+    </div>
+
+    <div class="container mt-5 ">
+        <!-- Encabezado h2 -->
+        <h1 class="mb-4">Hubo algun problema con la pregunta con el ID: {{idPregunta}}? </h1>
+        <h2 class="mb-4">ID DEL USUARIO: {{idUsuario}}</h2>
+
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header text-center bg-primary text-white">
+                            <h4>Reportar Pregunta</h4>
+                        </div>
+                        <div class="card-body">
+                            <form action="/reporte/reporteEnviadoIncorrecta" method="post" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="textoReportePregunta">Describe el problema con la pregunta:</label>
+                                    <input type="hidden" name="idUsuario" value="{{idUsuario}}">
+                                    <input type="hidden" name="idPregunta" value="{{idPregunta}}">
+
+                                    <textarea class="form-control" id="textoReportePregunta" name="textoReportePregunta" rows="4" placeholder="Escribe aquí los detalles..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">Enviar Reporte</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
