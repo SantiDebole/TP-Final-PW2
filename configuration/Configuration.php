@@ -17,6 +17,7 @@ include_once ("./model/PerfilModel.php");
 
 include_once ("./model/PartidaModel.php");
 include_once ("./model/ReporteModel.php");
+include_once ("./model/PreguntaModel.php");
 
 
 //controladores
@@ -27,6 +28,7 @@ include_once ("./controller/PerfilController.php");
 include_once ("./controller/PartidaController.php");
 include_once ("./controller/RegistroController.php");
 include_once ("./controller/ReporteController.php");
+include_once ("./controller/PreguntaController.php");
 
 
 
@@ -46,8 +48,6 @@ class Configuration
     }
 
 
-
-
     public function getDatabase(){
         $config = parse_ini_file("./configuration/config.ini");
         return new Database($config['host'], $config['username'], $config['password'], $config['database'], $config['port']);
@@ -60,6 +60,15 @@ class Configuration
         return new MustachePresenter("./view/template");
     }
     // getCONTROLLERS
+
+    public function getPreguntaController(){
+        return new PreguntaController($this->getPreguntaModel(),$this->getPresenter());
+    }
+
+    // getMODELS
+    public function getPreguntaModel(){
+        return new PreguntaModel($this->getDatabase());
+    }
 
     public function getReporteController(){
         return new ReporteController($this->getReporteModel(),$this->getPresenter());

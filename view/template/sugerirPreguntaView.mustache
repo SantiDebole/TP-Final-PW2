@@ -1,0 +1,37 @@
+<div class="flex-grow-1 ">
+
+    <div class="container mt-5">
+        <div class="d-flex justify-content-end mb-4 p-2">
+            <a href="/lobby/listar" class="btn btn-danger m-1">Ir al lobby</a>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Crear una Pregunta</h4>
+            </div>
+            <div class="card-body">
+                <form action="/pregunta/validarPreguntaSugerida" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="question" class="form-label">Pregunta</label>
+                        <input type="text" class="form-control" id="question" placeholder="Ingresa tu pregunta aquí" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="answer1" class="form-label">Respuesta 1</label>
+                        <input type="text" class="form-control" id="answer1" placeholder="Ingresa la primera respuesta" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="answer2" class="form-label">Respuesta 2</label>
+                        <input type="text" class="form-control" id="answer2" placeholder="Ingresa la segunda respuesta" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="answer3" class="form-label">Respuesta 3</label>
+                        <input type="text" class="form-control" id="answer3" placeholder="Ingresa la tercera respuesta" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enviar Pregunta</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</div>
