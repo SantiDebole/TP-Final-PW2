@@ -15,12 +15,14 @@ class LobbyController {
     public function listar() {
         // Obtengo rol del usuario desde la sesión
         $rol = $_SESSION['rol'];
+        $userId = $_SESSION['user_id'];
+        $username = $_SESSION['username'];
 
         // Preparar los datos para la vista
         $data = [
             'lobby' => [
-                'loggedUserId' => $_SESSION['user_id'],
-                'username' => $_SESSION['username'],
+                'loggedUserId' => $userId,
+                'username' => $username,
                 'rol' => $rol
             ],
             'rol' => $rol,
@@ -34,12 +36,54 @@ class LobbyController {
     }
 
 
+    public function verRival(){
+        $idBuscado = $_POST["usuarioBuscado"];
+        $data['perfilRival'] = $this->model->buscarDatosDeOtrosJugadores($idBuscado);
+        $this->presenter->show("perfil",$data);
 
 
-    public function getUserById($id) {
-        $stmt = $this->conn->prepare("SELECT nombre, puntaje FROM usuarios WHERE id = :id");
+    }
+    public function verRivalPorQr($usuario){
+        $idBuscado = $usuario;
+        $data['perfilRival'] = $this->model->buscarDatosDeOtrosJugadores($idBuscado);
+        $this->presenter->show("perfil",$data);
+
+    }
+
+
+
+ /*  public function getUserById($id) { //ESTO ESTA MAL, TIENE QUE IR EN EL MODELO!!!
+        $stmt = $this->connection->prepare("SELECT nombre, puntaje FROM usuarios WHERE id = :id");
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+*/
+    public function mis_partidas(){
+        $idUsuario = $_SESSION['user_id'];
+
+        $resultados= $this->model->traerMisPartidas($idUsuario);
+
+        $data = [
+            'misPartidas' => $resultados['partidas'],
+            'mejorPartida' => $resultados['mejor_partida']
+        ];
+
+        $this->presenter->show("misPartidas",$data);
+
+    }
+    public function ranking(){
+        $resultado = $this->model->obtenerRanking();
+        $data=[
+                    'topPuntosTotales' => $resultado['topPuntosTotales'],
+                    'topPartidasHistorico' =>  $resultado['topPartidasHistorico'],
+                    'topPartidasDelMes' => $resultado['topPartidasDelMes'],
+                    'topPartidasDeLaSemana' => $resultado['topPartidasDeLaSemana'],
+                    'top10MejoresJugadores' => $resultado['top10MejoresJugadores']
+
+            ];
+            $this->presenter->show("ranking", $data);
+
+
     }
 }
 ?>

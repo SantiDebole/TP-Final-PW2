@@ -18,9 +18,8 @@ class PerfilModel
         return $usuario;
     }
 
-    public function traerPerfil() {
+    public function traerPerfil($usuarioId) {
 
-        $usuarioId = $_SESSION["loggedUserId"];
 
         $sql= "SELECT * FROM usuario WHERE id = ?";
         $stmt = $this->database->connection->prepare($sql);
@@ -28,23 +27,13 @@ class PerfilModel
         $stmt->execute();
         // Obtener el resultado
         $result = $stmt->get_result();
-        $usuario = $result->fetch_assoc(); // Esto devuelve un array asociativo
+        $usuario = $result->fetch_assoc();
 
 
 
 
        $usuario = $this->transformImagePath($usuario);
 
-
-        // Si quieres depurar o ver el resultado
-        echo '<br>';
-        echo '<br>';
-        echo '<br>';
-        echo 'SOY LA FOTO DE PERFIL';
-
-        echo '<br>';
-
-        var_dump($usuario['foto_perfil']);
 
 
         return $usuario;

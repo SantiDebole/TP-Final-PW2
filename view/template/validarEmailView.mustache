@@ -5,13 +5,17 @@
         </div>
 
         <div class="container mt-5">
-            <h2 class="text-center">Para confirmar el registro acceda al siguiente link:</h2>
+            <h2 class="text-center">Para confirmar acceda al link enviado a su email</h2>
+            <h4 class="text-center">En caso de que no le haya llegado, toque en el botón reenviar</h4>
             <br>
 
-            <form id="formValidar" action="/registro/validarEmail" method="post">
-                <input type="hidden" name="hash" value="{{registro}}">
-                <button type="submit" class="btn btn-primary">Validar</button>
+            <form id="formValidar" action="/registro/reenviarEmail" method="post">
+                <input type="hidden" name="email" value="{{registro}}">
+                <button type="submit" class="btn btn-primary">Reenviar</button>
             </form>
+            {{#reenviado}}
+                <h4 class="text-center" style="color:red;">Email reenviado</h4>
+            {{/reenviado}}
 
         </div>
     </div>

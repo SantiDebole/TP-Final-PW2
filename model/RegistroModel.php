@@ -10,97 +10,129 @@ class RegistroModel
         $this->database = $database;
     }
 
+    public function ingresoPorEmail($token){
+
+    $resultado="Error, la activacion no se ha podido realizar";
+    $idUser="";
+    $usuario="";
+        $sql = "SELECT id, usuario FROM usuario WHERE token_verificacion = ? and esta_verificado=0";
+    $stmt = $this->database->connection->prepare($sql);
+    if($stmt){
+        $stmt->bind_param("s", $token);
+        if($stmt->execute()){
+            $stmt->store_result();
+            $stmt->bind_result($idUser, $usuario);
+            $stmt->fetch();
+            }
+        $stmt->close();
+    }
+    if($idUser!="") {
+        $sql = "UPDATE usuario
+                set esta_verificado =1
+                where id = ?";
+        $stmt = $this->database->connection->prepare($sql);
+        if ($stmt) {
+            $stmt->bind_param("s", $idUser);
+            $stmt->execute();
+            if ($stmt->affected_rows > 0) $resultado = "La activacion se ha realizado con exito";
+            $generadorDeQR= new GeneradorDeQR();
+            $generadorDeQR->generarQRParaPerfil($usuario);
+        }
+        $stmt->close();
+
+
+    } return $resultado;}
+    public function reenviarEmail($email)
+    {
+
+        $token="";
+        $sql = "SELECT token_verificacion FROM usuario WHERE email = ? and esta_verificado =0";
+        $stmt = $this->database->connection->prepare($sql);
+        if ($stmt) {
+            $stmt->bind_param("s", $email);
+            if ($stmt->execute()) {
+                $stmt->store_result();
+                $stmt->bind_result($token);
+                $stmt->fetch();
+                $stmt->close();
+                $mailer = new Mailer($email, $token);
+                return $token;
+
+            } else {
+                $stmt->close();
+                return "error en la consulta";
+            }
+
+        }
+
+
+    }
+
+
     public function registrar($datos_usuario)
     {
         $errores=0;
         $datos_usuario['errores'] = [];
         $datos_usuario['nombreArchivo'] = [];
 
-// Validar que las contraseñas sean iguales
-        $validacionPasswordSeanIguales = $this->validarPassword($datos_usuario['password'], $datos_usuario['repeat_password']);
-        if (strcmp($validacionPasswordSeanIguales, "password invalida") == 0) {
-            $errores=1;
-            $datos_usuario['errores'][] = "Elija contraseña correctamente"; // Agrega el mensaje de error
-        }
-
-// Validar si el usuario ya existe
-        $validacionUsuario = $this->validarUsuario($datos_usuario['usuario']);
-        if ($validacionUsuario) {
-            $errores=1;
-            $datos_usuario['errores'][] = "Usuario ya existente"; // Agrega el mensaje de error
-        }
-
-
-        $validacionEmail = $this->validarEmail($datos_usuario['email']);
-        if ($validacionEmail) {
-            $errores=1;
-            $datos_usuario['errores'][] = "Email ya existente"; // Agrega el mensaje de error
-        }
+        //Valida las contraseñas, el email y el usuario
+        list($errores, $datos_usuario) = $this->validarDatos($datos_usuario, $errores);
         if($errores==1) return $datos_usuario;
 
         //si el guardado de foto falla, devuelve un error sino devuelve el nombre de la imagen para guardarla en la bd
         $guardadoDeFotoDePerfil = $this->guardarFotoDePerfil($datos_usuario['foto_perfil']);
 
-        //envia el mail
-
-        $nombreArchivo = md5($datos_usuario['usuario']);
-        $rutaTemporal = "./data/" . $nombreArchivo . ".json";
-        var_dump($rutaTemporal);
-        $this->crearArchivoTemporalDeConfirmacion($rutaTemporal, $datos_usuario);
-       $datos_usuario['nombreArchivo']=$nombreArchivo;
-        return $datos_usuario;
-
-
-    }
-    public function emailConfirmacion($rutaArchivo)
-    {
-        $datos_usuario=file_get_contents($rutaArchivo);//carga los datos del archivo
-        $datos_usuario=json_decode($datos_usuario, true); //decodifica los datos en un array asociativo
-        unlink($rutaArchivo); //borra el archivo inicial
-        $sql = "INSERT INTO usuario (nombre_completo, fecha_nacimiento, genero, email, usuario, password, rol, foto_perfil, pais, ciudad) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        // Preparar la consulta
-        $stmt = $this->database->connection->prepare($sql);
-
-        // Verificar si la preparación fue exitosa
-        if ($stmt) {
-            // Enlazar parámetros (s: string, d: double, i: integer, b: blob)
-            //$hashed_password = password_hash($datos_usuario['password'], PASSWORD_DEFAULT);
-            $stmt->bind_param("ssssssssss",
-                $datos_usuario['nombre_completo'],
-                $datos_usuario['fecha_nacimiento'],
-                $datos_usuario['genero'],
-                $datos_usuario['email'],
-                $datos_usuario['usuario'],
-                $datos_usuario['password'],
-                $datos_usuario['rol'],
-                $datos_usuario['foto_perfil']['name'],
-                $datos_usuario['pais'],
-                $datos_usuario['ciudad']
-            );
-
-
-            if ($stmt->execute()) {
-
-                $registro = "exitoso";
-
-
-            } else {
-                $registro = "fallo";
-
-
-            }
-            $stmt->close();
-            return $registro;
-
-
+         $token=$this->cargarNuevoUsuarioEnBaseDeDatos($datos_usuario);
+        if($token=="fallo"){
+            $datos_usuario['errores'][] = "Error en la carga de base de datos";
+            return $datos_usuario;}
+        else {
+            $mailer = new Mailer($datos_usuario['email'], $token);
+            $datos_usuario['nombreArchivo']=$token;
+            return $datos_usuario;
         }
 
 
     }
+    private function cargarNuevoUsuarioEnBaseDeDatos($datos_usuario){
+    $token = bin2hex(random_bytes(16));
+    $sql = "INSERT INTO usuario (nombre_completo, fecha_nacimiento, genero, email, usuario, password, rol, foto_perfil, pais, ciudad, token_verificacion) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $this->database->connection->prepare($sql);
+    if($stmt){
+        $stmt->bind_param("sssssssssss",
+            $datos_usuario['nombre_completo'],
+            $datos_usuario['fecha_nacimiento'],
+            $datos_usuario['genero'],
+            $datos_usuario['email'],
+            $datos_usuario['usuario'],
+            $datos_usuario['password'],
+            $datos_usuario['rol'],
+            $datos_usuario['foto_perfil']['name'],
+            $datos_usuario['pais'],
+            $datos_usuario['ciudad'],
+            $token
+        );
 
-    private function validarUsuario($usuario)
+        if ($stmt->execute()) {
+
+            $registro = $token;
+
+
+        } else {
+            $registro = "fallo";
+
+
+        }
+        $stmt->close();
+
+        return $registro;
+
+
+    }
+    }
+
+       private function validarUsuario($usuario)
     {
         $sql = "SELECT 1 FROM usuario WHERE usuario=?";
         $stmt = $this->database->connection->prepare($sql);
@@ -219,10 +251,28 @@ class RegistroModel
 
     }
 
-    private function crearArchivoTemporalDeConfirmacion($ruta, $datos)
-    {
-        $json=json_encode($datos, JSON_PRETTY_PRINT);
-        file_put_contents($ruta, $json);
 
+    private function validarDatos($datos_usuario, int $errores): array
+    {
+        $validacionPasswordSeanIguales = $this->validarPassword($datos_usuario['password'], $datos_usuario['repeat_password']);
+        if (strcmp($validacionPasswordSeanIguales, "password invalida") == 0) {
+            $errores = 1;
+            $datos_usuario['errores'][] = "Elija contraseña correctamente"; // Agrega el mensaje de error
+        }
+
+// Validar si el usuario ya existe
+        $validacionUsuario = $this->validarUsuario($datos_usuario['usuario']);
+        if ($validacionUsuario) {
+            $errores = 1;
+            $datos_usuario['errores'][] = "Usuario ya existente"; // Agrega el mensaje de error
+        }
+
+
+        $validacionEmail = $this->validarEmail($datos_usuario['email']);
+        if ($validacionEmail) {
+            $errores = 1;
+            $datos_usuario['errores'][] = "Email ya existente"; // Agrega el mensaje de error
+        }
+        return array($errores, $datos_usuario);
     }
 }
