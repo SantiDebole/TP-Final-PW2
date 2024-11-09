@@ -75,10 +75,15 @@ class PartidaController
 
     public function reanudarPartida()
     {
-//cargo datos de partida
-
+        if (isset($_SESSION["user_id"])) {
+            $idUsuario = $_SESSION["user_id"];
+            if ($this->model->consultarPartidaDisponible($idUsuario)) {
+                $partida= $this->model->tienePartidaDisponible($idUsuario);
+                $_SESSION['partida'] = $partida['id'];
+                $this->preguntar();
+            }else $this->presenter->show("partidaNoDisponible");
     }
-
+    }
     public function responder()
     {
         if (isset($_SESSION["user_id"]) && isset($_SESSION['partida'])) {

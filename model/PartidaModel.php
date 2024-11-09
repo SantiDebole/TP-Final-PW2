@@ -38,7 +38,7 @@ class PartidaModel
             } else {
 
                 $this->reiniciarRegistroDePreguntasVistasPorUsuario($idUsuario);
-             //   $this->getPreguntaConRespuestas($idUsuario, $idPartida);
+                //$this->getPreguntaConRespuestas($idUsuario, $idPartida);
             }
         }
     }
@@ -111,7 +111,7 @@ class PartidaModel
         if ($intervalo->i < 1 && $intervalo->h == 0 && $intervalo->d == 0 && $intervalo->m == 0 && $intervalo->y == 0) return true;
         return false;
     }
-    private function tienePartidaDisponible($idUsuario)
+    public function tienePartidaDisponible($idUsuario)
     {
         $query = "SELECT id 
         from partida
@@ -139,7 +139,34 @@ class PartidaModel
     }
     private function filtrarPreguntasPorNivelDeUsuario($nivel): string
     {
-        $dificultad = "";
+        $dificultad["alto"]= '
+                WITH PreguntasFiltradasPorNivel AS (
+                    SELECT tienen.idPregunta AS idPreguntaFiltrada,
+                           AVG(tienen.puntaje) AS promedio
+                    FROM tienen
+                    GROUP BY tienen.idPregunta
+                    HAVING promedio < 0.3
+                )';
+        $dificultad["medio"]= '
+                WITH PreguntasFiltradasPorNivel AS (
+                    SELECT tienen.idPregunta AS idPreguntaFiltrada,
+                           AVG(tienen.puntaje) AS promedio
+                    FROM tienen
+                    GROUP BY tienen.idPregunta
+                    HAVING promedio > 0.3 AND promedio < 0.7
+                )';
+        $dificultad["bajo"]='
+                WITH PreguntasFiltradasPorNivel AS (
+                    SELECT tienen.idPregunta AS idPreguntaFiltrada,
+                           AVG(tienen.puntaje) AS promedio
+                    FROM tienen
+                    GROUP BY tienen.idPregunta
+                    HAVING promedio > 0.7
+                )';
+
+return $dificultad[$nivel];
+     /*
+        $dificultad[] = "";
         if ($nivel === "alto") {
             $dificultad = '
                 WITH PreguntasFiltradasPorNivel AS (
@@ -168,7 +195,7 @@ class PartidaModel
                     HAVING promedio > 0.7
                 )';
         }
-        return $dificultad;
+        return $dificultad;*/
     }
     private function calcularNivelDelUsuario($idUsuario)
     {
@@ -327,5 +354,7 @@ WHERE r.esCorrecta = 1 AND r.id = ? and p.id=  ?
         $intervalo = $fechaPregunta->diff($fechaActual);
         return 60-(($intervalo->days * 24 * 60 * 60)+($intervalo->h * 60 * 60)+($intervalo->i * 60)+$intervalo->s);
     }
+
+
 
 }
