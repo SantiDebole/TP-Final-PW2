@@ -38,8 +38,38 @@ class LobbyController {
 
     public function verRival(){
         $idBuscado = $_POST["usuarioBuscado"];
-        $data['perfilRival'] = $this->model->buscarDatosDeOtrosJugadores($idBuscado);
-        $this->presenter->show("perfil",$data);
+        if(is_null($idBuscado)){
+            header("location: /lobby/listar");
+            exit();
+        }else{
+            $usuario[] = $this->model->buscarDatosDeOtrosJugadores($idBuscado);
+        }
+        if($usuario[0] == NULL){
+            $rol = $_SESSION['rol'];
+            $userId = $_SESSION['user_id'];
+            $username = $_SESSION['username'];
+
+            // Preparar los datos para la vista
+            $data = [
+                'lobby' => [
+                    'loggedUserId' => $userId,
+                    'username' => $username,
+                    'rol' => $rol
+                ],
+                'rol' => $rol,
+                'isAdmin' => ($rol === 'a'),
+                'isEditor' => ($rol === 'e'),
+                'isPlayer' => ($rol === 'ur'),
+                'error'=> "Perfil no encontrado"
+            ];
+
+            $this->presenter->show("lobby",$data);
+            //header("location: /lobby/listar");
+            //exit();
+        }else{
+            $data['perfilRival'] = $usuario;
+            $this->presenter->show("perfil",$data);
+        }
 
 
     }
@@ -49,7 +79,6 @@ class LobbyController {
         $this->presenter->show("perfil",$data);
 
     }
-
 
 
     public function getUserById($id) { //ESTO ESTA MAL, TIENE QUE IR EN EL MODELO!!!

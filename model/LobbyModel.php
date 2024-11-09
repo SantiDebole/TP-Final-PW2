@@ -65,12 +65,19 @@ class LobbyModel
     public function buscarDatosDeOtrosJugadores($idBuscado)
     {
         $usuario = $this->buscarUsuario($idBuscado);
-        if (is_null($usuario)) return $usuario;
-        $resultado = $this->traerMisPartidas($usuario['id']);
-        $usuario['partidas'] = $resultado['partidas'];
-        $usuario['mejor_partida'] = $resultado['mejor_partida'];
-        $usuario['puntaje_total'] = $resultado['puntaje_total'];
-        return $usuario;
+        echo 'soy el usuario: ';
+        var_dump($usuario);
+        if (is_null($usuario)){
+            return $usuario;
+        }else{
+            $resultado = $this->traerMisPartidas($usuario['id']);
+            $usuario['partidas'] = $resultado['partidas'];
+            $usuario['mejor_partida'] = $resultado['mejor_partida'];
+            $usuario['puntaje_total'] = $resultado['puntaje_total'];
+            return $usuario;
+        }
+
+
 
 
     }

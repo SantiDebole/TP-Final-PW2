@@ -48,6 +48,9 @@
                     <button class="btn btn-primary" type="submit">Buscar</button>
                 </div>
             </form>
+            {{#error}}
+                <p style="color: red;">{{error}}</p>
+            {{/error}}
         {{/isPlayer}}
     </div>
 </div>
