@@ -16,7 +16,6 @@ class PartidaController
 
         if (isset($_SESSION["user_id"])) {
             $idUsuario = $_SESSION["user_id"];
-            var_dump($this->model->consultarPartidaDisponible($idUsuario));
             if ($this->model->consultarPartidaDisponible($idUsuario)) {
                 $this->presenter->show("reanudarPartida");
             } else {
@@ -34,8 +33,21 @@ class PartidaController
 
 
     public function crearPartida(){
-        $idUsuario = $_SESSION["user_id"];
-        //$this->model->crearPartida($idUsuario);
+        if (isset($_SESSION["user_id"])) {
+            $idUsuario = $_SESSION["user_id"];
+            if ($this->model->consultarPartidaDisponible($idUsuario)) {
+                $this->presenter->show("reanudarPartida");
+            } else {
+                $_SESSION['partida']= $this->model->crearPartida($idUsuario);
+                $preguntaConRespuestas = $this->model->getPreguntaConRespuestas($idUsuario);
+                $data = [
+                    "loggedUserId" => $idUsuario,
+                    "pregunta" => $preguntaConRespuestas,
+                    "puntaje" => "0"
+                ];
+                $this->presenter->show("pregunta", $data);
+            }
+        }
 
     }
     public function reanudarPartida(){
