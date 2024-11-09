@@ -50,21 +50,23 @@ class PartidaController
 
     }
 
-    public function preguntar()
-    {
+    public function preguntar(){
         $data = [];
         if (isset($_SESSION["user_id"]) && isset($_SESSION['partida'])) {
             $idUsuario = $_SESSION["user_id"];
             $idPartida = $_SESSION['partida'];
 
             $preguntaConRespuestas = $this->model->getPreguntaConRespuestas($idUsuario, $idPartida);
+            $tiempoRestante = $this->model->tiempoRestanteDeRespuesta($idPartida);
             $puntaje = $this->model->traerPuntajeDelUsuarioEnLaPartida($idPartida, $idUsuario);
+            var_dump($tiempoRestante);
             if ($preguntaConRespuestas) {
                 $data = [
 
                     "loggedUserId" => $idUsuario,
                     "pregunta" => $preguntaConRespuestas,
-                    "puntaje" => "$puntaje"
+                    "puntaje" => "$puntaje",
+                    "tiempoRestante" => $tiempoRestante
                 ];
             $this->presenter->show("pregunta", $data);
             }
@@ -82,8 +84,8 @@ class PartidaController
         if (isset($_SESSION["user_id"]) && isset($_SESSION['partida'])) {
             $idUsuario = $_SESSION["user_id"];
             $idPartida = $_SESSION['partida'];
-            if (isset($_POST["idRespuesta"])) {
-                $idRespuesta = $_POST["idRespuesta"];
+            if (isset($_POST["idRespuesta"])) $idRespuesta = $_POST["idRespuesta"];
+                else $idRespuesta=0;
                 if ($this->model->validarRespuesta($idRespuesta, $idPartida)) {
                     $puntaje = $this->model->traerPuntajeDelUsuarioEnLaPartida($idPartida, $idUsuario);
                     $data = [
@@ -103,7 +105,7 @@ class PartidaController
                     $this->presenter->show("resultadoRespuesta", $data);
 
                 }
-            }
+
 
 
         }else $this->presenter->show("partidaNoDisponible");

@@ -34,14 +34,14 @@ class PartidaModel
                 $idPregunta = $this->getPreguntaAleatoria($preguntasNoVistasPorUsuario);
                 $this->registrarPreguntaEnTienen($idPartida, $idPregunta);
                 $this->registrarPreguntaEnUsuarioPregunta($idUsuario, $idPregunta);
-
                 return $this->obtenerRespuestasALaPregunta($idPregunta);
             } else {
 
                 $this->reiniciarRegistroDePreguntasVistasPorUsuario($idUsuario);
-              //  $this->getPreguntaConRespuestas($idUsuario, $idPartida);
+             //   $this->getPreguntaConRespuestas($idUsuario, $idPartida);
             }
-        }}
+        }
+    }
     public function crearPartida($idUsuario)
     {
 
@@ -310,6 +310,22 @@ WHERE r.esCorrecta = 1 AND r.id = ? and p.id=  ?
         $resultado = $stmt->get_result()->fetch_assoc();
         return $resultado ? $resultado['total_puntaje'] : 0;
 
+    }
+    public function tiempoRestanteDeRespuesta($idPartida){
+        $query="select fecha
+        from tienen
+        where puntaje is null 
+        and idPartida = ?";
+
+        $stmt = $this->db->connection->prepare($query);
+        $stmt->bind_param("i", $idPartida);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        $fecha=$result['fecha'];
+        $fechaPregunta = new DateTime($fecha);
+        $fechaActual = new DateTime();
+        $intervalo = $fechaPregunta->diff($fechaActual);
+        return 60-(($intervalo->days * 24 * 60 * 60)+($intervalo->h * 60 * 60)+($intervalo->i * 60)+$intervalo->s);
     }
 
 }
