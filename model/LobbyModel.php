@@ -197,19 +197,19 @@ class LobbyModel
         return $this->ejecucionDeConsultaFetchAllSinParametros($query);
     }
 
-    private function ejecucionDeConsultaFetchAllSinParametros($query){
+
+    private function ejecucionDeConsultaFetchAllSinParametros($query)
+    {
         try {
 
-    $stmt = $this->database->connection->prepare($query);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    return $result->fetch_all(MYSQLI_ASSOC);}
-        catch (Exception $e) {
-                // Manejo de la excepción, por ejemplo, registrar el error o lanzar una excepción personalizada
-              //  header("Location: lobby/mostrarError?error=$e");
-            echo "hay un error";}
-
-}
+            $stmt = $this->database->connection->prepare($query);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
 
 
 //Las primeras 10 preguntas son rdm y no dependen del nivel.
@@ -217,6 +217,10 @@ class LobbyModel
 // promedio < a 2 les damos las de 70% acetadas para arriba (malos)
 // promedio > a 2 y < a 4 (intermedio)
 // promedio > a 4 (experto)
+
+
+
+
 
 
 }

@@ -43,7 +43,10 @@ class Router
 
         $rutasPermitidas = [];
         $rutaConstruida = "$controllerName/$methodName";
+
+
         var_dump($rutaConstruida);
+
         if (!isset($_SESSION['rol'])) {
             $rutasPermitidas = ['registro/listar',
                 'registro/validarRegistro',
@@ -69,9 +72,14 @@ class Router
                         'perfil/listar'];
                     break;
                 case "e":
+
+
                     $rutasPermitidas = [ 'lobby/listar',
                                          'login/validate',
-                                         'login/logout'];
+                                         'login/logout',
+                                         'editor/preguntasReportadas',
+                                        'perfil/listar',
+                                        'editorController/manejoAccionReporte'];
                     break;
                 case "a":
                     $rutasPermitidas = [ 'lobby/listar',
@@ -79,6 +87,7 @@ class Router
                                          'login/logout'];
                                          break;
             }
+
             $this->controlDeRuta($rutaConstruida, $rutasPermitidas);
         }
 
@@ -89,13 +98,19 @@ class Router
     {
 
         foreach ($rutasPermitidas as $rutaPermitida) {
-            if ($rutaPermitida == $rutaConstruida) return true;
+            if ($rutaPermitida == $rutaConstruida) {
+                return true;
+            }
+
         }
-        if(isset($_SESSION['rol'])) {header("Location: /lobby/listar");
-        exit();}
+/*
+        if(isset($_SESSION['rol'])) {
+            header("Location: /lobby/listar");
+        exit();
+        }
         else {header("Location: /login/listar");
             exit();}
-
+*/
     }
 
 

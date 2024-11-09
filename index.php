@@ -1,4 +1,4 @@
-<?php
+ <?php
 session_start();
 
 //si tenemos la sesion iniciada, deberia ir al lobby
@@ -20,3 +20,4 @@ $param =  isset($_GET["param"])? $_GET["param"]:"";
 
 
 $router->route($controller, $action, $param);
+
