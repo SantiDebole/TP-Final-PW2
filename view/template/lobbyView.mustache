@@ -6,10 +6,10 @@
             <a href="/perfil/listar" class="btn btn-info m-1">Ir a mi perfil</a>
         </div>
         {{#lobby}}
-        <!-- Bienvenida -->
-        <h1 class="h3 mb-3 text-center">Bienvenido, usuario con ID: <span class="text-danger">{{loggedUserId}}</span></h1>
-        <h2 class="h5 mb-3 text-center">Usuario: <span class="text-danger">{{username}}</span></h2>
-        <h2 class="h5 mb-4 text-center">Tipo de usuario: <span class="text-danger">{{rol}}</span></h2>
+            <!-- Bienvenida -->
+            <h1 class="h3 mb-3 text-center">Bienvenido, usuario con ID: <span class="text-danger">{{loggedUserId}}</span></h1>
+            <h2 class="h5 mb-3 text-center">Usuario: <span class="text-danger">{{username}}</span></h2>
+            <h2 class="h5 mb-4 text-center">Tipo de usuario: <span class="text-danger">{{rol}}</span></h2>
             <div class="text-center">
                 <h4 class="h5 text-dark mb-3">POSICION EN EL RANKING DE MEJORES JUGADORES: #<span class="text-danger">{{posicionRanking}}</span></h4>
                 <h4 class="h5 text-dark mb-3">PUNTAJE EN EL RANKING DE MEJORES JUGADORES: #<span class="text-danger">{{puntajePosicionRanking}}</span></h4>
@@ -39,11 +39,13 @@
 
             <div class="text-center">
                 <h2 class="h5 text-dark mb-3">Jugador</h2>
-                <a href="/partida/jugar" class="btn btn-primary mb-2 me-2">Jugar</a>
-                <a href="/lobby/mis_partidas" class="btn btn-info mb-2 me-2">Mis Partidas</a>
-                <a href="/lobby/ranking" class="btn btn-info mb-2">Ver Ranking</a>
-                <a href="/pregunta/sugerirPregunta" class="btn btn-warning mb-2">Sugerir una pregunta</a>
+                <a href="/partida/jugar" class="btn btn-primary mb-2 d-block mx-auto" style="width: 250px;">Jugar</a>
+                <a href="/lobby/mis_partidas" class="btn btn-info mb-2 d-block mx-auto" style="width: 250px;">Mis Partidas</a>
+                <a href="/lobby/ranking" class="btn btn-info mb-2 d-block mx-auto" style="width: 250px;">Ver Ranking</a>
+                <a href="/pregunta/sugerirPregunta" class="btn btn-warning mb-2 d-block mx-auto" style="width: 250px;">Sugerir una pregunta</a>
             </div>
+
+
 
             <!-- Formulario de búsqueda de usuario -->
             <form action="/lobby/verRival" method="post" enctype="multipart/form-data" class="mt-4">
