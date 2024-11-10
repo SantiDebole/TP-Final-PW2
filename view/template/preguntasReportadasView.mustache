@@ -11,7 +11,20 @@
                     <div class="card-body">
                         <p><strong>Texto del Reporte:</strong> {{texto_reporte}}</p>
                         <p><strong>Usuario:</strong> {{nombre_usuario}} (ID: {{id_usuario}})</p>
-                        <p><strong>Pregunta:</strong> {{texto_pregunta}} (ID: {{id_pregunta}})</p>
+                        <p><strong>Pregunta:</strong> {{descripcion}} (ID: {{id_pregunta}})</p>
+
+                        <!-- Mostrar las respuestas asociadas a esta pregunta -->
+                        <p><strong>Respuestas:</strong></p>
+                        <ul class="list-unstyled">
+                            {{#respuestas}}
+                                <li class="mt-2 p-2
+                                    {{#es_correcta}}bg-success{{/es_correcta}}
+                                    {{^es_correcta}}bg-danger{{/es_correcta}}
+                                    text-white rounded">
+                                    {{descripcion}}
+                                </li>
+                            {{/respuestas}}
+                        </ul>
                     </div>
                     <div class="card-footer text-center">
 
@@ -21,15 +34,17 @@
                             <button type="submit" class="btn btn-success me-2">Dar de Alta</button>
                         </form>
 
-
                         <form method="POST" action="/editor/manejoAccionReporte" class="d-inline">
                             <input type="hidden" name="idPregunta" value="{{id_pregunta}}">
                             <input type="hidden" name="accion" value="darDeBaja">
                             <button type="submit" class="btn btn-danger me-2">Dar de Baja</button>
                         </form>
 
+                        <form method="POST" action="/editor/mostrarFormularioEdicionPregunta" class="d-inline">
+                            <input type="hidden" name="idPregunta" value="{{id_pregunta}}">
+                            <button type="submit" class="btn btn-warning">Modificar</button>
+                        </form>
 
-                        <button class="btn btn-warning">Modificar</button>
                     </div>
                 </div>
             </div>

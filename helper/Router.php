@@ -79,7 +79,10 @@ class Router
                                          'login/logout',
                                          'editor/preguntasReportadas',
                                         'perfil/listar',
-                                        'editorController/manejoAccionReporte'];
+                                        'editorController/manejoAccionReporte',
+                                        'editor/modificarPreguntaYRespuestas',
+                                        'editor/mostrarFormularioEdicionPregunta',
+                                        ''];
                     break;
                 case "a":
                     $rutasPermitidas = [ 'lobby/listar',
