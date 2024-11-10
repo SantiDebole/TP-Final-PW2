@@ -1,4 +1,4 @@
-<?php
+ <?php
 session_start();
 echo '<h2>ESTA ES LA SESION:</h2>';
 var_dump($_SESSION);
@@ -27,3 +27,4 @@ $param =  isset($_GET["param"])? $_GET["param"]:"";
 
 
 $router->route($controller, $action, $param);
+

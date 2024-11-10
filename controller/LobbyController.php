@@ -87,11 +87,13 @@ class LobbyController {
     }
 
 
+
     public function getUserById($id) { //ESTO ESTA MAL, TIENE QUE IR EN EL MODELO!!!
         $stmt = $this->conn->prepare("SELECT nombre, puntaje FROM usuarios WHERE id = :id");
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
 
     public function mis_partidas(){
         $idUsuario = $_SESSION['user_id'];
@@ -120,6 +122,13 @@ class LobbyController {
 
 
     }
+
+
+
+
+
+
+
 }
 ?>
 
