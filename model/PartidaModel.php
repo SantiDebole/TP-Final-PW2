@@ -42,6 +42,7 @@ class PartidaModel
 
     public function getPregunta($idUsuario){
         $preguntasNoVistasPorUsuario = $this->getPreguntasNoVistasPorUsuario($idUsuario);
+
         if($preguntasNoVistasPorUsuario){
 
 
@@ -158,14 +159,15 @@ AND pr.id IN (
     FROM PreguntasDificiles
 );";*/
             $queryFuncional = "SELECT pr.id AS idPreguntaNoVista
-                   FROM pregunta pr
-                   WHERE pr.id NOT IN (
-                       SELECT up.idPregunta as id
-                       FROM usuario u
-                       JOIN UsuarioPregunta up on u.id = up.idUsuario
-                       WHERE u.id = ?
-                       ORDER BY u.id
-                   );";
+                                FROM pregunta pr
+                                WHERE pr.estado = 'activa' 
+                                  AND pr.id NOT IN (
+                                      SELECT up.idPregunta 
+                                      FROM usuario u
+                                      JOIN UsuarioPregunta up ON u.id = up.idUsuario
+                                      WHERE u.id = ?
+                                      ORDER BY u.id
+                                  );";
         $stmt = $this->db->connection->prepare($queryFuncional);
         $stmt->bind_param("i", $idUsuario);
         $stmt->execute();

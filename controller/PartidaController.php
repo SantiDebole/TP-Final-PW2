@@ -15,6 +15,7 @@ class PartidaController
         if(isset($_SESSION["user_id"])){
             $idUsuario = $_SESSION["user_id"];
             $pregunta = $this->model->getPregunta($idUsuario);
+            var_dump($pregunta);
             if($pregunta){
                 if(!isset($_SESSION["idPartida"])){
                     $this->crearPartida($idUsuario);
