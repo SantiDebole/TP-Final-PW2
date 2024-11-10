@@ -76,7 +76,8 @@ class Router
                 case "e":
                     $rutasPermitidas = [ 'lobby/listar',
                                          'login/validate',
-                                         'login/logout'];
+                                         'login/logout',
+                                         'perfil/listar'];
                     break;
                 case "a":
                     $rutasPermitidas = [ 'lobby/listar',

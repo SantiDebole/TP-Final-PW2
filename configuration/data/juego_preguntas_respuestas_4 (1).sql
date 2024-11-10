@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 04-11-2024 a las 20:37:49
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Host: 127.0.0.1
+-- Generation Time: Nov 10, 2024 at 08:24 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `juego_preguntas_respuestas`
+-- Database: `juego_preguntas_respuestas_4`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `categoria`
+-- Table structure for table `categoria`
 --
 
 CREATE TABLE `categoria` (
@@ -34,19 +34,19 @@ CREATE TABLE `categoria` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `categoria`
+-- Dumping data for table `categoria`
 --
 
 INSERT INTO `categoria` (`id`, `descripcion`, `color`) VALUES
-(1, 'paises', 'azul'),
-(2, 'Geografía', 'marron'),
-(3, 'Astronomía', 'celeste'),
-(4, 'Literatura', 'amarillo');
+(1, 'Paises', 'primary'),
+(2, 'Geografía', 'danger'),
+(3, 'Astronomía', 'warning'),
+(4, 'Literatura', 'info');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `partida`
+-- Table structure for table `partida`
 --
 
 CREATE TABLE `partida` (
@@ -57,39 +57,21 @@ CREATE TABLE `partida` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `partida`
+-- Dumping data for table `partida`
 --
 
 INSERT INTO `partida` (`id`, `estado`, `fecha`, `idUsuario`) VALUES
-(10, 'inactivo', '2024-10-25 00:45:05', 10),
-(11, 'inactivo', '2024-10-25 00:48:33', 10),
-(12, 'inactivo', '2024-10-25 00:53:02', 10),
-(13, 'inactivo', '2024-10-25 00:55:59', 3),
-(15, 'inactivo', '2024-10-25 13:49:15', 11),
-(16, 'inactivo', '2024-10-27 19:39:29', 11),
-(17, 'inactivo', '2024-10-27 19:42:24', 11),
-(18, 'inactivo', '2024-10-27 19:44:23', 11),
-(19, 'inactivo', '2024-10-27 19:48:26', 11),
-(20, 'inactivo', '2024-10-27 20:14:00', 11),
-(22, 'inactivo', '2024-10-27 20:18:28', 12),
-(23, 'inactivo', '2024-11-01 20:20:52', 14),
-(26, 'inactivo', '2024-11-03 23:19:58', 14),
-(27, 'inactivo', '2024-11-03 23:33:34', 14),
-(28, 'inactivo', '2024-11-03 23:36:20', 14),
-(29, 'inactivo', '2024-11-03 23:37:02', 14),
-(30, 'inactivo', '2024-11-03 23:37:44', 14),
-(31, 'inactivo', '2024-11-03 23:40:12', 14),
-(32, 'inactivo', '2024-11-03 23:41:58', 14),
-(33, 'inactivo', '2024-11-03 23:46:37', 14),
-(34, 'inactivo', '2024-11-04 19:58:40', 14),
-(35, 'inactivo', '2024-11-04 19:59:33', 14),
-(36, 'inactivo', '2024-11-04 20:01:52', 14),
-(37, 'inactivo', '2024-11-04 20:12:14', 14);
+(70, 'inactivo', '2024-11-09 18:06:10', 14),
+(71, 'inactivo', '2024-11-10 15:13:24', 14),
+(72, 'inactivo', '2024-11-10 15:15:20', 14),
+(73, 'Activo', '2024-11-10 15:19:28', 14),
+(74, 'Activo', '2024-11-10 15:34:46', 14),
+(75, 'Activo', '2024-11-10 20:14:16', 14);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `pregunta`
+-- Table structure for table `pregunta`
 --
 
 CREATE TABLE `pregunta` (
@@ -100,28 +82,50 @@ CREATE TABLE `pregunta` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `pregunta`
+-- Dumping data for table `pregunta`
 --
 
 INSERT INTO `pregunta` (`id`, `descripcion`, `estado`, `idCategoria`) VALUES
-(1, '¿Cuál es la capital de Francia?', 'activa', 1),
+(1, '¿Cuál es la capital de Francia?', 'activa', 2),
 (2, '¿Cuál es el planeta más cercano al Sol?', 'activa', 3),
 (3, '¿Quién escribió \"Cien años de soledad\"?', 'activa', 4),
-(4, '¿Cuál es el río más largo del mundo?', 'activa', 1),
-(5, '¿En qué continente se encuentra el desierto del Sahara?', 'activa', 1),
-(6, '¿Qué país tiene la mayor cantidad de islas en el mundo?', 'activa', 1),
-(7, '¿Qué planeta es conocido como el \"planeta rojo\"?', 'activa', 2),
-(8, '¿Cuántas lunas tiene la Tierra?', 'activa', 2),
-(9, '¿Qué planeta es el más grande del sistema solar?', 'activa', 2),
-(10, '¿Quién es el autor de \"Don Quijote de la Mancha\"?', 'activa', 3),
-(11, '¿En qué siglo se escribió \"La Odisea\" de Homero?', 'activa', 3),
-(12, '¿Cuál de los siguientes es un libro escrito por Gabriel García Márquez?', 'activa', 3),
-(13, '¿Quién escribió \"Crimen y Castigo\"?', 'activa', 3);
+(4, '¿Cuál es el río más largo del mundo?', 'activa', 2),
+(5, '¿En qué continente se encuentra el desierto del Sahara?', 'activa', 2),
+(6, '¿Qué país tiene la mayor cantidad de islas en el mundo?', 'activa', 2),
+(7, '¿Qué planeta es conocido como el \"planeta rojo\"?', 'activa', 3),
+(8, '¿Cuántas lunas tiene la Tierra?', 'activa', 3),
+(9, '¿Qué planeta es el más grande del sistema solar?', 'reportada', 3),
+(10, '¿Quién es el autor de \"Don Quijote de la Mancha\"?', 'activa', 4),
+(11, '¿En qué siglo se escribió \"La Odisea\" de Homero?', 'activa', 4),
+(12, '¿Cuál de los siguientes es un libro escrito por Gabriel García Márquez?', 'activa', 4),
+(13, '¿Quién escribió \"Crimen y Castigo\"?', 'activa', 4),
+(15, 'cual es el verdadero nombre de charles chaplin?', 'pendiente', NULL),
+(16, 'quien gano el mundial en 2018?', 'pendiente', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `respuesta`
+-- Table structure for table `reporte`
+--
+
+CREATE TABLE `reporte` (
+  `id` int(11) NOT NULL,
+  `usuario_id` int(11) DEFAULT NULL,
+  `pregunta_id` int(11) DEFAULT NULL,
+  `texto` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `reporte`
+--
+
+INSERT INTO `reporte` (`id`, `usuario_id`, `pregunta_id`, `texto`) VALUES
+(11, 14, 9, 'esta rara');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `respuesta`
 --
 
 CREATE TABLE `respuesta` (
@@ -132,7 +136,7 @@ CREATE TABLE `respuesta` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `respuesta`
+-- Dumping data for table `respuesta`
 --
 
 INSERT INTO `respuesta` (`id`, `descripcion`, `esCorrecta`, `idPregunta`) VALUES
@@ -174,12 +178,18 @@ INSERT INTO `respuesta` (`id`, `descripcion`, `esCorrecta`, `idPregunta`) VALUES
 (36, 'El amor en los tiempos del cólera', 0, 12),
 (37, 'Fiódor Dostoyevski', 1, 13),
 (38, 'Lev Tolstói', 0, 13),
-(39, 'Franz Kafka', 0, 13);
+(39, 'Franz Kafka', 0, 13),
+(43, 'Charles Chaplin', 1, 15),
+(44, 'Charles Reynchart', 0, 15),
+(45, 'Charles Brotovsky', 0, 15),
+(46, 'francia', 1, 16),
+(47, 'alemania', 0, 16),
+(48, 'brasil', 0, 16);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tienen`
+-- Table structure for table `tienen`
 --
 
 CREATE TABLE `tienen` (
@@ -190,113 +200,24 @@ CREATE TABLE `tienen` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `tienen`
+-- Dumping data for table `tienen`
 --
 
 INSERT INTO `tienen` (`idPartida`, `idPregunta`, `fecha`, `puntaje`) VALUES
-(23, 1, '2024-11-01 20:26:19', 1),
-(23, 1, '2024-11-01 20:27:24', 1),
-(23, 2, '2024-11-01 20:26:23', 1),
-(23, 2, '2024-11-01 20:27:04', 1),
-(23, 2, '2024-11-01 20:28:57', 0),
-(23, 3, '0000-00-00 00:00:00', 1),
-(23, 3, '2024-11-01 20:27:28', 1),
-(23, 4, '2024-11-01 20:26:17', 1),
-(23, 4, '2024-11-01 20:27:06', 1),
-(23, 5, '2024-11-01 20:26:20', 1),
-(23, 5, '2024-11-01 20:27:21', 1),
-(23, 6, '2024-11-01 20:26:22', 1),
-(23, 6, '2024-11-01 20:26:37', 1),
-(23, 7, '0000-00-00 00:00:00', 1),
-(23, 7, '2024-11-01 20:27:22', 1),
-(23, 7, '2024-11-01 20:27:33', 1),
-(23, 8, '0000-00-00 00:00:00', 1),
-(23, 8, '2024-11-01 20:27:18', 1),
-(23, 9, '0000-00-00 00:00:00', 1),
-(23, 9, '2024-11-01 20:26:34', 1),
-(23, 10, '2024-11-01 20:26:24', 1),
-(23, 10, '2024-11-01 20:27:10', 1),
-(23, 11, '0000-00-00 00:00:00', 1),
-(23, 11, '2024-11-01 20:27:05', 1),
-(23, 12, '2024-11-01 20:26:15', 1),
-(23, 12, '2024-11-01 20:27:19', 1),
-(23, 13, '2024-11-01 20:26:25', 1),
-(23, 13, '2024-11-01 20:27:08', 1),
-(26, 1, '2024-11-03 23:30:20', 1),
-(26, 4, '2024-11-03 23:30:24', 0),
-(26, 5, '2024-11-03 23:30:21', 1),
-(26, 6, '2024-11-03 23:30:22', 1),
-(26, 9, '2024-11-03 23:25:38', 1),
-(26, 10, '2024-11-03 23:30:19', 1),
-(26, 12, '2024-11-03 23:25:43', 1),
-(26, 13, '2024-11-03 23:25:42', 1),
-(27, 3, '2024-11-03 23:34:20', 1),
-(27, 8, '2024-11-03 23:34:22', 1),
-(27, 11, '2024-11-03 23:34:23', 0),
-(28, 4, '2024-11-03 23:36:57', 1),
-(28, 7, '2024-11-03 23:37:00', 0),
-(28, 10, '2024-11-03 23:36:59', 1),
-(28, 13, '2024-11-03 23:36:58', 1),
-(29, 2, '2024-11-03 23:37:32', 1),
-(29, 6, '2024-11-03 23:37:34', 0),
-(30, 1, '2024-11-03 23:38:06', 1),
-(30, 3, '2024-11-03 23:38:10', 1),
-(30, 4, '2024-11-03 23:38:14', 0),
-(30, 5, '2024-11-03 23:38:08', 1),
-(30, 8, '2024-11-03 23:37:53', 1),
-(30, 9, '2024-11-03 23:38:04', 1),
-(30, 11, '2024-11-03 23:38:07', 1),
-(30, 12, '2024-11-03 23:38:09', 1),
-(31, 3, '2024-11-03 23:40:18', 0),
-(31, 5, '2024-11-03 23:40:15', 1),
-(31, 10, '2024-11-03 23:40:16', 1),
-(32, 13, '2024-11-03 23:46:34', 0),
-(33, 1, '2024-11-03 23:46:43', 0),
-(33, 6, '2024-11-03 23:46:39', 1),
-(33, 8, '2024-11-03 23:46:41', 1),
-(33, 12, '2024-11-03 23:46:42', 1),
-(34, 2, '2024-11-04 19:58:42', 1),
-(34, 4, '2024-11-04 19:58:47', 0),
-(34, 7, '2024-11-04 19:58:44', 1),
-(34, 9, '2024-11-04 19:58:45', 1),
-(34, 11, '2024-11-04 19:58:43', 1),
-(35, 2, '2024-11-04 19:59:38', 1),
-(35, 3, '2024-11-04 19:59:36', 1),
-(35, 7, '2024-11-04 19:59:37', 1),
-(35, 8, '2024-11-04 19:59:40', 1),
-(35, 10, '2024-11-04 19:59:39', 1),
-(35, 11, '2024-11-04 19:59:43', 0),
-(35, 12, '2024-11-04 19:59:41', 1),
-(36, 1, '2024-11-04 20:01:53', 1),
-(36, 2, '2024-11-04 20:01:58', 1),
-(36, 3, '2024-11-04 20:02:05', 1),
-(36, 4, '2024-11-04 20:02:02', 1),
-(36, 5, '2024-11-04 20:01:55', 1),
-(36, 5, '2024-11-04 20:01:59', 1),
-(36, 6, '2024-11-04 20:01:57', 1),
-(36, 6, '2024-11-04 20:02:00', 1),
-(36, 7, '2024-11-04 20:02:00', 1),
-(36, 9, '2024-11-04 20:01:54', 1),
-(36, 9, '2024-11-04 20:02:08', 0),
-(36, 10, '2024-11-04 20:02:04', 1),
-(36, 12, '2024-11-04 20:02:07', 1),
-(36, 13, '2024-11-04 20:01:55', 1),
-(36, 13, '2024-11-04 20:02:01', 1),
-(37, 1, '2024-11-04 20:12:19', 1),
-(37, 1, '2024-11-04 20:12:25', 1),
-(37, 2, '2024-11-04 20:12:27', 1),
-(37, 3, '2024-11-04 20:12:22', 1),
-(37, 4, '2024-11-04 20:12:24', 1),
-(37, 8, '2024-11-04 20:12:16', 1),
-(37, 9, '2024-11-04 20:12:20', 1),
-(37, 10, '2024-11-04 20:12:23', 1),
-(37, 11, '2024-11-04 20:12:15', 1),
-(37, 12, '2024-11-04 20:12:28', 0);
+(70, 4, '2024-11-09 18:06:14', 1),
+(70, 5, '2024-11-09 18:07:08', 0),
+(70, 7, '2024-11-09 18:07:02', 1),
+(71, 5, '2024-11-10 15:36:48', 1),
+(71, 9, '2024-11-10 15:36:53', 0),
+(71, 10, '2024-11-10 15:35:34', 1),
+(71, 12, '2024-11-10 15:36:39', 1),
+(71, 13, '2024-11-10 15:35:40', 0),
+(72, 11, '2024-11-10 20:14:18', 0);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuario`
+-- Table structure for table `usuario`
 --
 
 CREATE TABLE `usuario` (
@@ -317,7 +238,7 @@ CREATE TABLE `usuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `usuario`
+-- Dumping data for table `usuario`
 --
 
 INSERT INTO `usuario` (`id`, `nombre_completo`, `usuario`, `fecha_nacimiento`, `genero`, `email`, `password`, `rol`, `foto_perfil`, `pais`, `ciudad`, `fecha_creacion`, `esta_verificado`, `token_verificacion`) VALUES
@@ -334,12 +255,13 @@ INSERT INTO `usuario` (`id`, `nombre_completo`, `usuario`, `fecha_nacimiento`, `
 (11, 'admin3', 'admin3', '2024-10-21', 'femenino', 'admin3', 'admin3', 'ur', 'foto.jpg', 'Argentina', 'Aeropuerto Internacional Ezeiza', '0000-00-00', 0, NULL),
 (12, 'admin1', 'admin1', '0000-00-00', '', 'admin1', 'admin1', 'ur', 'images.jfif', 'Brazil', 'Cedro', '0000-00-00', 0, NULL),
 (13, 'usuariovalidar', 'usuariovalidar', '0000-00-00', 'femenino', 'usuariovalidar', 'usuariovalidar', 'ur', '', 'South Africa', 'Moretele Local Municipality', '0000-00-00', 0, 1),
-(14, 'usuarioleo', 'usuarioleo', '0000-00-00', '', 'leandrojavierloureiro@gmail.com', 'usuarioleo', 'ur', '', 'Argentina', 'Buenos Aires', '0000-00-00', 1, 5623866);
+(14, 'usuarioleo', 'usuarioleo', '0000-00-00', '', 'leandrojavierloureiro@gmail.comaa', 'usuarioleo', 'ur', '', '', '', '0000-00-00', 1, 5623866),
+(15, 'qr', 'qr', '0000-00-00', 'femenino', 'leandrojavierloureiro@gmail.com', 'qr', 'e', '319165_255720784462118_1025491_n.jpg', 'Brazil', 'Iguatu', '0000-00-00', 1, 8);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuariopregunta`
+-- Table structure for table `usuariopregunta`
 --
 
 CREATE TABLE `usuariopregunta` (
@@ -348,135 +270,162 @@ CREATE TABLE `usuariopregunta` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `usuariopregunta`
+-- Dumping data for table `usuariopregunta`
 --
 
 INSERT INTO `usuariopregunta` (`idUsuario`, `idPregunta`) VALUES
-(14, 1),
-(14, 2),
-(14, 3),
-(14, 4),
+(14, 5),
 (14, 9),
 (14, 10),
-(14, 12);
+(14, 11),
+(14, 12),
+(14, 13),
+(15, 1),
+(15, 5),
+(15, 8),
+(15, 9),
+(15, 11),
+(15, 12),
+(15, 13);
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `categoria`
+-- Indexes for table `categoria`
 --
 ALTER TABLE `categoria`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `partida`
+-- Indexes for table `partida`
 --
 ALTER TABLE `partida`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_usuario` (`idUsuario`);
 
 --
--- Indices de la tabla `pregunta`
+-- Indexes for table `pregunta`
 --
 ALTER TABLE `pregunta`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_idCategoria` (`idCategoria`);
 
 --
--- Indices de la tabla `respuesta`
+-- Indexes for table `reporte`
+--
+ALTER TABLE `reporte`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `usuario_id` (`usuario_id`),
+  ADD KEY `pregunta_id` (`pregunta_id`);
+
+--
+-- Indexes for table `respuesta`
 --
 ALTER TABLE `respuesta`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_idPreguntaEnRta` (`idPregunta`);
 
 --
--- Indices de la tabla `tienen`
+-- Indexes for table `tienen`
 --
 ALTER TABLE `tienen`
   ADD PRIMARY KEY (`idPartida`,`idPregunta`,`fecha`),
   ADD KEY `fk_Pregunta` (`idPregunta`);
 
 --
--- Indices de la tabla `usuario`
+-- Indexes for table `usuario`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- Indices de la tabla `usuariopregunta`
+-- Indexes for table `usuariopregunta`
 --
 ALTER TABLE `usuariopregunta`
   ADD PRIMARY KEY (`idUsuario`,`idPregunta`),
   ADD KEY `fk_Preg` (`idPregunta`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `categoria`
+-- AUTO_INCREMENT for table `categoria`
 --
 ALTER TABLE `categoria`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de la tabla `partida`
+-- AUTO_INCREMENT for table `partida`
 --
 ALTER TABLE `partida`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
--- AUTO_INCREMENT de la tabla `pregunta`
+-- AUTO_INCREMENT for table `pregunta`
 --
 ALTER TABLE `pregunta`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- AUTO_INCREMENT de la tabla `respuesta`
+-- AUTO_INCREMENT for table `reporte`
+--
+ALTER TABLE `reporte`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `respuesta`
 --
 ALTER TABLE `respuesta`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
--- AUTO_INCREMENT de la tabla `usuario`
+-- AUTO_INCREMENT for table `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
--- Restricciones para tablas volcadas
+-- Constraints for dumped tables
 --
 
 --
--- Filtros para la tabla `partida`
+-- Constraints for table `partida`
 --
 ALTER TABLE `partida`
   ADD CONSTRAINT `fk_usuario` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 
 --
--- Filtros para la tabla `pregunta`
+-- Constraints for table `pregunta`
 --
 ALTER TABLE `pregunta`
   ADD CONSTRAINT `fk_idCategoria` FOREIGN KEY (`idCategoria`) REFERENCES `categoria` (`id`);
 
 --
--- Filtros para la tabla `respuesta`
+-- Constraints for table `reporte`
+--
+ALTER TABLE `reporte`
+  ADD CONSTRAINT `reporte_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`),
+  ADD CONSTRAINT `reporte_ibfk_2` FOREIGN KEY (`pregunta_id`) REFERENCES `pregunta` (`id`);
+
+--
+-- Constraints for table `respuesta`
 --
 ALTER TABLE `respuesta`
   ADD CONSTRAINT `fk_idPreguntaEnRta` FOREIGN KEY (`idPregunta`) REFERENCES `pregunta` (`id`);
 
 --
--- Filtros para la tabla `tienen`
+-- Constraints for table `tienen`
 --
 ALTER TABLE `tienen`
   ADD CONSTRAINT `fk_Partida` FOREIGN KEY (`idPartida`) REFERENCES `partida` (`id`),
   ADD CONSTRAINT `fk_Pregunta` FOREIGN KEY (`idPregunta`) REFERENCES `pregunta` (`id`);
 
 --
--- Filtros para la tabla `usuariopregunta`
+-- Constraints for table `usuariopregunta`
 --
 ALTER TABLE `usuariopregunta`
   ADD CONSTRAINT `fk_Preg` FOREIGN KEY (`idPregunta`) REFERENCES `pregunta` (`id`),

@@ -18,8 +18,9 @@ class LobbyController {
         $userId = $_SESSION['user_id'];
         $username = $_SESSION['username'];
         $posicionRanking = $this->model->getPosicionRankingMejoresJugadores($username);
-        var_dump($posicionRanking);
-        var_dump($posicionRanking['puesto_ranking']);
+
+        //var_dump($posicionRanking);
+        //($posicionRanking['puesto_ranking']);
 
         // Preparar los datos para la vista
         $data = [
