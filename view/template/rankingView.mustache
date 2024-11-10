@@ -1,127 +1,125 @@
-<div class="flex-grow-1 ">
+<div class="flex-grow-1">
     <div class="container mt-5">
-        <a href="/lobby/listar">Volver al lobby</a>
-        <h1 class="text-center mb-4">Ranking</h1>
-        <br>
-        <br>
-        <div style="display: flex; gap:20px; flex-wrap:wrap; justify-content: center";>
-
-        <div class="table-responsive" style="width: 500px;">
-            <p> Top 10 mejores jugadores</p>
-            <table class="table table-hover table-bordered table-striped align-middle">
-                <thead class="table-dark text-center">
-                <tr>
-                    <th scope="col">Usuario</th>
-                    <th scope="col">Promedio de puntaje por partida</th>
-
-                </tr>
-                </thead>
-                <tbody>
-                {{#top10MejoresJugadores}}
-                    <tr class="text-center">
-                        <td><a href="/lobby/verRivalPorQR/{{usuario}}">{{usuario}}</td>
-                        <td>{{promedio_respuestas}}</td>
-                    </tr>
-                {{/top10MejoresJugadores}}
-                </tbody>
-            </table>
-        </div>
-        <br>
-
-        <div class="table-responsive" style="width: 500px;">
-            <p> Top 10 por suma de puntaje obtenido</p>
-            <table class="table table-hover table-bordered table-striped align-middle" >
-                <thead class="table-dark text-center">
-                <tr>
-                    <th scope="col">Usuario</th>
-                    <th scope="col">Puntaje</th>
-
-                </tr>
-                </thead>
-                <tbody>
-                {{#topPuntosTotales}}
-                    <tr class="text-center">
-                        <td><a href="/lobby/verRivalPorQR/{{usuario}}">{{usuario}}</td>
-                        <td>{{puntaje_total}}</td>
-                    </tr>
-                {{/topPuntosTotales}}
-                </tbody>
-            </table>
-        </div>
-        <br>
-
-        <div class="table-responsive" style="width: 500px;">
-            <p> Top 10 de partidas históricas</p>
-            <table class="table table-hover table-bordered table-striped align-middle" >
-                <thead class="table-dark text-center">
-                <tr>
-                    <th scope="col">Usuario</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Puntaje</th>
-
-                </tr>
-                </thead>
-                <tbody>
-                {{#topPartidasHistorico}}
-                    <tr class="text-center">
-                        <td><a href="/lobby/verRivalPorQR/{{usuario}}">{{usuario}}</td>
-                        <td>{{fecha_partida}}</td>
-                        <td>{{puntaje_total}}</td>
-                    </tr>
-                {{/topPartidasHistorico}}
-                </tbody>
-            </table>
+        <!-- Botón de regreso al lobby -->
+        <div class="d-flex justify-content-start mb-3">
+            <a href="/lobby/listar" class="btn btn-info">Volver al lobby</a>
         </div>
 
-        <div class="table-responsive" style="width: 500px;">
-            <p> Top 10 partidas del mes</p>
-            <table class="table table-hover table-bordered table-striped align-middle" >
-                <thead class="table-dark text-center">
-                <tr>
-                    <th scope="col">Usuario</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Puntaje</th>
+        <!-- Título de la página -->
+        <h1 class="text-center mb-5">Ranking</h1>
 
-                </tr>
-                </thead>
-                <tbody>
-                {{#topPartidasDelMes}}
-                    <tr class="text-center">
-                        <td><a href="/lobby/verRivalPorQR/{{usuario}}">{{usuario}}</td>
-                        <td>{{fecha_partida}}</td>
-                        <td>{{puntaje_total}}</td>
+        <!-- Contenedor de tablas -->
+        <div class="d-flex flex-wrap justify-content-center gap-4">
+            <!-- Tabla: Top 10 Mejores Jugadores -->
+            <div class="table-responsive m-3" style="max-width: 500px;">
+                <h4 class="text-center">Top 10 Mejores Jugadores</h4>
+                <table class="table table-hover table-bordered table-striped align-middle">
+                    <thead class="table-dark text-center">
+                    <tr>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Promedio de Puntaje</th>
                     </tr>
-                {{/topPartidasDelMes}}
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                    {{#top10MejoresJugadores}}
+                        <tr class="text-center">
+                            <td><a href="/lobby/verRivalPorQR/{{usuario}}">{{usuario}}</a></td>
+                            <td>{{promedio_respuestas}}</td>
+                        </tr>
+                    {{/top10MejoresJugadores}}
+                    </tbody>
+                </table>
+            </div>
 
-        <div class="table-responsive" style="width: 500px;">
-            <p> Top 10 partidas de la semana</p>
-            <table class="table table-hover table-bordered table-striped align-middle">
-                <thead class="table-dark text-center">
-                <tr>
-                    <th scope="col">Usuario</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Puntaje</th>
-
-                </tr>
-                </thead>
-                <tbody>
-                {{#topPartidasDeLaSemana}}
-                    <tr class="text-center">
-                        <td><a href="/lobby/verRivalPorQR/{{usuario}}">{{usuario}}</td>
-                        <td>{{fecha_partida}}</td>
-                        <td>{{puntaje_total}}</td>
+            <!-- Tabla: Top 10 por Suma de Puntaje -->
+            <div class="table-responsive m-3" style="max-width: 500px;">
+                <h4 class="text-center">Top 10 por Suma de Puntaje</h4>
+                <table class="table table-hover table-bordered table-striped align-middle">
+                    <thead class="table-dark text-center">
+                    <tr>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Puntaje</th>
                     </tr>
-                {{/topPartidasDeLaSemana}}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {{#topPuntosTotales}}
+                        <tr class="text-center">
+                            <td><a href="/lobby/verRivalPorQR/{{usuario}}">{{usuario}}</a></td>
+                            <td>{{puntaje_total}}</td>
+                        </tr>
+                    {{/topPuntosTotales}}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tabla: Top 10 Partidas Históricas -->
+            <div class="table-responsive m-3" style="max-width: 500px;">
+                <h4 class="text-center">Top 10 de Partidas Históricas</h4>
+                <table class="table table-hover table-bordered table-striped align-middle">
+                    <thead class="table-dark text-center">
+                    <tr>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Puntaje</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#topPartidasHistorico}}
+                        <tr class="text-center">
+                            <td><a href="/lobby/verRivalPorQR/{{usuario}}">{{usuario}}</a></td>
+                            <td>{{fecha_partida}}</td>
+                            <td>{{puntaje_total}}</td>
+                        </tr>
+                    {{/topPartidasHistorico}}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tabla: Top 10 Partidas del Mes -->
+            <div class="table-responsive m-3" style="max-width: 500px;">
+                <h4 class="text-center">Top 10 Partidas del Mes</h4>
+                <table class="table table-hover table-bordered table-striped align-middle">
+                    <thead class="table-dark text-center">
+                    <tr>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Puntaje</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#topPartidasDelMes}}
+                        <tr class="text-center">
+                            <td><a href="/lobby/verRivalPorQR/{{usuario}}">{{usuario}}</a></td>
+                            <td>{{fecha_partida}}</td>
+                            <td>{{puntaje_total}}</td>
+                        </tr>
+                    {{/topPartidasDelMes}}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tabla: Top 10 Partidas de la Semana -->
+            <div class="table-responsive m-3" style="max-width: 500px;">
+                <h4 class="text-center">Top 10 Partidas de la Semana</h4>
+                <table class="table table-hover table-bordered table-striped align-middle">
+                    <thead class="table-dark text-center">
+                    <tr>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Puntaje</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#topPartidasDeLaSemana}}
+                        <tr class="text-center">
+                            <td><a href="/lobby/verRivalPorQR/{{usuario}}">{{usuario}}</a></td>
+                            <td>{{fecha_partida}}</td>
+                            <td>{{puntaje_total}}</td>
+                        </tr>
+                    {{/topPartidasDeLaSemana}}
+                    </tbody>
+                </table>
+            </div>
         </div>
-
-
     </div>
-
-    </div>
-
 </div>

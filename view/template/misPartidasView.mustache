@@ -1,16 +1,20 @@
-<div class="flex-grow-1 ">
+<div class="flex-grow-1">
     <div class="container mt-5">
-        <a href="/lobby/listar">Ir al lobby</a>
-        <h1 class="text-center mb-4">Mejor partida:</h1>
-        <div class="table-responsive">
-            <table class="table table-hover table-bordered table-striped align-middle">
+        <!-- Botón para volver al lobby -->
+        <div class="d-flex justify-content-start mb-3">
+            <a href="/lobby/listar" class="btn btn-info">Volver al lobby</a>
+        </div>
+
+        <!-- Tabla de Mejor Partida -->
+        <h3 class="text-center mb-3">Mejor partida</h3>
+        <div class="table-responsive mb-5">
+            <table class="table table-hover table-bordered table-striped align-middle table-sm">
                 <thead class="table-dark text-center">
                 <tr>
-                    <th scope="col">ID de Partida</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Estado</th>
-                    <th scope="col">Puntaje</th>
-
+                    <th scope="col" class="text-nowrap">ID de Partida</th>
+                    <th scope="col" class="text-nowrap">Fecha</th>
+                    <th scope="col" class="text-nowrap">Estado</th>
+                    <th scope="col" class="text-nowrap">Puntaje</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -25,16 +29,17 @@
                 </tbody>
             </table>
         </div>
-        <h1 class="text-center mb-4">Mis Partidas</h1>
+
+        <!-- Tabla de Mis Partidas -->
+        <h3 class="text-center mb-3 mt-4">Mis Partidas</h3>
         <div class="table-responsive">
-            <table class="table table-hover table-bordered table-striped align-middle">
+            <table class="table table-hover table-bordered table-striped align-middle table-sm">
                 <thead class="table-dark text-center">
                 <tr>
-                    <th scope="col">ID de Partida</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Estado</th>
-                    <th scope="col">Puntaje</th>
-
+                    <th scope="col" class="text-nowrap">ID de Partida</th>
+                    <th scope="col" class="text-nowrap">Fecha</th>
+                    <th scope="col" class="text-nowrap">Estado</th>
+                    <th scope="col" class="text-nowrap">Puntaje</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -50,5 +55,16 @@
             </table>
         </div>
     </div>
-
 </div>
+
+
+<style>
+    /* Ajuste del tamaño de texto en pantallas celulares */
+    @media (max-width: 768px) {
+        .table th, .table td {
+            font-size: 0.9rem; /* Reduce el tamaño de texto */
+            white-space: normal; /* Permite que el texto se divida en varias líneas */
+            word-wrap: break-word; /* Divide las palabras largas */
+        }
+    }
+</style>
