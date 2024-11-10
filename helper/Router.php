@@ -70,7 +70,8 @@ class Router
                         'reporte/reportarPregunta',
                         'reporte/reporteEnviadoCorrecta',
                         'reporte/reporteEnviadoIncorrecta',
-                        'pregunta/sugerirPregunta'];
+                        'pregunta/sugerirPregunta',
+                        'pregunta/validarPreguntaSugerida'];
                     break;
                 case "e":
                     $rutasPermitidas = [ 'lobby/listar',
