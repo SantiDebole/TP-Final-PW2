@@ -6,11 +6,12 @@
     <div class="container mt-5 mb-5 bg-light">
 
         <div class="text-center p-3">
-            <h2>Registro de Usuario</h2>
+            <h1>Bienvenido a <img src="/public/image/logoQWIZ-removebg-preview.png" style="width: 200px;"></h1>
+            <h2 style="margin-top: 20px;">Registro de Usuario</h2>
         </div>
 
         <div class="container mt-5">
-            <h2 class="text-center">Formulario de Registro</h2>
+            <h2 class="text-center mb-5">Formulario de Registro</h2>
             <form action="/registro/validarRegistro" method="post" enctype="multipart/form-data" class="row g-3 needs-validation" novalidate>
 
                 <!-- Errores -->
@@ -25,21 +26,21 @@
                 {{/errores}}
 
                 <!-- Nombre Completo -->
-                <div class="col-md-6">
+                <div class="col-md-6" style="margin-top: 20px;">
                     <label for="nombre_completo" class="form-label">Nombre Completo</label>
                     <input type="text" class="form-control" id="nombre_completo" name="nombre_completo" value="{{nombre_completo}}" required>
 
                 </div>
 
                 <!-- Fecha de Nacimiento -->
-                <div class="col-md-6">
+                <div class="col-md-6 " style="margin-top: 20px;">
                     <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
                     <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" value="{{fecha_nacimiento}}" required>
 
                 </div>
 
                 <!-- Género -->
-                <div class="col-md-6">
+                <div class="col-md-6" style="margin-top: 20px;">
                     <label for="genero" class="form-label">Género</label>
                     <select class="form-select" id="genero" name="genero" required>
                         <option value="" disabled {{#genero}}selected{{/genero}}>Selecciona tu género</option>
@@ -51,47 +52,47 @@
                 </div>
 
                 <!-- Email -->
-                <div class="col-md-6">
+                <div class="col-md-6" style="margin-top: 20px;">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control" id="email" name="email" value="{{email}}" required>
 
                 </div>
 
                 <!-- Usuario -->
-                <div class="col-md-6">
+                <div class="col-md-6" style="margin-top: 20px;">
                     <label for="usuario" class="form-label">Usuario</label>
                     <input type="text" class="form-control" id="usuario" name="usuario" value="{{usuario}}" required>
 
                 </div>
 
                 <!-- Contraseña -->
-                <div class="col-md-6">
+                <div class="col-md-6" style="margin-top: 20px;">
                     <label for="password" class="form-label">Contraseña</label>
                     <input type="password" class="form-control" id="password" name="password" required>
 
                 </div>
 
                 <!-- Repetir Contraseña -->
-                <div class="col-md-6">
+                <div class="col-md-6" style="margin-top: 20px;">
                     <label for="repeat_password" class="form-label">Repetir Contraseña</label>
                     <input type="password" class="form-control" id="repeat_password" name="repeat_password" required>
 
                 </div>
 
                 <!-- Foto de Perfil -->
-                <div class="col-md-6">
+                <div class="col-md-6" style="margin-top: 20px;">
                     <label for="foto_perfil" class="form-label">Foto de Perfil</label>
                     <input type="file" class="form-control" id="foto_perfil" name="foto_perfil">
                 </div>
 
-                <div class="container mt-4">
+                <div class="container mt-4" style="margin-top: 20px;">
                     <div class="row">
                         <div class="col-12">
                             <div id="map" style="width: 100%; height: 400px;"></div>
                         </div>
                     </div>
 
-                    <div class="row mt-3">
+                    <div class="row mt-3" style="margin-top: 20px;">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="pais">País:</label>
@@ -108,18 +109,11 @@
                     </div>
                 </div>
 
-                    <!--<input type="text" class="form-control" id="ciudad" name="ciudad" value="{{ciudad}}" required>-->
-
-
-
-
-
                 <!-- Botón de Enviar -->
-                <div class="col-12">
+                <div class="col-12 text-center" style="margin-top: 20px; margin-bottom: 20px;">
                     <button class="btn btn-primary" type="submit">Registrarse</button>
                 </div>
             </form>
-
 
         </div>
 
@@ -192,66 +186,66 @@
         var url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
 
 
-    var pais = '{{pais}}'; // Asigna el valor de país desde Mustache
-    var ciudad = '{{ciudad}}'; // Asigna el valor de ciudad desde Mustache
-    if (pais && ciudad) {
-        document.getElementById('pais').value = pais;
-        document.getElementById('ciudad').value = ciudad;
-        getCoordinates(pais, ciudad);
+        var pais = '{{pais}}'; // Asigna el valor de país desde Mustache
+        var ciudad = '{{ciudad}}'; // Asigna el valor de ciudad desde Mustache
+        if (pais && ciudad) {
+            document.getElementById('pais').value = pais;
+            document.getElementById('ciudad').value = ciudad;
+            getCoordinates(pais, ciudad);
+        }
+        function getCoordinates(country, city) {
+            var url = `https://nominatim.openstreetmap.org/search?format=json&country=${country}&city=${city}`;
+
+
+            fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+
+                        var country = data.address.country || '';
+                        var city = data.address.city || data.address.town || data.address.village || '';
+
+                        // Asignar los valores al formulario
+                        document.getElementById('pais').value = country;
+                        document.getElementById('ciudad').value = city;
+
+                        if (data.length > 0) {
+                            var lat = data[0].lat;
+                            var lon = data[0].lon;
+
+                            // Mover el mapa a las coordenadas encontradas
+                            map.setView([lat, lon], 10); // Puedes ajustar el zoom si es necesario
+
+                            // Mover el marcador a la nueva ubicación si ya existe
+                            marker.setLatLng([lat, lon]);
+
+                            // Agregar un popup al marcador
+                            //  marker.bindPopup(`Ciudad: ${city}, País: ${country}`).openPopup();
+                        } else {
+                            console.log('No se encontraron coordenadas para la ciudad y país especificados.');
+                        }
+
+                    })
+                    .catch(error => {
+                        console.log('Error fetching data: ', error);
+                    });
+        }
+
+
+        // Función que se ejecuta al hacer clic en el mapa
+        function onMapClick(e) {
+            var lat = e.latlng.lat;
+            var lon = e.latlng.lng;
+
+            // Mover el marcador al nuevo lugar donde se hizo clic
+            marker.setLatLng(e.latlng);
+
+            // Obtener país y ciudad usando las coordenadas
+            getCountryAndCity(lat, lon);
+        }
+
+        // Escuchar el evento de clic en el mapa
+        map.on('click', onMapClick);
     }
-    function getCoordinates(country, city) {
-        var url = `https://nominatim.openstreetmap.org/search?format=json&country=${country}&city=${city}`;
-
-
-        fetch(url)
-                .then(response => response.json())
-                .then(data => {
-
-                    var country = data.address.country || '';
-                    var city = data.address.city || data.address.town || data.address.village || '';
-
-                    // Asignar los valores al formulario
-                    document.getElementById('pais').value = country;
-                    document.getElementById('ciudad').value = city;
-
-                    if (data.length > 0) {
-                        var lat = data[0].lat;
-                        var lon = data[0].lon;
-
-                        // Mover el mapa a las coordenadas encontradas
-                        map.setView([lat, lon], 10); // Puedes ajustar el zoom si es necesario
-
-                        // Mover el marcador a la nueva ubicación si ya existe
-                        marker.setLatLng([lat, lon]);
-
-                        // Agregar un popup al marcador
-                      //  marker.bindPopup(`Ciudad: ${city}, País: ${country}`).openPopup();
-                    } else {
-                        console.log('No se encontraron coordenadas para la ciudad y país especificados.');
-                    }
-
-                })
-                .catch(error => {
-                    console.log('Error fetching data: ', error);
-                });
-    }
-
-
-    // Función que se ejecuta al hacer clic en el mapa
-    function onMapClick(e) {
-        var lat = e.latlng.lat;
-        var lon = e.latlng.lng;
-
-        // Mover el marcador al nuevo lugar donde se hizo clic
-        marker.setLatLng(e.latlng);
-
-        // Obtener país y ciudad usando las coordenadas
-        getCountryAndCity(lat, lon);
-    }
-
-    // Escuchar el evento de clic en el mapa
-    map.on('click', onMapClick);
-
 
 </script>
 
