@@ -6,10 +6,10 @@
             <a href="/perfil/listar" class="btn btn-info m-1">Ir a mi perfil</a>
         </div>
         {{#lobby}}
-            <!-- Bienvenida -->
-            <h1 class="h3 mb-3 text-center">Bienvenido, usuario con ID: <span class="text-danger">{{loggedUserId}}</span></h1>
-            <h2 class="h5 mb-3 text-center">Usuario: <span class="text-danger">{{username}}</span></h2>
-            <h2 class="h5 mb-4 text-center">Tipo de usuario: <span class="text-danger">{{rol}}</span></h2>
+        <!-- Bienvenida -->
+        <h1 class="h3 mb-3 text-center">Bienvenido, usuario con ID: <span class="text-danger">{{loggedUserId}}</span></h1>
+        <h2 class="h5 mb-3 text-center">Usuario: <span class="text-danger">{{username}}</span></h2>
+        <h2 class="h5 mb-4 text-center">Tipo de usuario: <span class="text-danger">{{rol}}</span></h2>
             <div class="text-center">
                 <h4 class="h5 text-dark mb-3">POSICION EN EL RANKING DE MEJORES JUGADORES: #<span class="text-danger">{{posicionRanking}}</span></h4>
                 <h4 class="h5 text-dark mb-3">PUNTAJE EN EL RANKING DE MEJORES JUGADORES: #<span class="text-danger">{{puntajePosicionRanking}}</span></h4>
@@ -18,19 +18,19 @@
         {{/lobby}}
         <!-- Rol Administrador -->
         {{#isAdmin}}
-            <div class="text-center">
+            <div class="text-center"  style="display: flex; flex-direction: column;">
                 <h2 class="h5 text-primary mb-3">Rol Administrador</h2>
-                <a href="#" class="btn btn-primary mb-2">Dashboard Admin</a>
-                <a href="#" class="btn btn-primary mb-2">Gestionar Preguntas</a>
+                <a href="#" class="btn btn-primary mb-2 d-block mx-auto" >Dashboard Admin</a>
+                <a href="#" class="btn btn-primary mb-2 d-block mx-auto">Gestionar Preguntas</a>
             </div>
         {{/isAdmin}}
 
         <!-- Rol Editor -->
         {{#isEditor}}
-            <div class="text-center">
+            <div class="text-center" style="display: flex; flex-direction: column;">
                 <h2 class="h5 text-warning mb-3">Editor</h2>
-                <a href="#" class="btn btn-warning mb-2">Dashboard Editor</a>
-                <a href="#" class="btn btn-warning mb-2">Reportar Preguntas</a>
+                <a href="#" class="btn btn-warning mb-2 d-block mx-auto">Dashboard Editor</a>
+                <a href="#" class="btn btn-warning mb-2 d-block mx-auto">Reportar Preguntas</a>
             </div>
         {{/isEditor}}
 
@@ -58,7 +58,7 @@
                 </div>
             </form>
             {{#error}}
-                <p style="color: red;">{{error}}</p>
+                <p style="color: red; background-color: lightpink; padding:5px; " >{{error}}</p>
             {{/error}}
         {{/isPlayer}}
     </div>

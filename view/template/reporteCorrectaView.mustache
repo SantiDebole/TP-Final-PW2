@@ -1,45 +1,82 @@
-
-<div class="flex-grow-1 ">
-
-    <div class="container mt-5 ">
-        <h2 class="mb-4">PUNTAJE: {{puntajePartida}}</h2>
-        <h2 class="mb-4">Resultado ultima pregunta: <span class="text-primary">{{resultadoDeLaUltimaPregunta}}</span></h2>
-        <h2>Seguir con el juego: </h2>
-        <br>
-        <a href="/partida/jugar" class="btn btn-info">Siguiente pregunta</a>
-
+<div class="d-flex flex-column align-items-center vh-100" style="background-color: #f8f9fa;">
+    <!-- PUNTAJE Y OPCIÓN DE CONTINUAR -->
+    <div class="container text-center p-4 mt-5 rounded shadow bg-white" style="max-width: 600px;">
+        <h2 class="text-primary mb-3">PUNTAJE: <span class="fw-bold">{{puntajePartida}}</span></h2>
+        <h3 class="text-secondary mb-3">Resultado última pregunta:
+            <span class="text-success fw-bold">{{resultadoDeLaUltimaPregunta}}</span>
+        </h3>
+        <h4 class="text-primary">¿Listo para continuar?</h4>
+        <a href="/partida/jugar" class="btn btn-info mt-4">Siguiente Pregunta</a>
     </div>
 
-    <div class="container mt-5 ">
-        <!-- Encabezado h2 -->
-        <h1 class="mb-4">Hubo algun problema con la pregunta con el ID: {{idPregunta}}? </h1>
-        <h2 class="mb-4">ID DEL USUARIO: {{idUsuario}}</h2>
+    <!-- FORMULARIO DE REPORTE -->
+    <div class="container text-center p-4 mt-5 rounded shadow bg-white" style="max-width: 700px;">
+        <h2 class="mb-3">¿Hubo algún problema con la pregunta?</h2>
+        <h4 class="text-secondary">ID de la pregunta: <span class="fw-bold">{{idPregunta}}</span></h4>
+        <h5 class="text-secondary">ID del usuario: <span class="fw-bold">{{idUsuario}}</span></h5>
 
-        <div class="container mt-5">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header text-center bg-primary text-white">
-                            <h4>Reportar Pregunta</h4>
-                        </div>
-                        <div class="card-body">
-                            <form action="/reporte/reporteEnviadoCorrecta" method="post" enctype="multipart/form-data">
-                                <div class="form-group">
-                                    <label for="textoReportePregunta">Describe el problema con la pregunta:</label>
-                                    <input type="hidden" name="idUsuario" value="{{idUsuario}}">
-                                    <input type="hidden" name="idPregunta" value="{{idPregunta}}">
-                                    <textarea class="form-control" id="textoReportePregunta" name="textoReportePregunta" rows="4" placeholder="Escribe aquí los detalles..."></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-block">Enviar Reporte</button>
-                            </form>
-                        </div>
+        <div class="card mt-4 shadow">
+            <div class="card-header bg-primary text-white text-center">
+                <h4>Reportar Pregunta</h4>
+            </div>
+            <div class="card-body">
+                <form action="/reporte/reporteEnviadoCorrecta" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="idUsuario" value="{{idUsuario}}">
+                    <input type="hidden" name="idPregunta" value="{{idPregunta}}">
+
+                    <div class="form-group mb-3">
+                        <label for="textoReportePregunta" class="form-label">Describe el problema:</label>
+                        <textarea
+                                class="form-control"
+                                id="textoReportePregunta"
+                                name="textoReportePregunta"
+                                rows="4"
+                                placeholder="Escribe aquí los detalles..."
+                                required></textarea>
                     </div>
-                </div>
+                    <button type="submit" class="btn btn-primary w-100">Enviar Reporte</button>
+                </form>
             </div>
         </div>
-
     </div>
-
-
 </div>
 
+<style>
+    body {
+
+        background-color: #f8f9fa;
+        margin: 0;
+    }
+
+    .container {
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    .btn-primary, .btn-info {
+        border-radius: 5px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-info:hover {
+        background-color: #117a8b;
+    }
+
+    h4{
+        margin:0;
+        padding: 0;
+    }
+
+</style>

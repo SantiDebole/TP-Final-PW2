@@ -4,26 +4,20 @@
         <a href="/login/list">Ir al login</a>
     </div>
     <div class="container mt-5 mb-5 bg-light">
-
-        <div class="text-center p-3">
-            <h1>Bienvenido a <img src="/public/image/logoQWIZ-removebg-preview.png" style="width: 200px;"></h1>
-            <h2 style="margin-top: 20px;">Registro de Usuario</h2>
+        <div  class="text-center ">
+            <img src="/public/image/brain.png" width="150px;">
         </div>
 
-        <div class="container mt-5">
+        <div class="text-center p-2">
+            <h1>Bienvenido a <img src="/public/image/logoQWIZ-removebg-preview.png" style="width: 200px;"></h1>
+        </div>
+
+        <div class=" mt-5">
+
             <h2 class="text-center mb-5">Formulario de Registro</h2>
             <form action="/registro/validarRegistro" method="post" enctype="multipart/form-data" class="row g-3 needs-validation" novalidate>
 
-                <!-- Errores -->
-                {{#errores}}
-                    <div class="alert alert-danger">
-                        <ul>
-                            {{#.}}
-                                <li>{{.}}</li>
-                            {{/.}}
-                        </ul>
-                    </div>
-                {{/errores}}
+
 
                 <!-- Nombre Completo -->
                 <div class="col-md-6" style="margin-top: 20px;">
@@ -113,6 +107,18 @@
                 <div class="col-12 text-center" style="margin-top: 20px; margin-bottom: 20px;">
                     <button class="btn btn-primary" type="submit">Registrarse</button>
                 </div>
+
+                <!-- Errores -->
+                {{#errores}}
+                    <div class="alert alert-danger">
+                        <ul>
+                            {{#.}}
+                                <li>{{.}}</li>
+                            {{/.}}
+                        </ul>
+                    </div>
+                {{/errores}}
+
             </form>
 
         </div>
@@ -121,6 +127,79 @@
 
     </div>
 </div>
+
+<style>
+    /* Fuente general */
+    body {
+
+        background-color: #f8f9fa;
+        color: #333;
+    }
+
+    /* Encabezados */
+    h1, h2, h3 {
+
+        font-weight: bold;
+    }
+
+
+    /* Contenedor principal */
+    .container {
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+    }
+
+
+    /* Botón */
+    .btn-primary {
+        background-color: #3498db;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #2980b9;
+    }
+
+    /* Errores */
+    .alert-danger {
+        border: none;
+        border-radius: 5px;
+        padding-bottom: 0px;
+        padding-right: 10px;
+        padding-left: 0px;
+        margin:10px;
+    }
+
+    /* Imagen del encabezado */
+    .text-center img {
+        margin-bottom: 20px;
+        border-radius: 10px;
+    }
+
+    /* Mapa */
+    #map {
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+    }
+
+    /* Responsividad */
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 24px;
+        }
+
+        #map {
+            height: 300px;
+        }
+    }
+
+</style>
+
 <script>
     // Inicializar el mapa en una ubicación predeterminada (puedes ajustarlo según tu preferencia)
     var map = L.map('map').setView([20.5937, 78.9629], 2); // Latitud y longitud de India (puedes cambiarlo)
