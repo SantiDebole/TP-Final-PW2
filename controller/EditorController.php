@@ -13,23 +13,19 @@ class EditorController
         $this->presenter = $presenter;
     }
 
-
     public function preguntasReportadas()
     {
         try {
-
             $preguntasReportadas = $this->model->obtenerPreguntasReportadas();
-
-
 
             foreach ($preguntasReportadas as &$pregunta) {
                 $respuestas = $this->model->obtenerRespuestasDeUnaPregunta($pregunta['id_pregunta']);
 
+                // Si las respuestas existen para esa pregunta, se las asigna.
                 if (!empty($respuestas)) {
                     $pregunta['respuestas'] = $respuestas;
                 }
             }
-
 
             // Paso las preguntas reportadas con las respuestas a la vista
             $this->presenter->show('preguntasReportadas', ['preguntasReportadas' => $preguntasReportadas]);
@@ -38,9 +34,6 @@ class EditorController
             $this->presenter->show('error', ['mensajeError' => "No se pudieron obtener las preguntas reportadas: " . $e->getMessage()]);
         }
     }
-
-
-
 
     public function manejoAccionReporte()
     {
@@ -80,8 +73,6 @@ class EditorController
         }
     }
 
-
-
     // Procesa la modificacion
     public function modificarPreguntaYORespuestas()
     {
@@ -92,6 +83,7 @@ class EditorController
                 $idCategoria = $_POST['idCategoria'];
                 $respuestas = $_POST['respuestas'];  // Las respuestas enviadas
 
+
                 // Validaciones generales
                 $this->validarDatosPregunta($idPregunta, $textoPregunta, $idCategoria);
 
@@ -101,7 +93,7 @@ class EditorController
                 // Verifico si modifiqué la pregunta
                 $modificoPregunta = $this->modificoPregunta($preguntaOriginal, $textoPregunta, $idCategoria);
 
-                // Si hubo cambios, que los realiza
+                // Si hubo cambios, modifico la pregunta
                 if ($modificoPregunta) {
                     $this->modificarPregunta($idPregunta, $textoPregunta, $idCategoria);
                 }
@@ -109,7 +101,7 @@ class EditorController
                 // Modificar las respuestas si han cambiado
                 $modificoAlgunaRespuesta = $this->modificarRespuestas($respuestas);
 
-                // Redirigir si no hubo cambios
+                // Redirigir si no hubo cambios en la pregunta ni en las respuestas
                 if (!$modificoPregunta && !$modificoAlgunaRespuesta) {
                     header("Location: /editor/preguntasReportadas");
                     exit;
@@ -128,6 +120,7 @@ class EditorController
             $this->presenter->show('error', ['mensajeError' => $e->getMessage()]);
         }
     }
+
 
     private function validarDatosPregunta($idPregunta, $textoPregunta, $idCategoria)
     {
@@ -152,19 +145,24 @@ class EditorController
 
     private function modificarPregunta($idPregunta, $textoPregunta, $idCategoria)
     {
+        // Verificamos si la pregunta ha cambiado antes de realizar la actualización
+        $preguntaOriginal = $this->model->obtenerPreguntaPorId($idPregunta);
+
+        // Si no hay cambios en la pregunta ni en la categoría, no hacemos nada
+        if ($preguntaOriginal['descripcion'] === $textoPregunta && $preguntaOriginal['idCategoria'] === $idCategoria) {
+            return true; // No hubo cambios
+        }
+
         // Si el texto de la pregunta está vacío, no debería actualizarla
         if (empty($textoPregunta)) {
             throw new Exception("El texto de la pregunta no puede estar vacío.");
         }
 
-        // Realizamos la modificación de la pregunta sin importar si el texto cambió o no
+        // Realizamos la modificación de la pregunta
         $resultado = $this->model->modificarPregunta($idPregunta, $textoPregunta, $idCategoria);
 
-        if (!$resultado) {
-            throw new Exception("Error al modificar la pregunta.");
-        }
+        return true; // Modificación exitosa
     }
-
 
 
     private function modificarRespuestas($respuestas)
@@ -183,6 +181,7 @@ class EditorController
         }
         return $modificoAlgunaRespuesta;
     }
+
 
 
 

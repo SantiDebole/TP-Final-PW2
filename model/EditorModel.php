@@ -1,4 +1,4 @@
-    <?php
+<?php
 
     class EditorModel
     {
@@ -9,7 +9,7 @@
             $this->database = $database;
         }
 
-        //Funciona bien
+
         public function obtenerPreguntasReportadas() {
             $query = "SELECT reporte.id AS id_reporte,
                          reporte.texto AS texto_reporte,
@@ -24,7 +24,6 @@
             return $this->ejecucionDeConsultaFetchAllSinParametros($query);
         }
 
-        //La query esta bien
         public function obtenerRespuestasDeUnaPregunta($id_pregunta) {
             $query = "SELECT respuesta.id AS id_respuesta, 
                              respuesta.descripcion AS descripcion, 
@@ -36,8 +35,7 @@
             $stmt->bind_param("i", $id_pregunta);
             $stmt->execute();
             $result = $stmt->get_result();
-            return $respuestas = $result->fetch_all(MYSQLI_ASSOC);
-
+            return $result->fetch_all(MYSQLI_ASSOC);
         }
 
         // Esto se usa cuando hago varias consultas, para que si ocurre un problema en el medio me cancele todo
@@ -100,11 +98,9 @@
         }
 
         public function darDeAltaReporte($idPregunta) {
-            $nuevoEstado = 'APROBADA'; // Por ejemplo, activar la pregunta
-            $resultado = $this->cambiarEstadoDePreguntaYEliminarReporte($idPregunta, $nuevoEstado);
-
+            $nuevoEstado = 'APROBADA'; // Activar la pregunta
             // retorna true si se cambio el estado y se eliminó el reporte
-            return $resultado;
+            return $this->cambiarEstadoDePreguntaYEliminarReporte($idPregunta, $nuevoEstado);
         }
 
 
@@ -113,18 +109,13 @@
                 $nuevoEstado = 'DESACTIVADA';
                 $this->cambiarEstadoDePreguntaYEliminarReporte($idPregunta, $nuevoEstado);
             });
-
             // Retornar true si fue exitoso
             return true;
         }
-
-
-
-
         public function modificarPregunta($idPregunta, $textoPregunta, $idCategoria)
         {
             try {
-                // Preparamos la consulta de actualización
+                // Preparo la consulta de actualización
                 $query = "UPDATE pregunta SET descripcion = ?, idCategoria = ? WHERE id = ?";
                 $stmt = $this->database->connection->prepare($query);
 
@@ -132,14 +123,17 @@
                     throw new Exception("Error al preparar la consulta de actualización: " . $this->database->connection->error);
                 }
 
-                // Vinculamos los parámetros
+                // Vinculo los parámetros
                 $stmt->bind_param("sii", $textoPregunta, $idCategoria, $idPregunta);
 
-                // Ejecutamos la consulta
-                if ($stmt->execute() && $stmt->affected_rows > 0) {
+                // Ejecuto la consulta
+                $stmt->execute();
+
+                // Verifico si la actualización fue exitosa
+                if ($stmt->affected_rows > 0) {
                     return true; // Modificación exitosa
                 } else {
-                    return false; // Si no se afecta ninguna fila, la actualización no se realizó
+                    return false; // No se realizó ningún cambio
                 }
             } catch (Exception $e) {
                 // En caso de error, registramos el error y retornamos false
@@ -147,6 +141,8 @@
                 return false;
             }
         }
+
+
 
 
 
@@ -180,12 +176,6 @@
             }
         }
 
-
-
-
-
-
-
         public function obtenerPreguntaPorId($idPregunta)
         {
             $query = "SELECT id, descripcion, idCategoria FROM pregunta WHERE id = ?";
@@ -214,7 +204,6 @@
                     error_log("Error al preparar la consulta: " . $this->database->connection->error);
                     return null;
                 }
-
 
                 $stmt->bind_param("i", $idRespuesta);
                 $stmt->execute();
