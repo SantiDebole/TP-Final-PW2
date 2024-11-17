@@ -34,3 +34,13 @@
 
 </div>
 
+<script>
+    let contador = {{tiempoRestante}};
+    function actualizarContador() {
+        contador--;
+        document.getElementById('contador').textContent = contador;
+        if(contador==0) document.querySelector('form').submit();
+    }
+    // Actualiza el contador cada segundo
+    setInterval(actualizarContador, 1000);
+</script>

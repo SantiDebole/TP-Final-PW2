@@ -111,15 +111,24 @@
 </div>
 
 <script>
-    // JavaScript para inicializar el mapa y obtener coordenadas
-    var map = L.map('map').setView([20.5937, 78.9629], 2);
+    // Inicializar el mapa en una ubicación predeterminada (puedes ajustarlo según tu preferencia)
+    var map = L.map('map').setView([20.5937, 78.9629], 2); // Latitud y longitud de India (puedes cambiarlo)
+
+    // Cargar los tiles de OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
-
-    var pais = '{{pais}}';
-    var ciudad = '{{ciudad}}';
-
+        {{#perfilRival}}
+        // Variables que llegan desde el backend
+        var pais = '{{pais}}'; // Asigna el valor de país desde Mustache
+        var ciudad = '{{ciudad}}'; // Asigna el valor de ciudad desde Mustache
+        {{/perfilRival}}
+        {{#perfil}}
+        // Variables que llegan desde el backend
+        var pais = '{{pais}}'; // Asigna el valor de país desde Mustache
+        var ciudad = '{{ciudad}}'; // Asigna el valor de ciudad desde Mustache
+        {{/perfil}}
+    // Función para obtener coordenadas a partir de país y ciudad (usando Nominatim)
     function getCoordinates(country, city) {
         var url = `https://nominatim.openstreetmap.org/search?format=json&country=${country}&city=${city}`;
 
@@ -129,13 +138,21 @@
                     if (data.length > 0) {
                         var lat = data[0].lat;
                         var lon = data[0].lon;
-                        map.setView([lat, lon], 10);
+
+// Mover el mapa a las coordenadas encontradas
+                        map.setView([lat, lon], 10); // Puedes ajustar el zoom si es necesario
+
+// Crear un marcador en la ubicación
                         L.marker([lat, lon]).addTo(map).bindPopup(`Ciudad: ${city}, País: ${country}`);
                     } else {
-                        console.log('No se encontraron coordenadas.');
+                        console.log('No se encontraron coordenadas para la ciudad y país especificados.');
                     }
                 })
-                .catch(error => console.log('Error fetching data: ', error));
+                .catch(error => {
+                    console.log('Error fetching data: ', error);
+                });
     }
+
+    // Llama a la función con el país y la ciudad
     getCoordinates(pais, ciudad);
 </script>
