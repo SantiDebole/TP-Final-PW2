@@ -35,4 +35,5 @@ class LoginModel {
         return $result ? $result['rol'] : null; //retorna null si no lo encuentra
     }
 
+
 }

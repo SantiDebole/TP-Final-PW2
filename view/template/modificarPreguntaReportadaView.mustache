@@ -1,0 +1,65 @@
+<h1 class="text-center my-4">Editar Pregunta Reportada</h1>
+
+<div class="container">
+    <form method="POST" action="/editor/modificarPreguntaYORespuestas">
+        <input type="hidden" name="idPregunta" value="{{id_pregunta}}">
+
+        <!-- Información sobre la pregunta que se está editando -->
+        <p class="text mb-4">
+            Usted está editando la pregunta con id: <strong>{{id_pregunta}}</strong>
+        </p>
+
+        <!-- Textarea para la pregunta -->
+        <div class="mb-3">
+            <label for="textoPregunta" class="form-label">Texto de la Pregunta</label>
+            <textarea class="form-control" id="textoPregunta" name="textoPregunta" rows="3" required>{{texto_pregunta}}</textarea>
+        </div>
+
+        <!-- Dropdown para selección de categoría -->
+        <div class="mb-3">
+            <label for="idCategoria" class="form-label">Categoría</label>
+            <select class="form-select" id="idCategoria" name="idCategoria">
+                <option value="1" {{#isCategoria1}}selected{{/isCategoria1}}>Paises</option>
+                <option value="2" {{#isCategoria2}}selected{{/isCategoria2}}>Geografía</option>
+                <option value="3" {{#isCategoria3}}selected{{/isCategoria3}}>Astronomía</option>
+                <option value="4" {{#isCategoria4}}selected{{/isCategoria4}}>Literatura</option>
+            </select>
+        </div>
+
+        <!-- Mensaje de advertencia para la primera respuesta -->
+        <div class="alert alert-info">
+            La primera respuesta debe ser la correcta. Las respuestas siguientes serán incorrectas.
+        </div>
+
+        <!-- Sección de respuestas -->
+        <div class="mb-3">
+            <label class="form-label">Respuestas</label>
+            {{#respuestas}}
+                <div class="mb-2"
+                     style="background-color: {{#es_correcta}}#d4edda{{/es_correcta}}{{^es_correcta}}#f8d7da{{/es_correcta}};">
+                    <label for="respuesta{{id_respuesta}}" class="form-label">Respuesta {{@index + 1}}</label>
+                    <input type="text" class="form-control" id="respuesta{{id_respuesta}}" name="respuestas[{{id_respuesta}}][descripcion]" value="{{descripcion}}" required>
+
+                    <!-- Aquí, la primera respuesta se muestra como correcta por defecto -->
+                    {{#isFirstResponse}}
+                        <p class="text-success"><strong>Correcta</strong></p>
+                    {{/isFirstResponse}}
+
+                    {{^isFirstResponse}}
+                        <p class="text-danger"><strong>Incorrecta</strong></p>
+                    {{/isFirstResponse}}
+
+                    <!-- Agregar el ID de la respuesta para que el controlador pueda modificarla -->
+                    <input type="hidden" name="respuestas[{{id_respuesta}}][id_respuesta]" value="{{id_respuesta}}">
+                </div>
+            {{/respuestas}}
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="d-flex justify-content-between">
+            <a href="/editor/preguntasReportadas" class="btn btn-danger me-2">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+
+        </div>
+    </form>
+</div>

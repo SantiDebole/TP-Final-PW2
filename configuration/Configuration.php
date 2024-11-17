@@ -14,7 +14,7 @@ include_once ("./model/RegistroModel.php");
 include_once("./model/LoginModel.php");
 include_once ("./model/LobbyModel.php");
 include_once ("./model/PerfilModel.php");
-
+include_once ("./model/EditorModel.php");
 include_once ("./model/PartidaModel.php");
 include_once ("./model/ReporteModel.php");
 include_once ("./model/PreguntaModel.php");
@@ -26,6 +26,7 @@ include_once ("./controller/RegistroController.php");
 include_once ("./controller/LobbyController.php");
 include_once ("./controller/PerfilController.php");
 include_once ("./controller/PartidaController.php");
+include_once ("./controller/EditorController.php");
 include_once ("./controller/RegistroController.php");
 include_once ("./controller/ReporteController.php");
 include_once ("./controller/PreguntaController.php");
@@ -125,6 +126,15 @@ class Configuration
     public function getPartidaModel(){
         return new PartidaModel($this->getDatabase());
     }
+
+    public function getEditorController(){
+        return new EditorController($this->getEditorModel(),$this->getPresenter());
+    }
+
+    public function getEditorModel(){
+        return new EditorModel($this->getDatabase());
+    }
+
 
 
 }
