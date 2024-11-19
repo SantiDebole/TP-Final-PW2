@@ -18,8 +18,8 @@
                          pregunta.id AS id_pregunta,
                          pregunta.descripcion AS descripcion
                          FROM reporte
-                         JOIN usuario ON reporte.id_usuario = usuario.id
-                         JOIN pregunta ON reporte.id_pregunta = pregunta.id
+                         JOIN usuario ON reporte.usuario_id = usuario.id
+                         JOIN pregunta ON reporte.pregunta_id = pregunta.id
                          ORDER BY id_reporte ASC;";
             return $this->ejecucionDeConsultaFetchAllSinParametros($query);
         }
