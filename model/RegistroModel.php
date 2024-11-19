@@ -96,7 +96,7 @@ class RegistroModel
     }
     private function cargarNuevoUsuarioEnBaseDeDatos($datos_usuario){
     $token = bin2hex(random_bytes(16));
-    $sql = "INSERT INTO usuario (nombre_completo, fecha_nacimiento, genero, email, usuario, password, rol, foto_perfil, pais, ciudad, token_verificacion) 
+        $sql = "INSERT INTO usuario (nombre_completo, fecha_nacimiento, genero, email, usuario, password, rol, foto_perfil, pais, ciudad, token_verificacion) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $this->database->connection->prepare($sql);
     if($stmt){

@@ -38,7 +38,7 @@ class PartidaModel
             } else {
 
                 $this->reiniciarRegistroDePreguntasVistasPorUsuario($idUsuario);
-                //$this->getPreguntaConRespuestas($idUsuario, $idPartida);
+                return $this->getPreguntaConRespuestas($idUsuario, $idPartida);
             }
         }
     }
@@ -164,6 +164,7 @@ class PartidaModel
                     HAVING promedio > 0.7
                 )';
 
+
 return $dificultad[$nivel];
      /*
         $dificultad[] = "";
@@ -235,7 +236,7 @@ return $dificultad[$nivel];
         $idPreguntaAleatoria = array_rand($preguntas);
         return $preguntas[$idPreguntaAleatoria];
     }
-    private function getPreguntasNoVistasPorUsuario($idUsuario,$nivel)
+    private function getPreguntasNoVistasPorUsuario($idUsuario,$nivel,$usarConsultaSimple = false)
     {
         $dificultad = $this->filtrarPreguntasPorNivelDeUsuario($nivel);
 
@@ -247,20 +248,26 @@ return $dificultad[$nivel];
                 FROM usuario u
                 JOIN UsuarioPregunta up ON u.id = up.idUsuario
                 WHERE u.id = ?
-            )
-            AND pr.id IN (
+            ) ";
+        $condicionPreguntasFiltradas = "AND pr.id IN (
                 SELECT idPreguntaFiltrada
                 FROM PreguntasFiltradasPorNivel
-            );";
-        $queryFinal = $dificultad . $queryFuncional;
+            )";
+        $queryFinal = $usarConsultaSimple ? $queryFuncional : $dificultad . $queryFuncional . $condicionPreguntasFiltradas;
         $stmt = $this->db->connection->prepare($queryFinal);
         $stmt->bind_param("i", $idUsuario);
         $stmt->execute();
         $result = $stmt->get_result();
         $preguntasNoVistasPorUsuario = [];
+        if($result){
         while($row = $result->fetch_assoc()){
             $preguntasNoVistasPorUsuario[] = $row["idPreguntaNoVista"];
         }
+        }
+        if (empty($preguntasNoVistasPorUsuario) && !$usarConsultaSimple) {
+            return $this->getPreguntasNoVistasPorUsuario($idUsuario, $nivel, true);
+        }
+
         return $preguntasNoVistasPorUsuario;
     }
     private function obtenerRespuestasALaPregunta($idPregunta){
@@ -354,7 +361,6 @@ WHERE r.esCorrecta = 1 AND r.id = ? and p.id=  ?
         $intervalo = $fechaPregunta->diff($fechaActual);
         return 60-(($intervalo->days * 24 * 60 * 60)+($intervalo->h * 60 * 60)+($intervalo->i * 60)+$intervalo->s);
     }
-
 
 
 }
