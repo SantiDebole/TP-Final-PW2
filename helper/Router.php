@@ -80,7 +80,7 @@ class Router
                                          'editor/preguntasReportadas',
                                         'perfil/listar',
                                         'editorController/manejoAccionReporte',
-                                        'editor/modificarPreguntaYRespuestas',
+                                        'editor/modificarPreguntaYORespuestas',
                                         'editor/mostrarFormularioEdicionPregunta',
                                         ''];
                     break;
