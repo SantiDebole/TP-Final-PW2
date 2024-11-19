@@ -9,7 +9,7 @@
             $this->database = $database;
         }
 
-
+    // devuelve un array multidimensional (un array con arrays asociativos dentro (preguntas reportadas))
         public function obtenerPreguntasReportadas() {
             $query = "SELECT reporte.id AS id_reporte,
                          reporte.texto AS texto_reporte,

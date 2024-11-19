@@ -18,10 +18,11 @@ class EditorController
         try {
             $preguntasReportadas = $this->model->obtenerPreguntasReportadas();
 
+            // el & está para que esa variable represente verdadermente a un elemento del array y lo modifique, sin eso no lo modifica.
             foreach ($preguntasReportadas as &$pregunta) {
                 $respuestas = $this->model->obtenerRespuestasDeUnaPregunta($pregunta['id_pregunta']);
 
-                // Si las respuestas existen para esa pregunta, se las asigna.
+                // Si las respuestas existen para esa pregunta, se las asigna al array asociativo, el & asegura que se modifique $preguntasReportadas.
                 if (!empty($respuestas)) {
                     $pregunta['respuestas'] = $respuestas;
                 }
@@ -77,23 +78,23 @@ class EditorController
     public function modificarPreguntaYORespuestas()
     {
         try {
+            // Verificar que los datos necesarios están presentes
             if (isset($_POST['idPregunta']) && isset($_POST['textoPregunta']) && isset($_POST['idCategoria']) && isset($_POST['respuestas'])) {
                 $idPregunta = $_POST['idPregunta'];
                 $textoPregunta = $_POST['textoPregunta'];
                 $idCategoria = $_POST['idCategoria'];
                 $respuestas = $_POST['respuestas'];  // Las respuestas enviadas
 
-
                 // Validaciones generales
                 $this->validarDatosPregunta($idPregunta, $textoPregunta, $idCategoria);
 
-                // Obtener la pregunta antes de modificarla
+                // Obtener la pregunta original
                 $preguntaOriginal = $this->model->obtenerPreguntaPorId($idPregunta);
 
-                // Verifico si modifiqué la pregunta
+                // Verificar si hubo cambios en la pregunta
                 $modificoPregunta = $this->modificoPregunta($preguntaOriginal, $textoPregunta, $idCategoria);
 
-                // Si hubo cambios, modifico la pregunta
+                // Si hubo cambios, modificar la pregunta
                 if ($modificoPregunta) {
                     $this->modificarPregunta($idPregunta, $textoPregunta, $idCategoria);
                 }
@@ -101,7 +102,7 @@ class EditorController
                 // Modificar las respuestas si han cambiado
                 $modificoAlgunaRespuesta = $this->modificarRespuestas($respuestas);
 
-                // Redirigir si no hubo cambios en la pregunta ni en las respuestas
+                // Si no hubo cambios ni en la pregunta ni en las respuestas, redirigir
                 if (!$modificoPregunta && !$modificoAlgunaRespuesta) {
                     header("Location: /editor/preguntasReportadas");
                     exit;
@@ -116,39 +117,69 @@ class EditorController
             }
 
         } catch (Exception $e) {
-            // Si hay un error, mostrar mensaje de error
+            // Si hay un error, mostrar el mensaje de error
             $this->presenter->show('error', ['mensajeError' => $e->getMessage()]);
         }
     }
 
 
-    private function validarDatosPregunta($idPregunta, $textoPregunta, $idCategoria)
+    // Muestra los datos, se encarga de la visualizacion de las categorias
+    public function mostrarFormularioEdicionPregunta()
     {
-        if (!filter_var($idPregunta, FILTER_VALIDATE_INT) || $idPregunta <= 0) {
-            throw new Exception("ID de pregunta no válida.");
-        }
+        try {
+            if (isset($_POST['idPregunta'])) {
+                $idPregunta = $_POST['idPregunta'];
+                $pregunta = $this->model->obtenerPreguntaPorId($idPregunta);  // Obtengo la pregunta con el id de la pregunta a editar
+                $respuestas = $this->model->obtenerRespuestasDeUnaPregunta($idPregunta);  // Obtenengo las respuestas de esa pregunta
 
-        if (empty($textoPregunta) || strlen($textoPregunta) > 255) {
-            throw new Exception("El texto de la pregunta es inválido o demasiado largo.");
-        }
+                // Creo dos arrays para almacenar temporalmente las respuestas correctas y separado las incorrectas
+                $respuestasCorrecta = [];
+                $respuestasIncorrectas = [];
 
-        if (!in_array($idCategoria, [1, 2, 3, 4])) {
-            throw new Exception("Categoría no válida.");
+                //Busco la correcta y la almaceno en el array, lo mismo con las incorrectas
+                foreach ($respuestas as $respuesta) {
+                    if ($respuesta['es_correcta']) {
+                        $respuestasCorrecta[] = $respuesta;
+                    } else {
+                        $respuestasIncorrectas[] = $respuesta;
+                    }
+                }
+
+                // Combino la respuesta correcta al inicio con las incorrectas, y de la correcta primero
+                $respuestas = array_merge($respuestasCorrecta, $respuestasIncorrectas);
+
+                // Marca la primera respuesta como correcta visualmente
+                foreach ($respuestas as $index => $respuesta) {
+                    $respuestas[$index]['isFirstResponse'] = ($index == 0);  // el elemento 0 se lo establace con index 0
+                }
+
+                $data = [
+                    'id_pregunta' => $pregunta['id'],
+                    'texto_pregunta' => $pregunta['descripcion'],
+                    'respuestas' => $respuestas,
+                    'isCategoria1' => $pregunta['idCategoria'] == 1,
+                    'isCategoria2' => $pregunta['idCategoria'] == 2,
+                    'isCategoria3' => $pregunta['idCategoria'] == 3,
+                    'isCategoria4' => $pregunta['idCategoria'] == 4,
+                ];
+
+                // Pasar los datos a la vista
+                $this->presenter->show('modificarPreguntaReportada', $data);
+            }
+        } catch (Exception $e) {
+            // Manejo de errores
+            $this->presenter->show('error', ['mensajeError' => "No se pudo cargar la pregunta: " . $e->getMessage()]);
         }
     }
 
-    private function modificoPregunta($preguntaOriginal, $textoPregunta, $idCategoria)
-    {
-        // Verificar si la pregunta ha cambiado
-        return ($preguntaOriginal['descripcion'] !== $textoPregunta || $preguntaOriginal['idCategoria'] !== $idCategoria);
-    }
+
 
     private function modificarPregunta($idPregunta, $textoPregunta, $idCategoria)
     {
         // Verificamos si la pregunta ha cambiado antes de realizar la actualización
         $preguntaOriginal = $this->model->obtenerPreguntaPorId($idPregunta);
 
-        // Si no hay cambios en la pregunta ni en la categoría, no hacemos nada
+        // Si no hay cambios en la pregunta ni en la categoría, no hacemos nada (evita actualizar la BDD con lo mismo)
         if ($preguntaOriginal['descripcion'] === $textoPregunta && $preguntaOriginal['idCategoria'] === $idCategoria) {
             return true; // No hubo cambios
         }
@@ -182,40 +213,34 @@ class EditorController
         return $modificoAlgunaRespuesta;
     }
 
-
-
-
-
-    // Muestra los datos, se encarga de la visualizacion de las categorias
-    public function mostrarFormularioEdicionPregunta()
+    private function modificoPregunta($preguntaOriginal, $textoPregunta, $idCategoria)
     {
-        try {
-            if (isset($_POST['idPregunta'])) {
-                $idPregunta = $_POST['idPregunta'];
-                $pregunta = $this->model->obtenerPreguntaPorId($idPregunta);  // Obtener la pregunta
-                $respuestas = $this->model->obtenerRespuestasDeUnaPregunta($idPregunta);  // Obtener respuestas
+        // Verificar si la pregunta ha cambiado
+        return ($preguntaOriginal['descripcion'] !== $textoPregunta || $preguntaOriginal['idCategoria'] !== $idCategoria);
+    }
 
-                // Marcar la primera respuesta como la correcta
-                foreach ($respuestas as $index => $respuesta) {
-                    $respuestas[$index]['isFirstResponse'] = ($index == 0);  // La primera respuesta es la correcta
-                    $respuestas[$index]['es_correcta'] = ($index == 0);  // Asegurar que la primera es correcta
-                }
 
-                $data = [
-                    'id_pregunta' => $pregunta['id'],
-                    'texto_pregunta' => $pregunta['descripcion'],
-                    'respuestas' => $respuestas,
-                    'isCategoria1' => $pregunta['idCategoria'] == 1,
-                    'isCategoria2' => $pregunta['idCategoria'] == 2,
-                    'isCategoria3' => $pregunta['idCategoria'] == 3,
-                    'isCategoria4' => $pregunta['idCategoria'] == 4,
-                ];
-                // Pasar los datos a la vista
-                $this->presenter->show('modificarPreguntaReportada', $data);
-            }
-        } catch (Exception $e) {
-            // Manejo de errores
-            $this->presenter->show('error', ['mensajeError' => "No se pudo cargar la pregunta: " . $e->getMessage()]);
+    private function validarDatosPregunta($idPregunta, $textoPregunta, $idCategoria)
+    {
+        if (!filter_var($idPregunta, FILTER_VALIDATE_INT) || $idPregunta <= 0) {
+            throw new Exception("ID de pregunta no válida.");
+        }
+
+        if (empty($textoPregunta) || strlen($textoPregunta) > 255) {
+            throw new Exception("El texto de la pregunta es inválido o demasiado largo.");
+        }
+
+        if (!in_array($idCategoria, [1, 2, 3, 4])) {
+            throw new Exception("Categoría no válida.");
         }
     }
+
+
+
+
+
+
+
+
+
 }
