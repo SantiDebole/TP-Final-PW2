@@ -89,26 +89,31 @@ class PartidaController
             $idPartida = $_SESSION['partida'];
             if (isset($_POST["idRespuesta"])) $idRespuesta = $_POST["idRespuesta"];
             else $idRespuesta=0;
+
             if ($this->model->validarRespuesta($idRespuesta, $idPartida)) {
+                $ultimaPregunta = $this->model->ultimaPregunta($idPartida, $idUsuario);
                 $puntaje = $this->model->traerPuntajeDelUsuarioEnLaPartida($idPartida, $idUsuario);
                 $data = [
                     "loggedUserId" => $idUsuario,
                     "resultadoCorrecta" => "respuesta correcta",
-                    "puntaje" => "$puntaje"
+                    "puntaje" => "$puntaje",
+                    "ultimaPregunta" => $ultimaPregunta
+
                 ];
                 $this->presenter->show("resultadoRespuesta", $data);
             } else {
+                $ultimaPregunta = $this->model->ultimaPregunta($idPartida, $idUsuario);
                 $puntaje = $this->model->traerPuntajeDelUsuarioEnLaPartida($idPartida, $idUsuario);
                 $data = [
                     "loggedUserId" => $idUsuario,
                     "resultadoIncorrecta" => "respuesta incorrecta",
-                    "puntaje" => "$puntaje"
+                    "puntaje" => "$puntaje",
+                    "ultimaPregunta" => $ultimaPregunta
                 ];
                 unset($_SESSION['partida']);
                 $this->presenter->show("resultadoRespuesta", $data);
 
             }
-
 
 
         }else $this->presenter->show("partidaNoDisponible");

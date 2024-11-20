@@ -18,8 +18,8 @@
 
     <div class="container mt-5 ">
         <!-- Encabezado h2 -->
-        <h1 class="mb-4">Hubo algun problema con la pregunta con el ID: {{idPregunta}}? </h1>
-        <h2 class="mb-4">ID DEL USUARIO: {{idUsuario}}</h2>
+        <h1 class="mb-4">Hubo algun problema con la pregunta con el ID: {{ultimaPregunta}}? </h1>
+        <h2 class="mb-4">ID DEL USUARIO: {{loggedUserId}}</h2>
 
         <div class="container mt-5">
             <div class="row justify-content-center">
@@ -29,11 +29,11 @@
                             <h4>Reportar Pregunta</h4>
                         </div>
                         <div class="card-body">
-                            <form action="/reporte/reporteEnviadoIncorrecta" method="post" enctype="multipart/form-data">
+                            <form action="/reporte/reporteEnviado" method="post" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label for="textoReportePregunta">Describe el problema con la pregunta:</label>
-                                    <input type="hidden" name="idUsuario" value="{{idUsuario}}">
-                                    <input type="hidden" name="idPregunta" value="{{idPregunta}}">
+                                    <input type="hidden" name="idUsuario" value="{{loggedUserId}}">
+                                    <input type="hidden" name="idPregunta" value="{{ultimaPregunta}}">
 
                                     <textarea class="form-control" id="textoReportePregunta" name="textoReportePregunta" rows="4" placeholder="Escribe aquí los detalles..."></textarea>
                                 </div>

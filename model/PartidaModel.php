@@ -8,6 +8,44 @@ class PartidaModel
     {
         $this->db = $db;
     }
+
+    public function ultimaPregunta($idPartida, $idUsuario)
+    {
+        // Consulta para obtener el ID de la última pregunta
+        $query = "
+        SELECT p.id
+        FROM pregunta p
+        JOIN tienen t ON p.id = t.idPregunta
+        JOIN partida pa ON t.idPartida = pa.id
+        WHERE pa.id = ? AND pa.idUsuario = ?
+        ORDER BY t.fecha DESC
+        LIMIT 1;
+    ";
+
+        // Preparar la consulta
+        $stmt = $this->db->connection->prepare($query);
+
+        // Vincular parámetros
+        $stmt->bind_param("ii", $idPartida, $idUsuario);
+
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        // Obtener el resultado
+        $result = $stmt->get_result();
+
+        // Verificar si se encontró una pregunta
+        if ($result->num_rows > 0) {
+            // Obtener el ID de la pregunta
+            $row = $result->fetch_assoc();
+            return $row['id']; // Devolver solo el ID
+        }
+
+        // Si no hay resultados, retornar null
+        return null;
+    }
+
+
     public function validarRespuesta($idRespuesta,$idPartida){
         $pregunta = $this->tienePreguntaDisponible($idPartida);
         if($this->controladorDeExpiracionDePregunta($pregunta['fecha'])&&$this->controlarSiEsRespuestaCorrectaParaPreguntaObtenida($pregunta,$idRespuesta)){

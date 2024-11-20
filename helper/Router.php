@@ -75,6 +75,7 @@ class Router
                         'login/logout',
                         'login/validate',
                         'perfil/listar',
+                        'reporte/reporteEnviado',
                         'reporte/reportarPregunta',
                         'reporte/reporteEnviadoCorrecta',
                         'reporte/reporteEnviadoIncorrecta',
