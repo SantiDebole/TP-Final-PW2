@@ -93,7 +93,7 @@ class PartidaController
                 $puntaje = $this->model->traerPuntajeDelUsuarioEnLaPartida($idPartida, $idUsuario);
                 $data = [
                     "loggedUserId" => $idUsuario,
-                    "resultado" => "Acerto!",
+                    "resultadoCorrecta" => "respuesta correcta",
                     "puntaje" => "$puntaje"
                 ];
                 $this->presenter->show("resultadoRespuesta", $data);
@@ -101,7 +101,7 @@ class PartidaController
                 $puntaje = $this->model->traerPuntajeDelUsuarioEnLaPartida($idPartida, $idUsuario);
                 $data = [
                     "loggedUserId" => $idUsuario,
-
+                    "resultadoIncorrecta" => "respuesta incorrecta",
                     "puntaje" => "$puntaje"
                 ];
                 unset($_SESSION['partida']);

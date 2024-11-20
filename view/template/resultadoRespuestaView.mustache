@@ -2,13 +2,15 @@
 
     <div class="container mt-5 ">
         <h2 class="mb-4">PUNTAJE: {{puntaje}}</h2>
-        <h2 class="mb-4">Resultado ultima pregunta: <span class="text-danger">{{resultadoDeLaUltimaPregunta}}</span></h2>
-        {{#resultado}}
+
+        {{#resultadoCorrecta}}
+            <h2 class="mb-4">Resultado ultima pregunta: <span class="text-danger">{{resultadoCorrecta}}</span></h2>
             <a href="/partida/preguntar" class="btn btn-info">Siguiente pregunta</a>
-        {{/resultado}}
-        {{^resultado}}
+        {{/resultadoCorrecta}}
+        {{#resultadoIncorrecta}}
+            <h2 class="mb-4">Resultado ultima pregunta: <span class="text-danger">{{resultadoIncorrecta}}</span></h2>
             <h2>Juego finalizado: </h2>
-        {{/resultado}}
+        {{/resultadoIncorrecta}}
         <br>
         <a href="/lobby/listar" class="btn btn-info">Ir al lobby</a>
 
