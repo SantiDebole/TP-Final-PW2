@@ -38,7 +38,7 @@ class PartidaModel
             } else {
 
                 $this->reiniciarRegistroDePreguntasVistasPorUsuario($idUsuario);
-                //$this->getPreguntaConRespuestas($idUsuario, $idPartida);
+                $this->getPreguntaConRespuestas($idUsuario, $idPartida);
             }
         }
     }
@@ -240,14 +240,15 @@ return $dificultad[$nivel];
         $dificultad = $this->filtrarPreguntasPorNivelDeUsuario($nivel);
 
         $queryFuncional = "
-            SELECT pr.id AS idPreguntaNoVista
-            FROM pregunta pr
-            WHERE pr.id NOT IN (
-                SELECT up.idPregunta
-                FROM usuario u
-                JOIN UsuarioPregunta up ON u.id = up.idUsuario
-                WHERE u.id = ?
-            )
+          SELECT pr.id AS idPreguntaNoVista
+FROM pregunta pr
+WHERE pr.id NOT IN (
+    SELECT up.idPregunta
+    FROM usuario u
+    JOIN UsuarioPregunta up ON u.id = up.idUsuario
+    WHERE u.id = ?
+)
+AND pr.estado = 'activa' or pr.estado = 'reportada'
             AND pr.id IN (
                 SELECT idPreguntaFiltrada
                 FROM PreguntasFiltradasPorNivel

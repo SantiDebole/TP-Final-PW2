@@ -34,7 +34,6 @@ class PartidaController
         }
     }
 
-
     public function crearPartida()
     {
         if (isset($_SESSION["user_id"])) {
@@ -72,7 +71,6 @@ class PartidaController
             }
         }else $this->presenter->show("partidaNoDisponible");
     }
-
     public function reanudarPartida()
     {
         if (isset($_SESSION["user_id"])) {
