@@ -278,19 +278,19 @@ class PartidaModel
         $dificultad = $this->filtrarPreguntasPorNivelDeUsuario($nivel);
 
         $queryFuncional = "
-          SELECT pr.id AS idPreguntaNoVista
-FROM pregunta pr
-WHERE pr.id NOT IN (
-    SELECT up.idPregunta
-    FROM usuario u
-    JOIN UsuarioPregunta up ON u.id = up.idUsuario
-    WHERE u.id = ?
-)
-AND pr.estado = 'activa' or pr.estado = 'reportada'
-            AND pr.id IN (
-                SELECT idPreguntaFiltrada
-                FROM PreguntasFiltradasPorNivel
-            );";
+                      SELECT pr.id AS idPreguntaNoVista
+            FROM pregunta pr
+            WHERE pr.id NOT IN (
+                SELECT up.idPregunta
+                FROM usuario u
+                JOIN UsuarioPregunta up ON u.id = up.idUsuario
+                WHERE u.id = ?
+            )
+            AND pr.estado = 'activa' or pr.estado = 'reportada'
+                        AND pr.id IN (
+                            SELECT idPreguntaFiltrada
+                            FROM PreguntasFiltradasPorNivel
+                        );";
         $queryFinal = $dificultad . $queryFuncional;
         $stmt = $this->db->connection->prepare($queryFinal);
         $stmt->bind_param("i", $idUsuario);
@@ -303,9 +303,10 @@ AND pr.estado = 'activa' or pr.estado = 'reportada'
         return $preguntasNoVistasPorUsuario;
     }
     private function obtenerRespuestasALaPregunta($idPregunta){
-        $query = "SELECT p.id as idPregunta, p.descripcion as pregunta, r.descripcion as respuesta, r.id as idRta
+        $query = "SELECT p.id as idPregunta, p.descripcion as pregunta, c.descripcion as categoria_descripcion, c.color as color_categoria, r.descripcion as respuesta, r.id as idRta
               FROM pregunta p 
               JOIN respuesta r ON p.id = r.idPregunta 
+              JOIN categoria c ON p.idCategoria = c.id
               WHERE p.id = ?";
 
         $stmt = $this->db->connection->prepare($query);
@@ -316,7 +317,9 @@ AND pr.estado = 'activa' or pr.estado = 'reportada'
         $data = [
             "pregunta" => [
                 "idPregunta" => null,
-                "descripcion" => ""
+                "descripcion" => "",
+                "categoria_descripcion" => "",
+                "color_categoria" => "",
             ],
             "respuestas" => []
         ];
@@ -325,6 +328,8 @@ AND pr.estado = 'activa' or pr.estado = 'reportada'
             if ($data["pregunta"]["idPregunta"] === null) {
                 $data["pregunta"]["idPregunta"] = $row["idPregunta"];
                 $data["pregunta"]["descripcion"] = $row["pregunta"];
+                $data["pregunta"]["categoria_descripcion"] = $row["categoria_descripcion"];
+                $data["pregunta"]["color_categoria"] = $row["color_categoria"];
             }
 
             $data["respuestas"][] = [
