@@ -27,6 +27,36 @@ class EditorController
         }
     }
 
+    public function verReportes()
+    {
+        // Validar que se recibió un parámetro GET
+        if (!isset($_GET['idPregunta']) || !is_numeric($_GET['idPregunta'])) {
+            $this->presenter->show("error", ["mensajeError" => "ID de pregunta inválido."]);
+            return;
+        }
+
+        $idPregunta = intval($_GET['idPregunta']); // Convertir a entero para mayor seguridad
+
+        try {
+            // Obtener los reportes de la pregunta
+            $reportes = $this->model->obtenerReportesDeUnaPregunta($idPregunta);
+
+            // Renderizar la vista de reportes
+            $this->presenter->show("reportesDePregunta", [
+                "id_pregunta" => $idPregunta,
+                "reportes" => $reportes,
+            ]);
+        } catch (Exception $e) {
+            $this->presenter->show("error", [
+                "mensajeError" => "No se pudieron obtener los reportes de la pregunta: " . $e->getMessage()
+            ]);
+        }
+    }
+
+
+
+
+
     public function manejoAccionReporte()
     {
         try {

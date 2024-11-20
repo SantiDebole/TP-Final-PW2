@@ -1,0 +1,29 @@
+<h1 class="text-center my-4">Reportes de la Pregunta ID: {{id_pregunta}}</h1>
+
+<div class="container">
+    <div class="row justify-content-center">
+        {{#reportes}}
+            <div class="col-md-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <p><strong>Reporte ID:</strong> {{id_reporte}}</p>
+                        <p><strong>Texto del Reporte:</strong> {{texto_reporte}}</p>
+                        <p><strong>Usuario:</strong> {{nombre_usuario}} (ID: {{id_usuario}})</p>
+                    </div>
+                </div>
+            </div>
+        {{/reportes}}
+
+        {{^reportes}}
+            <div class="col-12">
+                <div class="alert alert-info text-center" role="alert">
+                    No hay reportes asociados a esta pregunta.
+                </div>
+            </div>
+        {{/reportes}}
+
+        <div class="col-12 text-center mt-4">
+            <a href="/editor/preguntasReportadas" class="btn btn-secondary">Volver</a>
+        </div>
+    </div>
+</div>

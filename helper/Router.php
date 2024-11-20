@@ -55,7 +55,6 @@ class Router
                 'login/listar',
                 'login/validate'
             ];
-            $this->controlDeRuta($rutaConstruida, $rutasPermitidas);
         } else {
             switch ($_SESSION['rol']) {
                 case "ur":
@@ -72,18 +71,19 @@ class Router
                         'perfil/listar'];
                     break;
                 case "e":
-
-
-                    $rutasPermitidas = [ 'lobby/listar',
-                                         'login/validate',
-                                         'login/logout',
-                                         'editor/preguntasReportadas',
-                                        'perfil/listar',
-                                        'editorController/manejoAccionReporte',
-                                        'editor/modificarPreguntaYORespuestas',
-                                        'editor/mostrarFormularioEdicionPregunta',
-                                        ''];
+                    $rutasPermitidas = [
+                        'lobby/listar',
+                        'login/validate',
+                        'login/logout',
+                        'editor/preguntasReportadas',
+                        'perfil/listar',
+                        'editorController/manejoAccionReporte',
+                        'editor/modificarPreguntaYORespuestas',
+                        'editor/mostrarFormularioEdicionPregunta',
+                        'editor/verReportes'
+                    ];
                     break;
+
                 case "a":
                     $rutasPermitidas = [ 'lobby/listar',
                                          'login/validate',
@@ -91,7 +91,6 @@ class Router
                                          break;
             }
 
-            $this->controlDeRuta($rutaConstruida, $rutasPermitidas);
         }
 
 
