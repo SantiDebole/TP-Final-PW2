@@ -35,7 +35,7 @@ class ReporteModel
 
     public function reportarPreguntaYEnviarlaALaTablaReporte($idPreguntaReportada, $idUsuarioQueReporta, $textoDelReporte) {
         // Insertar el reporte en la tabla reporte
-        $queryReporte = "INSERT INTO reporte (usuario_id, pregunta_id, texto) VALUES (?, ?, ?)";
+        $queryReporte = "INSERT INTO reporte (usuario_id, pregunta_id, texto, estado) VALUES (?, ?, ?, 'activo')";
         $stmtReporte = $this->db->connection->prepare($queryReporte);
         $stmtReporte->bind_param("iis", $idUsuarioQueReporta, $idPreguntaReportada, $textoDelReporte);
         $stmtReporte->execute();

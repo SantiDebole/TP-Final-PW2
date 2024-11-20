@@ -18,12 +18,9 @@ class ReporteController{
         $idUsuarioQueReporta= $_POST["idUsuario"];
         $textoDelReporte = $_POST["textoReportePregunta"];
         $this->model->reportarPreguntaYEnviarlaALaTablaReporte($idPreguntaReportada,$idUsuarioQueReporta,$textoDelReporte);
-        $data=[
-            'preguntaReportada'=>$idPreguntaReportada,
-            'idUsuarioQueReporta'=>$idUsuarioQueReporta
-        ];
 
-        $this->presenter->show('reporteEnviado',$data);
+        header("Location: /partida/preguntar ");
+        exit();
 
     }
 
