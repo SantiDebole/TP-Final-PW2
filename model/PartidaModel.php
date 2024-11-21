@@ -9,17 +9,17 @@ class PartidaModel
         $this->db = $db;
     }
     public function validarRespuesta($idRespuesta,$idPartida){
-       $pregunta = $this->tienePreguntaDisponible($idPartida);
-       if($this->controladorDeExpiracionDePregunta($pregunta['fecha'])&&$this->controlarSiEsRespuestaCorrectaParaPreguntaObtenida($pregunta,$idRespuesta)){
-       $this->marcarPreguntaComoCorrecta($pregunta);
-        return true;}
+        $pregunta = $this->tienePreguntaDisponible($idPartida);
+        if($this->controladorDeExpiracionDePregunta($pregunta['fecha'])&&$this->controlarSiEsRespuestaCorrectaParaPreguntaObtenida($pregunta,$idRespuesta)){
+            $this->marcarPreguntaComoCorrecta($pregunta);
+            return true;}
         else { $this->marcarPreguntaComoIncorrecta($pregunta);
 
         }
         $this->marcarPartidaComoFinalizada($idPartida);
         return false;
 
-}
+    }
     public function getPreguntaConRespuestas($idUsuario, $idPartida)
     {
         if ($this->tienePartidaDisponible($idUsuario)) {
@@ -38,7 +38,7 @@ class PartidaModel
             } else {
 
                 $this->reiniciarRegistroDePreguntasVistasPorUsuario($idUsuario);
-                return $this->getPreguntaConRespuestas($idUsuario, $idPartida);
+                $this->getPreguntaConRespuestas($idUsuario, $idPartida);
             }
         }
     }
@@ -48,9 +48,7 @@ class PartidaModel
         $fecha = date('Y-m-d H:i:s');
         $estado = "Activo";
         $query = "INSERT INTO partida(fecha, estado,idUsuario) VALUES (?,?,?)";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("ssi", $fecha, $estado, $idUsuario);
-        $stmt->execute();
+        $this->db->executeQueryConParametros($query,[$fecha,$estado,$idUsuario]);
         return $this->db->connection->insert_id;
 
 
@@ -88,19 +86,14 @@ class PartidaModel
         $query = "update partida
         set estado = 'inactivo'
         where id = ?";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("i", $partidaDisponible);
-        $stmt->execute();
-
+        $this->db->executeQueryConParametros($query,[$partidaDisponible]);
     }
     private function marcarPreguntaComoIncorrecta($pregunta)
     {
         $query = "update tienen
         set puntaje = 0
         where idPartida = ? and idPregunta = ? and fecha= ?";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("iis", $pregunta['idPartida'], $pregunta['idPregunta'], $pregunta['fecha']);
-        $stmt->execute();
+        $this->db->executeQueryConParametros($query,[$pregunta['idPartida'], $pregunta['idPregunta'], $pregunta['fecha']]);
     }
     private function controladorDeExpiracionDePregunta($horario)
     {
@@ -117,10 +110,7 @@ class PartidaModel
         from partida
         where idUsuario = ?
         and estado = 'activo'";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("i", $idUsuario);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $result = $this->db->executeQueryConParametros($query,[$idUsuario]);
         return $result->fetch_assoc();
 
 
@@ -131,10 +121,7 @@ class PartidaModel
         from tienen
         where idPartida = ?
         and puntaje IS NULL";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("i", $idPartida);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $result = $this->db->executeQueryConParametros($query,[$idPartida]);
         return $result->fetch_assoc();
     }
     private function filtrarPreguntasPorNivelDeUsuario($nivel): string
@@ -164,39 +151,38 @@ class PartidaModel
                     HAVING promedio > 0.7
                 )';
 
-
-return $dificultad[$nivel];
-     /*
-        $dificultad[] = "";
-        if ($nivel === "alto") {
-            $dificultad = '
-                WITH PreguntasFiltradasPorNivel AS (
-                    SELECT tienen.idPregunta AS idPreguntaFiltrada,
-                           AVG(tienen.puntaje) AS promedio
-                    FROM tienen
-                    GROUP BY tienen.idPregunta
-                    HAVING promedio < 0.3
-                )';
-        } elseif ($nivel === "medio") {
-            $dificultad = '
-                WITH PreguntasFiltradasPorNivel AS (
-                    SELECT tienen.idPregunta AS idPreguntaFiltrada,
-                           AVG(tienen.puntaje) AS promedio
-                    FROM tienen
-                    GROUP BY tienen.idPregunta
-                    HAVING promedio > 0.3 AND promedio < 0.7
-                )';
-        } else {
-            $dificultad = '
-                WITH PreguntasFiltradasPorNivel AS (
-                    SELECT tienen.idPregunta AS idPreguntaFiltrada,
-                           AVG(tienen.puntaje) AS promedio
-                    FROM tienen
-                    GROUP BY tienen.idPregunta
-                    HAVING promedio > 0.7
-                )';
-        }
-        return $dificultad;*/
+        return $dificultad[$nivel];
+        /*
+           $dificultad[] = "";
+           if ($nivel === "alto") {
+               $dificultad = '
+                   WITH PreguntasFiltradasPorNivel AS (
+                       SELECT tienen.idPregunta AS idPreguntaFiltrada,
+                              AVG(tienen.puntaje) AS promedio
+                       FROM tienen
+                       GROUP BY tienen.idPregunta
+                       HAVING promedio < 0.3
+                   )';
+           } elseif ($nivel === "medio") {
+               $dificultad = '
+                   WITH PreguntasFiltradasPorNivel AS (
+                       SELECT tienen.idPregunta AS idPreguntaFiltrada,
+                              AVG(tienen.puntaje) AS promedio
+                       FROM tienen
+                       GROUP BY tienen.idPregunta
+                       HAVING promedio > 0.3 AND promedio < 0.7
+                   )';
+           } else {
+               $dificultad = '
+                   WITH PreguntasFiltradasPorNivel AS (
+                       SELECT tienen.idPregunta AS idPreguntaFiltrada,
+                              AVG(tienen.puntaje) AS promedio
+                       FROM tienen
+                       GROUP BY tienen.idPregunta
+                       HAVING promedio > 0.7
+                   )';
+           }
+           return $dificultad;*/
     }
     private function calcularNivelDelUsuario($idUsuario)
     {
@@ -204,10 +190,7 @@ return $dificultad[$nivel];
                     FROM tienen join partida on tienen.idPartida = partida.id
                     where partida.idUsuario = ?
                     GROUP BY partida.idUsuario";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("i", $idUsuario);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $result = $this->db->executeQueryConParametros($query,[$idUsuario]);
         $result = $result->fetch_assoc();
         if($result['promedioDeAciertoDelUsuario'] < 0.3){
             return "bajo";
@@ -221,53 +204,41 @@ return $dificultad[$nivel];
         $query="update tienen
         set puntaje = 1
       where idPartida = ? and idPregunta = ? and fecha = ?";
-    $stmt = $this->db->connection->prepare($query);
-    $stmt->bind_param("iis", $pregunta['idPartida'],$pregunta['idPregunta'],$pregunta['fecha']);
-    $stmt->execute();
+        $this->db->executeQueryConParametros($query,[$pregunta['idPartida'],$pregunta['idPregunta'],$pregunta['fecha']]);
     }
     public function reiniciarRegistroDePreguntasVistasPorUsuario($idUsuario){
         $query = "DELETE FROM UsuarioPregunta WHERE idUsuario = ?";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("i", $idUsuario);
-        $stmt->execute();
+        $this->db->executeQueryConParametros($query, [$idUsuario]);
     }
     private function getPreguntaAleatoria(array $preguntasNoVistasPorUsuario){
         $preguntas = $preguntasNoVistasPorUsuario;
         $idPreguntaAleatoria = array_rand($preguntas);
         return $preguntas[$idPreguntaAleatoria];
     }
-    private function getPreguntasNoVistasPorUsuario($idUsuario,$nivel,$usarConsultaSimple = false)
+    private function getPreguntasNoVistasPorUsuario($idUsuario,$nivel)
     {
         $dificultad = $this->filtrarPreguntasPorNivelDeUsuario($nivel);
 
         $queryFuncional = "
-            SELECT pr.id AS idPreguntaNoVista
-            FROM pregunta pr
-            WHERE pr.id NOT IN (
-                SELECT up.idPregunta
-                FROM usuario u
-                JOIN UsuarioPregunta up ON u.id = up.idUsuario
-                WHERE u.id = ?
-            ) ";
-        $condicionPreguntasFiltradas = "AND pr.id IN (
+          SELECT pr.id AS idPreguntaNoVista
+FROM pregunta pr
+WHERE pr.id NOT IN (
+    SELECT up.idPregunta
+    FROM usuario u
+    JOIN UsuarioPregunta up ON u.id = up.idUsuario
+    WHERE u.id = ?
+)
+AND pr.estado = 'activa' or pr.estado = 'reportada'
+            AND pr.id IN (
                 SELECT idPreguntaFiltrada
                 FROM PreguntasFiltradasPorNivel
-            )";
-        $queryFinal = $usarConsultaSimple ? $queryFuncional : $dificultad . $queryFuncional . $condicionPreguntasFiltradas;
-        $stmt = $this->db->connection->prepare($queryFinal);
-        $stmt->bind_param("i", $idUsuario);
-        $stmt->execute();
-        $result = $stmt->get_result();
+            );";
+        $queryFinal = $dificultad . $queryFuncional;
+        $result = $this->db->executeQueryConParametros($queryFinal, [$idUsuario]);
         $preguntasNoVistasPorUsuario = [];
-        if($result){
         while($row = $result->fetch_assoc()){
             $preguntasNoVistasPorUsuario[] = $row["idPreguntaNoVista"];
         }
-        }
-        if (empty($preguntasNoVistasPorUsuario) && !$usarConsultaSimple) {
-            return $this->getPreguntasNoVistasPorUsuario($idUsuario, $nivel, true);
-        }
-
         return $preguntasNoVistasPorUsuario;
     }
     private function obtenerRespuestasALaPregunta($idPregunta){
@@ -276,10 +247,8 @@ return $dificultad[$nivel];
               JOIN respuesta r ON p.id = r.idPregunta 
               WHERE p.id = ?";
 
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("i", $idPregunta);
-        $stmt->execute();
-        $result = $stmt->get_result();
+
+        $result = $this->db->executeQueryConParametros($query, [$idPregunta]);
 
         $data = [
             "pregunta" => [
@@ -304,30 +273,25 @@ return $dificultad[$nivel];
         return $data;
     }
     private function controlarSiEsRespuestaCorrectaParaPreguntaObtenida($pregunta,$idRespuesta){
-    var_dump($pregunta['idPregunta']);
+        var_dump($pregunta['idPregunta']);
         $query="SELECT 1 
 FROM pregunta p
 JOIN respuesta r ON p.id = r.idPregunta
 WHERE r.esCorrecta = 1 AND r.id = ? and p.id=  ?
 ;";
-    $stmt = $this->db->connection->prepare($query);
-    $stmt->bind_param("ii",$idRespuesta, $pregunta['idPregunta']);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result->num_rows > 0) return true;
+        $result = $this->db->executeQueryConParametros($query,[$idRespuesta,$pregunta['idPregunta']]);
+        if ($result->num_rows > 0) return true;
         return false;
-}
+    }
     private function registrarPreguntaEnTienen($idPartida, $idPregunta){
-                $fecha = date('Y-m-d H:i:s');
-                $query = "INSERT INTO tienen (idPartida, idPregunta, fecha) VALUES (?,?, ?)";
-                $stmt = $this->db->connection->prepare($query);
-                $stmt->bind_param("iis", $idPartida, $idPregunta, $fecha);
-                $stmt->execute();}
+        $fecha = date('Y-m-d H:i:s');
+        $query = "INSERT INTO tienen (idPartida, idPregunta, fecha) VALUES (?,?, ?)";
+        $this->db->executeQueryConParametros($query, [$idPartida, $idPregunta, $fecha]);
+    }
     private function registrarPreguntaEnUsuarioPregunta($idUsuario, $idPregunta){
         $query = "INSERT INTO usuarioPregunta (idUsuario, idPregunta) VALUES (?,?)";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("ii", $idUsuario, $idPregunta);
-        $stmt->execute();}
+        $this->db->executeQueryConParametros($query, [$idUsuario, $idPregunta]);
+    }
     public function traerPuntajeDelUsuarioEnLaPartida($idPartida, $idUsuario) {
         // Preparar la consulta SQL
         $query = "SELECT SUM(t.puntaje) AS total_puntaje
@@ -338,10 +302,8 @@ WHERE r.esCorrecta = 1 AND r.id = ? and p.id=  ?
                   WHERE p.id = ? AND u.id = ?
                   GROUP BY u.id";
 
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("ii", $idPartida, $idUsuario);
-        $stmt->execute();
-        $resultado = $stmt->get_result()->fetch_assoc();
+        $result = $this->db->executeQueryConParametros($query, [$idPartida, $idUsuario]);
+        $resultado = $result->fetch_assoc();
         return $resultado ? $resultado['total_puntaje'] : 0;
 
     }
@@ -350,17 +312,15 @@ WHERE r.esCorrecta = 1 AND r.id = ? and p.id=  ?
         from tienen
         where puntaje is null 
         and idPartida = ?";
-
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("i", $idPartida);
-        $stmt->execute();
-        $result = $stmt->get_result()->fetch_assoc();
+        $result = $this->db->executeQueryConParametros($query, [$idPartida]);
+        $result = $result->fetch_assoc();
         $fecha=$result['fecha'];
         $fechaPregunta = new DateTime($fecha);
         $fechaActual = new DateTime();
         $intervalo = $fechaPregunta->diff($fechaActual);
         return 60-(($intervalo->days * 24 * 60 * 60)+($intervalo->h * 60 * 60)+($intervalo->i * 60)+$intervalo->s);
     }
+
 
 
 }

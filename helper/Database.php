@@ -39,6 +39,36 @@ class Database {
 
     }
 
+    public function executeQueryConParametros($query, array $variables) {
+        $stmt = $this->connection->prepare($query);
+        $ordenTiposDeDatos = "";
+
+        foreach ($variables as $item => $valor) {
+            $ordenTiposDeDatos .= is_integer($valor) ? "i" : "s";
+        }
+
+        $parametros = $this->referenciarValores($variables);
+
+        array_unshift($parametros, $ordenTiposDeDatos); //mandar la variable al principio del array
+
+        $stmt->bind_param(...$parametros);
+        $stmt->execute();
+        return $stmt->get_result();
+        // Si es una consulta SELECT, devuelve el resultado
+        /*if (preg_match('/^\s*SELECT/i', $query)) {
+           /para verificar si es un select, devolver get_result()
+        }*/
+
+    }
+
+    private function referenciarValores($array) {
+        $refs = [];
+        foreach ($array as $key => $value) {
+            $refs[$key] = &$array[$key]; //referencia de c/ elemento
+        }
+        return $refs;
+    }
+
 }
 
 
