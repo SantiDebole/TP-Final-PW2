@@ -22,6 +22,49 @@
                 return $this->ejecucionDeConsultaFetchAllSinParametros($query);
             }
 
+            public function obtenerPreguntasSugeridas() {
+                $query = "SELECT 
+                 pregunta.id AS id_pregunta,
+                 pregunta.descripcion AS descripcion
+             FROM pregunta
+             WHERE pregunta.estado = 'pendiente'
+             ORDER BY pregunta.id ASC;";
+                return $this->ejecucionDeConsultaFetchAllSinParametros($query);
+            }
+
+            public function aprobarSugerencia($idPregunta) {
+                $resultado = false;
+
+                // Ejecutamos una transacción para asegurar que el cambio de estado sea atómico
+                $this->ejecutarConTransaccion(function() use ($idPregunta, &$resultado) {
+                    // Cambia el estado de la pregunta a 'activa'
+                    $resultado = $this->cambiarEstadoDeLaPregunta($idPregunta, 'activa');
+                });
+
+                if (!$resultado) {
+                    error_log("Error al aprobar la sugerencia con ID: $idPregunta");
+                }
+
+                return $resultado;
+            }
+
+            public function rechazarSugerencia($idPregunta) {
+                $resultado = false;
+
+                // Ejecutamos una transacción para asegurar que el cambio de estado sea atómico
+                $this->ejecutarConTransaccion(function() use ($idPregunta, &$resultado) {
+                    // Cambia el estado de la pregunta a 'desactivada'
+                    $resultado = $this->cambiarEstadoDeLaPregunta($idPregunta, 'desactivada');
+                });
+
+                if (!$resultado) {
+                    error_log("Error al rechazar la sugerencia con ID: $idPregunta");
+                }
+
+                return $resultado;
+            }
+
+
 
             public function obtenerReportesDeUnaPregunta($id_pregunta)
             {
@@ -128,6 +171,7 @@
 
             return $resultado;
         }
+
 
 
 

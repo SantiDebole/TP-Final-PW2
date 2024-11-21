@@ -1,12 +1,11 @@
-<h1 class="text-center my-4">Preguntas Reportadas</h1>
+<h1 class="text-center my-4">Preguntas Sugeridas</h1>
 
 <div class="container">
     <div class="text-center mt-4 mb-4">
         <a href="/lobby/listar" class="btn btn-secondary">Volver al Lobby</a>
     </div>
     <div class="row justify-content-center">
-
-        {{#preguntasReportadas}}
+        {{#preguntasSugeridas}}
             <div class="col-md-8 mb-4">
                 <div class="card">
                     <div class="card-header">
@@ -27,37 +26,29 @@
                         </ul>
                     </div>
                     <div class="card-footer text-center">
-                        <form method="POST" action="/editor/manejoAccionReporte" class="d-inline">
+                        <form method="POST" action="/editor/manejoAccionSugerencia" class="d-inline">
                             <input type="hidden" name="idPregunta" value="{{id_pregunta}}">
-                            <input type="hidden" name="accion" value="darDeAlta">
-                            <button type="submit" class="btn btn-success me-2">Dar de Alta</button>
+                            <input type="hidden" name="accion" value="aprobar">
+                            <button type="submit" class="btn btn-success me-2">Aprobar</button>
                         </form>
 
-                        <form method="POST" action="/editor/manejoAccionReporte" class="d-inline">
+                        <form method="POST" action="/editor/manejoAccionSugerencia" class="d-inline">
                             <input type="hidden" name="idPregunta" value="{{id_pregunta}}">
-                            <input type="hidden" name="accion" value="darDeBaja">
-                            <button type="submit" class="btn btn-danger me-2">Dar de Baja</button>
+                            <input type="hidden" name="accion" value="rechazar">
+                            <button type="submit" class="btn btn-danger me-2">Rechazar</button>
                         </form>
 
-                        <form method="POST" action="/editor/mostrarFormularioEdicionPregunta" class="d-inline">
-                            <input type="hidden" name="idPregunta" value="{{id_pregunta}}">
-                            <button type="submit" class="btn btn-warning me-2">Modificar</button>
-                        </form>
-
-                        <!-- Botón para ver reportes -->
-                        <a href="/editor/verReportes?idPregunta={{id_pregunta}}" class="btn btn-primary">Ver Reportes</a>
                     </div>
                 </div>
             </div>
-        {{/preguntasReportadas}}
+        {{/preguntasSugeridas}}
 
-        {{^preguntasReportadas}}
+        {{^preguntasSugeridas}}
             <div class="col-12">
                 <div class="alert alert-info text-center" role="alert">
-                    No hay preguntas reportadas.
+                    No hay preguntas sugeridas.
                 </div>
             </div>
-        {{/preguntasReportadas}}
+        {{/preguntasSugeridas}}
     </div>
-
 </div>

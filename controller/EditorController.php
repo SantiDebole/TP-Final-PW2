@@ -11,6 +11,61 @@ class EditorController
         $this->presenter = $presenter;
     }
 
+    public function preguntasSugeridas()
+    {
+        try {
+            $preguntasReportadas = $this->model->obtenerPreguntasSugeridas();
+            foreach ($preguntasReportadas as &$pregunta) {
+                $respuestas = $this->model->obtenerRespuestasDeUnaPregunta($pregunta['id_pregunta']);
+                if (!empty($respuestas)) {
+                    $pregunta['respuestas'] = $respuestas;
+                }
+            }
+            $this->presenter->show('preguntasSugeridas', ['preguntasSugeridas' => $preguntasReportadas]);
+        } catch (Exception $e) {
+            $this->presenter->show('error', ['mensajeError' => "No se pudieron obtener las preguntas sugeridas: " . $e->getMessage()]);
+        }
+    }
+
+    public function manejoAccionSugerencia() {
+        try {
+            if (isset($_POST['accion']) && isset($_POST['idPregunta'])) {
+                $accion = $_POST['accion'];
+                $idPregunta = $_POST['idPregunta'];
+
+                // Validaciones
+                $this->validarAccion($accion);
+                $this->validarIdPregunta($idPregunta);
+
+                // Lógica según la acción
+                $resultado = false;
+                if ($accion === 'aprobar') {
+                    $resultado = $this->model->aprobarSugerencia($idPregunta);
+                } elseif ($accion === 'rechazar') {
+                    $resultado = $this->model->rechazarSugerencia($idPregunta);
+                } else {
+                    throw new Exception("Acción no reconocida.");
+                }
+
+                // Verificar el resultado
+                if ($resultado) {
+                    $this->redirigirAPreguntasSugeridas();
+                } else {
+                    throw new Exception("Error al procesar la sugerencia.");
+                }
+            } else {
+                throw new Exception("Datos incompletos.");
+            }
+        } catch (Exception $e) {
+            $this->presenter->show('error', ['mensajeError' => $e->getMessage()]);
+        }
+    }
+
+    private function redirigirAPreguntasSugeridas() {
+        header("Location: /editor/preguntasSugeridas");
+        exit();
+    }
+
     public function preguntasReportadas()
     {
         try {
@@ -158,12 +213,14 @@ class EditorController
     }
 
     // Métodos de validación privados
-    private function validarAccion($accion)
-    {
-        if (!in_array($accion, ['darDeAlta', 'darDeBaja'])) {
-            throw new Exception("Acción no válida.");
+    private function validarAccion($accion) {
+        $accionesPermitidas = ['darDeAlta', 'darDeBaja', 'aprobar', 'rechazar'];
+
+        if (!in_array($accion, $accionesPermitidas)) {
+            throw new Exception("Acción no reconocida: $accion");
         }
     }
+
 
     private function validarIdPregunta($idPregunta)
     {
