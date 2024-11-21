@@ -257,7 +257,7 @@ class PartidaModel
                 JOIN UsuarioPregunta up ON u.id = up.idUsuario
                 WHERE u.id = ?
             )
-            AND pr.estado = 'activa' or pr.estado = 'reportada'
+            AND (pr.estado = 'activa' or pr.estado = 'reportada')
                         AND pr.id IN (
                             SELECT idPreguntaFiltrada
                             FROM PreguntasFiltradasPorNivel

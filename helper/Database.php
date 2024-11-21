@@ -40,7 +40,7 @@ class Database {
     }
 
 
-    public function executeQueryConParametros($query, array $variables) {
+    public function executeQueryConParametros(string $query, array $variables) {
         try{
         $stmt = $this->connection->prepare($query);
             if (!$stmt) {
@@ -57,20 +57,18 @@ class Database {
         array_unshift($parametros, $ordenTiposDeDatos); //mandar la variable al principio del array
 
         $stmt->bind_param(...$parametros);
-        $stmt->execute();
-            if (!$stmt->execute()) {
-                throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+            $stmt->execute();
+
+            if (preg_match('/^\s*(WITH\s+.+?\s+)?SELECT\b/i', $query)) {
+                // Es una consulta SELECT o comienza con WITH seguido de SELECT
+                return $stmt->get_result();
+            } else {
+                return $stmt->affected_rows;
             }
-            //return stripos(trim($query),'SELECT') === 0 ? $stmt->affected_rows : $stmt->get_result();
-            return $stmt->get_result();
         }catch(Exception $e){
             echo "Error: " . $e->getMessage();
             return false;
         }
-        // Si es una consulta SELECT, devuelve el resultado
-        /*if (preg_match('/^\s*SELECT/i', $query)) {
-           /para verificar si es un select, devolver get_result()
-        }*/
     }
 
     private function referenciarValores($array) {
