@@ -16,56 +16,33 @@ class RegistroModel
     $idUser="";
     $usuario="";
         $sql = "SELECT id, usuario FROM usuario WHERE token_verificacion = ? and esta_verificado=0";
-    $stmt = $this->database->connection->prepare($sql);
-    if($stmt){
-        $stmt->bind_param("s", $token);
-        if($stmt->execute()){
-            $stmt->store_result();
-            $stmt->bind_result($idUser, $usuario);
-            $stmt->fetch();
-            }
-        $stmt->close();
-    }
+    $result = $this->database->executeQueryConParametros($sql,[$token]);
+    $resultado = $result->fetch_assoc();
+    $idUser = $resultado["id"];
+    $usuario = $resultado["usuario"];
     if($idUser!="") {
         $sql = "UPDATE usuario
                 set esta_verificado =1
                 where id = ?";
-        $stmt = $this->database->connection->prepare($sql);
-        if ($stmt) {
-            $stmt->bind_param("s", $idUser);
-            $stmt->execute();
-            if ($stmt->affected_rows > 0) $resultado = "La activacion se ha realizado con exito";
-            $generadorDeQR= new GeneradorDeQR();
-            $generadorDeQR->generarQRParaPerfil($usuario);
-        }
-        $stmt->close();
-
-
-    } return $resultado;}
+        $affected_rows = $this->database->executeQueryConParametros($sql,[$idUser]);
+            if ($affected_rows > 0) {
+                $resultado = "La activacion se ha realizado con exito";
+                $generadorDeQR = new GeneradorDeQR();
+                $generadorDeQR->generarQRParaPerfil($usuario);
+            }
+    }
+    return $resultado;}
     public function reenviarEmail($email)
     {
 
         $token="";
         $sql = "SELECT token_verificacion FROM usuario WHERE email = ? and esta_verificado =0";
-        $stmt = $this->database->connection->prepare($sql);
-        if ($stmt) {
-            $stmt->bind_param("s", $email);
-            if ($stmt->execute()) {
-                $stmt->store_result();
-                $stmt->bind_result($token);
-                $stmt->fetch();
-                $stmt->close();
+        $result = $this->database->executeQueryConParametros($sql,[$email]);
+        if ($result) {
                 $mailer = new Mailer($email, $token);
                 return $token;
-
-            } else {
-                $stmt->close();
-                return "error en la consulta";
-            }
-
         }
-
-
+        return new Exception("Error, no se pudo enviar el correo");
     }
 
 
@@ -98,72 +75,38 @@ class RegistroModel
     $token = bin2hex(random_bytes(16));
     $sql = "INSERT INTO usuario (nombre_completo, fecha_nacimiento, genero, email, usuario, password, rol, foto_perfil, pais, ciudad, token_verificacion) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $this->database->connection->prepare($sql);
-    if($stmt){
-        $stmt->bind_param("sssssssssss",
-            $datos_usuario['nombre_completo'],
-            $datos_usuario['fecha_nacimiento'],
-            $datos_usuario['genero'],
-            $datos_usuario['email'],
-            $datos_usuario['usuario'],
-            $datos_usuario['password'],
-            $datos_usuario['rol'],
-            $datos_usuario['foto_perfil']['name'],
-            $datos_usuario['pais'],
-            $datos_usuario['ciudad'],
-            $token
-        );
-
-        if ($stmt->execute()) {
-
-            $registro = $token;
-
-
-        } else {
-            $registro = "fallo";
-
-
-        }
-        $stmt->close();
-
-        return $registro;
-
-
+    $affected_rows = $this->database->executeQueryConParametros($sql,[$datos_usuario['nombre_completo'],
+        $datos_usuario['fecha_nacimiento'],
+        $datos_usuario['genero'],
+        $datos_usuario['email'],
+        $datos_usuario['usuario'],
+        $datos_usuario['password'],
+        $datos_usuario['rol'],
+        $datos_usuario['foto_perfil']['name'],
+        $datos_usuario['pais'],
+        $datos_usuario['ciudad'],
+        $token]);
+    if($affected_rows > 0){
+        return $token;
     }
+    return "fallo";
     }
 
        private function validarUsuario($usuario)
     {
         $sql = "SELECT 1 FROM usuario WHERE usuario=?";
-        $stmt = $this->database->connection->prepare($sql);
-
+        $result = $this->database->executeQueryConParametros($sql,[$usuario]);
         // Verificar si la preparación fue exitosa
-        if ($stmt) {
-            // Enlazar el parámetro (s: string)
-            $stmt->bind_param("s", $usuario);
-
-            // Ejecutar la consulta
-            if ($stmt->execute()) {
-                // Obtener el resultado
-                $stmt->store_result();
-
+        if ($result) {
                 // Verificar si existe al menos una fila
-                if ($stmt->num_rows > 0) {
+                if ($result->num_rows > 0) {
                     // Si hay una fila, el usuario ya existe
-                    $stmt->close();
                     return true;
                 } else {
                     // Si no hay filas, el usuario no existe
-                    $stmt->close();
                     return false;
                 }
-            } else {
-                // Si hay un error en la ejecución
-                $stmt->close();
-                return "error en la consulta";
-            }
         }
-
         // Si la preparación de la consulta falla, devolver false
         return "error en la preparacion de la consulta";
     }
@@ -171,33 +114,16 @@ class RegistroModel
     private function validarEmail($email)
     {
         $sql = "SELECT 1 FROM usuario WHERE email=?";
-        $stmt = $this->database->connection->prepare($sql);
-
+        $result = $this->database->executeQueryConParametros($sql,[$email]);
         // Verificar si la preparación fue exitosa
-        if ($stmt) {
-            // Enlazar el parámetro (s: string)
-            $stmt->bind_param("s", $email);
-
-            // Ejecutar la consulta
-            if ($stmt->execute()) {
-                // Obtener el resultado
-                $stmt->store_result();
-
-                // Verificar si existe al menos una fila
-                if ($stmt->num_rows > 0) {
+        if ($result) {
+                if ($result->num_rows > 0) {
                     // Si hay una fila, el usuario ya existe
-                    $stmt->close();
                     return true;
                 } else {
                     // Si no hay filas, el usuario no existe
-                    $stmt->close();
                     return false;
                 }
-            } else {
-                // Si hay un error en la ejecución
-                $stmt->close();
-                return "error en la consulta";
-            }
         }
 
         // Si la preparación de la consulta falla, devolver false
