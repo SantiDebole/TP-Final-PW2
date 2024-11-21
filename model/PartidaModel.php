@@ -181,37 +181,6 @@ class PartidaModel
                 )';
 
         return $dificultad[$nivel];
-        /*
-           $dificultad[] = "";
-           if ($nivel === "alto") {
-               $dificultad = '
-                   WITH PreguntasFiltradasPorNivel AS (
-                       SELECT tienen.idPregunta AS idPreguntaFiltrada,
-                              AVG(tienen.puntaje) AS promedio
-                       FROM tienen
-                       GROUP BY tienen.idPregunta
-                       HAVING promedio < 0.3
-                   )';
-           } elseif ($nivel === "medio") {
-               $dificultad = '
-                   WITH PreguntasFiltradasPorNivel AS (
-                       SELECT tienen.idPregunta AS idPreguntaFiltrada,
-                              AVG(tienen.puntaje) AS promedio
-                       FROM tienen
-                       GROUP BY tienen.idPregunta
-                       HAVING promedio > 0.3 AND promedio < 0.7
-                   )';
-           } else {
-               $dificultad = '
-                   WITH PreguntasFiltradasPorNivel AS (
-                       SELECT tienen.idPregunta AS idPreguntaFiltrada,
-                              AVG(tienen.puntaje) AS promedio
-                       FROM tienen
-                       GROUP BY tienen.idPregunta
-                       HAVING promedio > 0.7
-                   )';
-           }
-           return $dificultad;*/
     }
     private function calcularNivelDelUsuario($idUsuario)
     {

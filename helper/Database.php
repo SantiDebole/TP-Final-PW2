@@ -47,18 +47,32 @@ class Database {
                 throw new Exception("Error al preparar la consulta: " . $this->connection->error);
             }
         $ordenTiposDeDatos = "";
-
         foreach ($variables as $item => $valor) {
             $ordenTiposDeDatos .= is_integer($valor) ? "i" : "s";
         }
-
         $parametros = $this->referenciarValores($variables);
-
         array_unshift($parametros, $ordenTiposDeDatos); //mandar la variable al principio del array
-
         $stmt->bind_param(...$parametros);
             $stmt->execute();
+            if (preg_match('/^\s*(WITH\s+.+?\s+)?SELECT\b/i', $query)) {
+                // Es una consulta SELECT o comienza con WITH seguido de SELECT
+                return $stmt->get_result();
+            } else {
+                return $stmt->affected_rows;
+            }
+        }catch(Exception $e){
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
 
+    public function executeQuery(string $query){
+        try {
+            $stmt = $this->connection->prepare($query);
+            if (!$stmt) {
+                throw new Exception("Error en la consulta SQL: " . $this->connection->error);
+            }
+            $stmt->execute();
             if (preg_match('/^\s*(WITH\s+.+?\s+)?SELECT\b/i', $query)) {
                 // Es una consulta SELECT o comienza con WITH seguido de SELECT
                 return $stmt->get_result();

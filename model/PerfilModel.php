@@ -22,11 +22,8 @@ class PerfilModel
 
 
         $sql= "SELECT * FROM usuario WHERE id = ?";
-        $stmt = $this->database->connection->prepare($sql);
-        $stmt->bind_param("i", $usuarioId);
-        $stmt->execute();
         // Obtener el resultado
-        $result = $stmt->get_result();
+        $result = $this->database->executeQueryConParametros($sql,[$usuarioId]);
         $usuario = $result->fetch_assoc();
 
 
