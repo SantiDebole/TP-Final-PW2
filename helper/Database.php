@@ -39,6 +39,47 @@ class Database {
 
     }
 
+
+    public function executeQueryConParametros($query, array $variables) {
+        try{
+        $stmt = $this->connection->prepare($query);
+            if (!$stmt) {
+                throw new Exception("Error al preparar la consulta: " . $this->connection->error);
+            }
+        $ordenTiposDeDatos = "";
+
+        foreach ($variables as $item => $valor) {
+            $ordenTiposDeDatos .= is_integer($valor) ? "i" : "s";
+        }
+
+        $parametros = $this->referenciarValores($variables);
+
+        array_unshift($parametros, $ordenTiposDeDatos); //mandar la variable al principio del array
+
+        $stmt->bind_param(...$parametros);
+        $stmt->execute();
+            if (!$stmt->execute()) {
+                throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
+            //return stripos(trim($query),'SELECT') === 0 ? $stmt->affected_rows : $stmt->get_result();
+            return $stmt->get_result();
+        }catch(Exception $e){
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+        // Si es una consulta SELECT, devuelve el resultado
+        /*if (preg_match('/^\s*SELECT/i', $query)) {
+           /para verificar si es un select, devolver get_result()
+        }*/
+    }
+
+    private function referenciarValores($array) {
+        $refs = [];
+        foreach ($array as $key => $value) {
+            $refs[$key] = &$array[$key]; //referencia de c/ elemento
+        }
+        return $refs;
+    }
 }
 
 

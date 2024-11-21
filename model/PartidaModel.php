@@ -22,17 +22,7 @@ class PartidaModel
         LIMIT 1;
     ";
 
-        // Preparar la consulta
-        $stmt = $this->db->connection->prepare($query);
-
-        // Vincular parámetros
-        $stmt->bind_param("ii", $idPartida, $idUsuario);
-
-        // Ejecutar la consulta
-        $stmt->execute();
-
-        // Obtener el resultado
-        $result = $stmt->get_result();
+        $result = $this->db->executeQueryConParametros($query,[$idPartida, $idUsuario]);
 
         // Verificar si se encontró una pregunta
         if ($result->num_rows > 0) {
@@ -86,9 +76,7 @@ class PartidaModel
         $fecha = date('Y-m-d H:i:s');
         $estado = "Activo";
         $query = "INSERT INTO partida(fecha, estado,idUsuario) VALUES (?,?,?)";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("ssi", $fecha, $estado, $idUsuario);
-        $stmt->execute();
+        $this->db->executeQueryConParametros($query,[$fecha, $estado, $idUsuario]);
         return $this->db->connection->insert_id;
 
 
@@ -126,9 +114,7 @@ class PartidaModel
         $query = "update partida
         set estado = 'inactivo'
         where id = ?";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("i", $partidaDisponible);
-        $stmt->execute();
+        $this->db->executeQueryConParametros($query,[$partidaDisponible]);
 
     }
     private function marcarPreguntaComoIncorrecta($pregunta)
@@ -136,9 +122,7 @@ class PartidaModel
         $query = "update tienen
         set puntaje = 0
         where idPartida = ? and idPregunta = ? and fecha= ?";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("iis", $pregunta['idPartida'], $pregunta['idPregunta'], $pregunta['fecha']);
-        $stmt->execute();
+        $this->db->executeQueryConParametros($query,[$pregunta['idPartida'], $pregunta['idPregunta'], $pregunta['fecha']]);
     }
     private function controladorDeExpiracionDePregunta($horario)
     {
@@ -155,10 +139,7 @@ class PartidaModel
         from partida
         where idUsuario = ?
         and estado = 'activo'";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("i", $idUsuario);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $result = $this->db->executeQueryConParametros($query,[$idUsuario]);
         return $result->fetch_assoc();
 
 
@@ -169,10 +150,7 @@ class PartidaModel
         from tienen
         where idPartida = ?
         and puntaje IS NULL";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("i", $idPartida);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $result = $this->db->executeQueryConParametros($query,[$idPartida]);
         return $result->fetch_assoc();
     }
     private function filtrarPreguntasPorNivelDeUsuario($nivel): string
@@ -241,10 +219,7 @@ class PartidaModel
                     FROM tienen join partida on tienen.idPartida = partida.id
                     where partida.idUsuario = ?
                     GROUP BY partida.idUsuario";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("i", $idUsuario);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $result = $this->db->executeQueryConParametros($query,[$idUsuario]);
         $result = $result->fetch_assoc();
         if($result['promedioDeAciertoDelUsuario'] < 0.3){
             return "bajo";
@@ -258,15 +233,11 @@ class PartidaModel
         $query="update tienen
         set puntaje = 1
       where idPartida = ? and idPregunta = ? and fecha = ?";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("iis", $pregunta['idPartida'],$pregunta['idPregunta'],$pregunta['fecha']);
-        $stmt->execute();
+        $this->db->executeQueryConParametros($query,[$pregunta['idPartida'],$pregunta['idPregunta'],$pregunta['fecha']]);
     }
     public function reiniciarRegistroDePreguntasVistasPorUsuario($idUsuario){
         $query = "DELETE FROM UsuarioPregunta WHERE idUsuario = ?";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("i", $idUsuario);
-        $stmt->execute();
+        $this->db->executeQueryConParametros($query,[$idUsuario]);
     }
     private function getPreguntaAleatoria(array $preguntasNoVistasPorUsuario){
         $preguntas = $preguntasNoVistasPorUsuario;
@@ -292,10 +263,7 @@ class PartidaModel
                             FROM PreguntasFiltradasPorNivel
                         );";
         $queryFinal = $dificultad . $queryFuncional;
-        $stmt = $this->db->connection->prepare($queryFinal);
-        $stmt->bind_param("i", $idUsuario);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $result = $this->db->executeQueryConParametros($queryFinal,[$idUsuario]);
         $preguntasNoVistasPorUsuario = [];
         while($row = $result->fetch_assoc()){
             $preguntasNoVistasPorUsuario[] = $row["idPreguntaNoVista"];
@@ -309,10 +277,7 @@ class PartidaModel
               JOIN categoria c ON p.idCategoria = c.id
               WHERE p.id = ?";
 
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("i", $idPregunta);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $result = $this->db->executeQueryConParametros($query,[$idPregunta]);
 
         $data = [
             "pregunta" => [
@@ -347,24 +312,19 @@ FROM pregunta p
 JOIN respuesta r ON p.id = r.idPregunta
 WHERE r.esCorrecta = 1 AND r.id = ? and p.id=  ?
 ;";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("ii",$idRespuesta, $pregunta['idPregunta']);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $result = $this->db->executeQueryConParametros($query,[$idRespuesta,$pregunta['idPregunta']]);
         if ($result->num_rows > 0) return true;
         return false;
     }
     private function registrarPreguntaEnTienen($idPartida, $idPregunta){
         $fecha = date('Y-m-d H:i:s');
         $query = "INSERT INTO tienen (idPartida, idPregunta, fecha) VALUES (?,?, ?)";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("iis", $idPartida, $idPregunta, $fecha);
-        $stmt->execute();}
+        $this->db->executeQueryConParametros($query,[$idPartida, $idPregunta, $fecha]);
+    }
     private function registrarPreguntaEnUsuarioPregunta($idUsuario, $idPregunta){
         $query = "INSERT INTO usuarioPregunta (idUsuario, idPregunta) VALUES (?,?)";
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("ii", $idUsuario, $idPregunta);
-        $stmt->execute();}
+        $this->db->executeQueryConParametros($query,[$idUsuario, $idPregunta]);
+    }
     public function traerPuntajeDelUsuarioEnLaPartida($idPartida, $idUsuario) {
         // Preparar la consulta SQL
         $query = "SELECT SUM(t.puntaje) AS total_puntaje
@@ -374,11 +334,8 @@ WHERE r.esCorrecta = 1 AND r.id = ? and p.id=  ?
                   JOIN pregunta pr ON t.idPregunta = pr.id
                   WHERE p.id = ? AND u.id = ?
                   GROUP BY u.id";
-
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("ii", $idPartida, $idUsuario);
-        $stmt->execute();
-        $resultado = $stmt->get_result()->fetch_assoc();
+        $result = $this->db->executeQueryConParametros($query,[$idPartida, $idUsuario]);
+        $resultado = $result->fetch_assoc();
         return $resultado ? $resultado['total_puntaje'] : 0;
 
     }
@@ -387,12 +344,9 @@ WHERE r.esCorrecta = 1 AND r.id = ? and p.id=  ?
         from tienen
         where puntaje is null 
         and idPartida = ?";
-
-        $stmt = $this->db->connection->prepare($query);
-        $stmt->bind_param("i", $idPartida);
-        $stmt->execute();
-        $result = $stmt->get_result()->fetch_assoc();
-        $fecha=$result['fecha'];
+        $result = $this->db->executeQueryConParametros($query,[$idPartida]);
+        $resultado = $result->fetch_assoc();
+        $fecha=$resultado['fecha'];
         $fechaPregunta = new DateTime($fecha);
         $fechaActual = new DateTime();
         $intervalo = $fechaPregunta->diff($fechaActual);
