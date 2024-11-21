@@ -11,6 +11,41 @@ class EditorController
         $this->presenter = $presenter;
     }
 
+
+    public function sugerirPregunta()
+    {
+        $this->presenter->show('sugerirPregunta');
+    }
+
+// En el controlador
+    public function validarPreguntaSugerida()
+    {
+        $preguntaSugerida = isset($_POST['pregunta_sugerida']) ? $_POST['pregunta_sugerida'] : '';
+        $respuestaCorrecta = isset($_POST['respuesta_correcta']) ? $_POST['respuesta_correcta'] : '';
+        $respuestaIncorrecta1 = isset($_POST['respuesta_incorrecta_1']) ? $_POST['respuesta_incorrecta_1'] : '';
+        $respuestaIncorrecta2 = isset($_POST['respuesta_incorrecta_2']) ? $_POST['respuesta_incorrecta_2'] : '';
+        $idCategoria = isset($_POST['idCategoria']) ? $_POST['idCategoria'] : 1; // Default to 'Paises' if not set
+        $estado = 'pendiente';
+
+        // Llamar al método que guarda la pregunta y las respuestas
+        $this->model->agregarPreguntaConUnaRespuestaCorrectaYDosIncorrectasYCambiarDeEstado(
+            $preguntaSugerida,
+            $respuestaCorrecta,
+            $respuestaIncorrecta1,
+            $respuestaIncorrecta2,
+            $estado,
+            $idCategoria
+        );
+
+        // Pasar el dato a la vista de éxito
+        $this->presenter->show('sugerirPregunta', ['preguntaEnviada' => true]);
+    }
+
+
+
+
+
+
     public function preguntasSugeridas()
     {
         try {

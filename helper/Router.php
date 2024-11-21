@@ -81,7 +81,8 @@ class Router
                         'editor/modificarPreguntaYORespuestas',
                         'editor/mostrarFormularioEdicionPregunta',
                         'editor/verReportes',
-                        'editor/preguntasSugeridas'
+                        'editor/preguntasSugeridas',
+                        'editor/sugerirPregunta'
                     ];
                     break;
 

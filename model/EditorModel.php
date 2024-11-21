@@ -9,7 +9,51 @@
                 $this->database = $database;
             }
 
-        // devuelve un array multidimensional (un array con arrays asociativos dentro (preguntas reportadas))
+
+
+            public function agregarPreguntaConUnaRespuestaCorrectaYDosIncorrectasYCambiarDeEstado(
+                $preguntaSugerida,
+                $respuestaCorrecta,
+                $respuestaIncorrecta1,
+                $respuestaIncorrecta2,
+                $estado,
+                $idCategoria
+            )
+            {
+                // Insertar la pregunta en la tabla `pregunta`
+                $sqlPregunta = "INSERT INTO pregunta (descripcion, estado, idCategoria) VALUES (?, ?, ?)";
+                $stmtPregunta = $this->database->connection->prepare($sqlPregunta);
+                $stmtPregunta->bind_param("ssi", $preguntaSugerida, $estado, $idCategoria); // Se añadió idCategoria
+                $stmtPregunta->execute();
+
+                $idPregunta = $this->database->connection->insert_id;
+
+                // Insertar las respuestas
+                $sqlRespuesta = "INSERT INTO respuesta (descripcion, esCorrecta, idPregunta) VALUES (?, ?, ?)";
+                $stmtRespuesta = $this->database->connection->prepare($sqlRespuesta);
+
+                // Respuesta correcta
+                $esCorrecta = 1;
+                $stmtRespuesta->bind_param("sii", $respuestaCorrecta, $esCorrecta, $idPregunta);
+                $stmtRespuesta->execute();
+
+                // Respuesta incorrecta 1
+                $esCorrecta = 0;
+                $stmtRespuesta->bind_param("sii", $respuestaIncorrecta1, $esCorrecta, $idPregunta);
+                $stmtRespuesta->execute();
+
+                // Respuesta incorrecta 2
+                $stmtRespuesta->bind_param("sii", $respuestaIncorrecta2, $esCorrecta, $idPregunta);
+                $stmtRespuesta->execute();
+
+                // Cerrar las declaraciones
+                $stmtPregunta->close();
+                $stmtRespuesta->close();
+            }
+
+
+
+            // devuelve un array multidimensional (un array con arrays asociativos dentro (preguntas reportadas))
             public function obtenerPreguntasReportadas() {
                 $query = "SELECT DISTINCT 
                  pregunta.id AS id_pregunta,
