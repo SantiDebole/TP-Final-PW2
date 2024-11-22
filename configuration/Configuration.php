@@ -10,6 +10,7 @@ include_once ("./helper/Router.php");
 include_once ("./helper/Mailer.php");
 include_once ("./helper/GeneradorDeQR.php");
 include_once ("./helper/PdfHelper.php");
+include_once ("./helper/GraphHelper.php");
 //model
 include_once ("./model/RegistroModel.php");
 include_once("./model/LoginModel.php");

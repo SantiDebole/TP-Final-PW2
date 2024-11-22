@@ -124,7 +124,7 @@ class AdministradorController
         $this->presenter->show('verCantidadPartidasJugadas', $data);
     }
 
-    public function verCantidadJugadores(){
+    public function verCantidadJugadores() {
         $filtro = $_POST['filtro'] ?? 'dia';
         $fecha_actual = $_POST['fecha'] ?? date('Y-m-d');
 
@@ -147,14 +147,34 @@ class AdministradorController
 
         $resultado = $this->model->verCantidadJugadores($rango);
 
+        // Usar GraphHelper para generar el gráfico
+        $graphHelper = new GraphHelper();
+        $labels = [$fecha_actual]; // Puedes ajustar según lo que necesites como etiquetas
+        $data = [$resultado];     // Datos obtenidos de la consulta
+        $title = "Cantidad de Jugadores por $filtro";
+        $nombreGrafico = "grafico_" . $filtro . "_" . $fecha_actual . ".png";
+        $outputFile = $_SERVER['DOCUMENT_ROOT'] . '/public/image/' . $nombreGrafico;
+        $ruta = '/public/image/' . $nombreGrafico;
+
+        $graphHelper->generateBarGraph($data, $labels, $title, $outputFile);
+
+        /*if (!$graphHelper->generateBarGraph($data, $labels, $title, $outputFile)) {
+            // Manejar error aquí, por ejemplo, logueando el error o mostrando un mensaje al usuario.
+            throw new Exception("Error al generar el gráfico.");
+        }*/
+
+        // Pasar datos y la ruta del gráfico a la vista
         $data = [
             'resultado' => $resultado,
             'filtro' => $filtro,
             'fecha' => $fecha_actual,
+            'grafico' => $ruta,
         ];
 
         $this->presenter->show('verCantidadJugadores', $data);
     }
+
+
 
 
 }
