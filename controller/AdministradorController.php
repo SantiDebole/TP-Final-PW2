@@ -20,6 +20,9 @@ class AdministradorController
         $fecha_actual = $_GET['fecha'] ?? date('Y-m-d');
         $resultado = $_GET['resultado'] ?? 0;
 
+        // Ruta del gráfico (debes asegurarte de pasar esta variable desde tu vista)
+        $grafico = $_SERVER['DOCUMENT_ROOT'] . '/public/image/grafico_' . $filtro . '_' . $fecha_actual . '.png';
+
         // Crear una nueva instancia de FPDF
         $pdf = new FPDF();
         $pdf->AddPage();
@@ -28,19 +31,26 @@ class AdministradorController
         $pdf->SetFont('Arial', 'B', 16);
 
         // Agregar título al PDF con los datos recibidos
-        $pdf->Cell(200, 10, "La cantidad de jugadores por $filtro en la fecha $fecha_actual es: $resultado", 0, 1, 'C');
+        $pdf->MultiCell(0, 10, "La cantidad de jugadores por $filtro en la fecha '$fecha_actual' es: $resultado", 0, 'C');
 
-        // Establecer fuente para el contenido
-        $pdf->SetFont('Arial', '', 12);
-
-        // Agregar un poco de espacio antes de los botones
+        // Agregar un espacio antes de insertar la imagen
         $pdf->Ln(10);
 
-             // Generar y mostrar el PDF
-        $pdf->Output('I', 'reporte.pdf'); // 'I' lo muestra en el navegador
+        // Insertar la imagen del gráfico al PDF
+        if (file_exists($grafico)) {
+            // Insertar el gráfico con dimensiones ajustadas
+            $pdf->Image($grafico, 50, 60, 100, 70); // Ajusta las coordenadas y dimensiones según sea necesario
+        } else {
+            // Mostrar un mensaje si no se encuentra el gráfico
+            $pdf->SetFont('Arial', 'I', 12);
+            $pdf->Cell(0, 10, "El gráfico no está disponible.", 0, 1, 'C');
+        }
 
+        // Generar y mostrar el PDF
+        $pdf->Output('I', 'reporte.pdf'); // 'I' lo muestra en el navegador
         ob_end_flush();
     }
+
 
 
     public function dashboard(){
