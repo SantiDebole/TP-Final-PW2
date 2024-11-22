@@ -46,7 +46,7 @@ class Router
 
 
 
-        var_dump($rutaConstruida);
+
 
         if (!isset($_SESSION['rol'])) {
             $rutasPermitidas = ['registro/listar',
@@ -92,17 +92,26 @@ class Router
                                          'perfil/listar',
 
                                          'editor/preguntasReportadas',
-                                        'perfil/listar',
-                                        'editorController/manejoAccionReporte',
-                                        'editor/modificarPreguntaYRespuestas',
-                                        'editor/mostrarFormularioEdicionPregunta',
+                                         'perfil/listar',
+                                         'editorController/manejoAccionReporte',
+                                         'editor/modificarPreguntaYRespuestas',
+                                         'editor/mostrarFormularioEdicionPregunta',
                                         ''];
 
                     break;
                 case "a":
                     $rutasPermitidas = [ 'lobby/listar',
                                          'login/validate',
-                                         'login/logout'];
+                                         'login/logout',
+                                         'perfil/listar',
+                                         'administrador/dashboard',
+                                            'administrador/cantidadJugadores',
+                                            'administrador/verCantidadJugadores',
+                                                'administrador/cantidadPartidasJugadas',
+                                                'administrador/verCantidadPartidasJugadas',
+                                                    'administrador/cantidadPreguntasEnElJuego',
+                                                    'administrador/verCantidadPreguntasEnElJuego',
+                                                        'administrador/imprimirPdf'];
                                          break;
             }
 

@@ -83,7 +83,7 @@ class PartidaModel
     }
     public function consultarPartidaDisponible($idUsuario)
     {
-        var_dump($idUsuario);
+
         $partidaDisponible = $this->tienePartidaDisponible($idUsuario);
         if ($partidaDisponible) {
             $pregunta = $this->tienePreguntaDisponible($partidaDisponible['id']);
@@ -103,7 +103,7 @@ class PartidaModel
     public function terminarPartida($idUsuario)
     {
         $partidaDisponible = $this->tienePartidaDisponible($idUsuario);
-        var_dump($partidaDisponible['id']);
+
         $pregunta = $this->tienePreguntaDisponible($partidaDisponible['id']);
         $this->marcarPartidaComoFinalizada($partidaDisponible['id']);
         $this->marcarPreguntaComoIncorrecta($pregunta);
@@ -275,7 +275,7 @@ class PartidaModel
         return $data;
     }
     private function controlarSiEsRespuestaCorrectaParaPreguntaObtenida($pregunta,$idRespuesta){
-        var_dump($pregunta['idPregunta']);
+
         $query="SELECT 1 
 FROM pregunta p
 JOIN respuesta r ON p.id = r.idPregunta

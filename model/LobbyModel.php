@@ -58,7 +58,7 @@ class LobbyModel
     {
         $usuario = $this->buscarUsuario($idBuscado);
         echo 'soy el usuario: ';
-        var_dump($usuario);
+
         if (is_null($usuario)){
             return $usuario;
         }else{
