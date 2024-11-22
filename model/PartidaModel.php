@@ -66,7 +66,7 @@ class PartidaModel
             } else {
 
                 $this->reiniciarRegistroDePreguntasVistasPorUsuario($idUsuario);
-                $this->getPreguntaConRespuestas($idUsuario, $idPartida);
+               return $this->getPreguntaConRespuestas($idUsuario, $idPartida);
             }
         }
     }
@@ -213,8 +213,18 @@ class PartidaModel
         $idPreguntaAleatoria = array_rand($preguntas);
         return $preguntas[$idPreguntaAleatoria];
     }
+
+    private function isNuevoJugador($idUsuario){
+        $query = "SELECT COUNT(*) as cantidadDeVecesQueJugo 
+        FROM partida p JOIN tienen t ON p.id = t.idPartida WHERE p.idUsuario = ? GROUP BY p.idUsuario;";
+        $result = $this->db->executeQueryConParametros($query,[$idUsuario])->fetch_assoc();
+        return $result["cantidadDeVecesQueJugo"] < 10;
+    }
+
+
     private function getPreguntasNoVistasPorUsuario($idUsuario,$nivel)
     {
+        if(!$this->isNuevoJugador($idUsuario)){
         $dificultad = $this->filtrarPreguntasPorNivelDeUsuario($nivel);
 
         $queryFuncional = "
@@ -238,6 +248,17 @@ class PartidaModel
             $preguntasNoVistasPorUsuario[] = $row["idPreguntaNoVista"];
         }
         return $preguntasNoVistasPorUsuario;
+        }
+        $query = "SELECT pr.id as idPregunta FROM pregunta pr WHERE pr.id NOT IN (SELECT up.idPregunta
+                FROM usuario u
+                JOIN UsuarioPregunta up ON u.id = up.idUsuario
+                WHERE u.id = ?)";
+        $result = $this->db->executeQueryConParametros($query,[$idUsuario]);
+        $preguntas=[];
+        while($row = $result->fetch_assoc()){
+            $preguntas[]=$row["idPregunta"];
+        }
+        return $preguntas;
     }
     private function obtenerRespuestasALaPregunta($idPregunta){
         $query = "SELECT p.id as idPregunta, p.descripcion as pregunta, c.descripcion as categoria_descripcion, c.color as color_categoria, r.descripcion as respuesta, r.id as idRta
