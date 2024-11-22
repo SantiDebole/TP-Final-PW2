@@ -17,14 +17,15 @@ class EditorController
         $this->presenter->show('sugerirPregunta');
     }
 
-// En el controlador
+    // Cuando clickeo enviar sugerencia, valida que los datos enviados por el form sean correctos y crea la pregunta con estado pendiente.
+    // Con la variable preguntaEnviada en true muestra un cartel de pregunta enviada correctamente
     public function validarPreguntaSugerida()
     {
-        $preguntaSugerida = isset($_POST['pregunta_sugerida']) ? $_POST['pregunta_sugerida'] : '';
-        $respuestaCorrecta = isset($_POST['respuesta_correcta']) ? $_POST['respuesta_correcta'] : '';
-        $respuestaIncorrecta1 = isset($_POST['respuesta_incorrecta_1']) ? $_POST['respuesta_incorrecta_1'] : '';
-        $respuestaIncorrecta2 = isset($_POST['respuesta_incorrecta_2']) ? $_POST['respuesta_incorrecta_2'] : '';
-        $idCategoria = isset($_POST['idCategoria']) ? $_POST['idCategoria'] : 1; // Default to 'Paises' if not set
+        $preguntaSugerida = $_POST['pregunta_sugerida'] ?? '';
+        $respuestaCorrecta = $_POST['respuesta_correcta'] ?? '';
+        $respuestaIncorrecta1 = $_POST['respuesta_incorrecta_1'] ?? '';
+        $respuestaIncorrecta2 = $_POST['respuesta_incorrecta_2'] ?? '';
+        $idCategoria = $_POST['idCategoria'] ?? 1; // La categoría default es países
         $estado = 'pendiente';
 
         // Llamar al método que guarda la pregunta y las respuestas
@@ -41,10 +42,157 @@ class EditorController
         $this->presenter->show('sugerirPregunta', ['preguntaEnviada' => true]);
     }
 
+    // Ver preguntas reportadas, Obtiene las preguntas reportadas junto a sus respuestas y se las manda a la vista
+    public function preguntasReportadas()
+    {
+        try {
+            $preguntasReportadas = $this->model->obtenerPreguntasReportadas();
+            foreach ($preguntasReportadas as &$pregunta) {
+                $respuestas = $this->model->obtenerRespuestasDeUnaPregunta($pregunta['id_pregunta']);
+                if (!empty($respuestas)) {
+                    $pregunta['respuestas'] = $respuestas;
+                }
+            }
+            $this->presenter->show('preguntasReportadas', ['preguntasReportadas' => $preguntasReportadas]);
+        } catch (Exception $e) {
+            $this->presenter->show('error', ['mensajeError' => "No se pudieron obtener las preguntas reportadas: " . $e->getMessage()]);
+        }
+    }
+
+    // Si se da de alta o da de baja, maneja la accion y redirige a la vista de los reportes
+    public function manejoAccionReporte()
+    {
+        try {
+            if (isset($_POST['accion']) && isset($_POST['idPregunta'])) {
+                $accion = $_POST['accion'];
+                $idPregunta = $_POST['idPregunta'];
+
+                $this->validarAccion($accion);
+                $this->validarIdPregunta($idPregunta);
+
+                $resultado = ($accion === 'darDeAlta')
+                    ? $this->model->darDeAltaReporte($idPregunta)
+                    : $this->model->darDeBajaReporte($idPregunta);
+
+                if ($resultado) {
+                    $this->redirigirAPreguntasReportadas();
+                } else {
+                    throw new Exception("Error al procesar la solicitud.");
+                }
+            } else {
+                throw new Exception("Datos incompletos.");
+            }
+        } catch (Exception $e) {
+            $this->presenter->show('error', ['mensajeError' => $e->getMessage()]);
+        }
+    }
+
+    // Si se elige modificar la pregunta, se muestra el form
+    public function mostrarFormularioEdicionPregunta()
+    {
+        try {
+            if (isset($_POST['idPregunta'])) {
+                $idPregunta = $_POST['idPregunta'];
+                $pregunta = $this->model->obtenerPreguntaPorId($idPregunta);
+                $respuestas = $this->model->obtenerRespuestasDeUnaPregunta($idPregunta);
+
+                $respuestasCorrecta = [];
+                $respuestasIncorrectas = [];
+
+                foreach ($respuestas as $respuesta) {
+                    if ($respuesta['es_correcta']) {
+                        $respuestasCorrecta[] = $respuesta;
+                    } else {
+                        $respuestasIncorrectas[] = $respuesta;
+                    }
+                }
+
+                $respuestas = array_merge($respuestasCorrecta, $respuestasIncorrectas);
+
+                foreach ($respuestas as $index => $respuesta) {
+                    $respuestas[$index]['isPrimerRespuesta'] = ($index == 0);
+                }
+
+                $data = [
+                    'id_pregunta' => $pregunta['id'],
+                    'texto_pregunta' => $pregunta['descripcion'],
+                    'respuestas' => $respuestas,
+                    'isCategoria1' => $pregunta['idCategoria'] == 1,
+                    'isCategoria2' => $pregunta['idCategoria'] == 2,
+                    'isCategoria3' => $pregunta['idCategoria'] == 3,
+                    'isCategoria4' => $pregunta['idCategoria'] == 4,
+                ];
+
+                $this->presenter->show('modificarPreguntaReportada', $data);
+            }
+        } catch (Exception $e) {
+            $this->presenter->show('error', ['mensajeError' => "No se pudo cargar la pregunta: " . $e->getMessage()]);
+        }
+    }
+
+    // Cuando guardo los cambios a la pregunta reportada, valida y aplica y redirige a preguntas reportadas
+    public function modificarPreguntaYORespuestas()
+    {
+        try {
+            $idPregunta = $_POST['idPregunta'];
+            if (isset($_POST['modificarPregunta']) && $_POST['modificarPregunta'] === 'true') {
+                $textoPregunta = $_POST['textoPregunta'];
+                $idCategoria = $_POST['idCategoria'];
+
+                $this->validarDatosPregunta($idPregunta, $textoPregunta, $idCategoria);
+
+                $preguntaActual = $this->model->obtenerPreguntaPorId($idPregunta);
+                if ($preguntaActual['texto'] !== $textoPregunta || $preguntaActual['categoria_id'] !== $idCategoria) {
+                    $this->model->modificarPregunta($idPregunta, $textoPregunta, $idCategoria);
+                }
+            }
+
+            if (isset($_POST['respuestas'])) {
+                foreach ($_POST['respuestas'] as $respuestaData) {
+                    $this->validarRespuesta($respuestaData);
+                    $respuestaActual = $this->model->obtenerRespuestaPorId($respuestaData['id_respuesta']);
+                    if ($respuestaActual['descripcion'] !== $respuestaData['descripcion']) {
+                        $this->model->modificarRespuesta($respuestaData['id_respuesta'], $respuestaData['descripcion']);
+                    }
+                }
+            }
+            $this->redirigirAPreguntasReportadas();
+        } catch (Exception $e) {
+            $this->presenter->show('error', ['mensajeError' => "Error al modificar la pregunta o respuestas: " . $e->getMessage()]);
+        }
+    }
+
+    // Si elige ver reportes, los muestra relacionados a esa pregunta en especifico (valor pasa por get)
+
+    public function verReportes()
+    {
+        // Validar que se recibió un parámetro GET
+        if (!isset($_GET['idPregunta']) || !is_numeric($_GET['idPregunta'])) {
+            $this->presenter->show("error", ["mensajeError" => "ID de pregunta inválido."]);
+            return;
+        }
+
+        $idPregunta = intval($_GET['idPregunta']); // Convertir a entero para mayor seguridad
+
+        try {
+            // Obtener los reportes de la pregunta
+            $reportes = $this->model->obtenerReportesDeUnaPregunta($idPregunta);
+
+            // Renderizar la vista de reportes
+            $this->presenter->show("reportesDePregunta", [
+                "id_pregunta" => $idPregunta,
+                "reportes" => $reportes,
+            ]);
+        } catch (Exception $e) {
+            $this->presenter->show("error", [
+                "mensajeError" => "No se pudieron obtener los reportes de la pregunta: " . $e->getMessage()
+            ]);
+        }
+    }
 
 
 
-
+    // Obtiene las preguntas sugeridas y las muestra
 
     public function preguntasSugeridas()
     {
@@ -62,6 +210,7 @@ class EditorController
         }
     }
 
+    // Dependiendo de la accion elegida, aprueba o rechaza la sugerencia
     public function manejoAccionSugerencia() {
         try {
             if (isset($_POST['accion']) && isset($_POST['idPregunta'])) {
@@ -96,156 +245,6 @@ class EditorController
         }
     }
 
-    private function redirigirAPreguntasSugeridas() {
-        header("Location: /editor/preguntasSugeridas");
-        exit();
-    }
-
-    public function preguntasReportadas()
-    {
-        try {
-            $preguntasReportadas = $this->model->obtenerPreguntasReportadas();
-            foreach ($preguntasReportadas as &$pregunta) {
-                $respuestas = $this->model->obtenerRespuestasDeUnaPregunta($pregunta['id_pregunta']);
-                if (!empty($respuestas)) {
-                    $pregunta['respuestas'] = $respuestas;
-                }
-            }
-            $this->presenter->show('preguntasReportadas', ['preguntasReportadas' => $preguntasReportadas]);
-        } catch (Exception $e) {
-            $this->presenter->show('error', ['mensajeError' => "No se pudieron obtener las preguntas reportadas: " . $e->getMessage()]);
-        }
-    }
-
-    public function verReportes()
-    {
-        // Validar que se recibió un parámetro GET
-        if (!isset($_GET['idPregunta']) || !is_numeric($_GET['idPregunta'])) {
-            $this->presenter->show("error", ["mensajeError" => "ID de pregunta inválido."]);
-            return;
-        }
-
-        $idPregunta = intval($_GET['idPregunta']); // Convertir a entero para mayor seguridad
-
-        try {
-            // Obtener los reportes de la pregunta
-            $reportes = $this->model->obtenerReportesDeUnaPregunta($idPregunta);
-
-            // Renderizar la vista de reportes
-            $this->presenter->show("reportesDePregunta", [
-                "id_pregunta" => $idPregunta,
-                "reportes" => $reportes,
-            ]);
-        } catch (Exception $e) {
-            $this->presenter->show("error", [
-                "mensajeError" => "No se pudieron obtener los reportes de la pregunta: " . $e->getMessage()
-            ]);
-        }
-    }
-
-
-
-
-
-    public function manejoAccionReporte()
-    {
-        try {
-            if (isset($_POST['accion']) && isset($_POST['idPregunta'])) {
-                $accion = $_POST['accion'];
-                $idPregunta = $_POST['idPregunta'];
-
-                $this->validarAccion($accion);
-                $this->validarIdPregunta($idPregunta);
-
-                $resultado = ($accion === 'darDeAlta')
-                    ? $this->model->darDeAltaReporte($idPregunta)
-                    : $this->model->darDeBajaReporte($idPregunta);
-
-                if ($resultado) {
-                    $this->redirigirAPreguntasReportadas();
-                } else {
-                    throw new Exception("Error al procesar la solicitud.");
-                }
-            } else {
-                throw new Exception("Datos incompletos.");
-            }
-        } catch (Exception $e) {
-            $this->presenter->show('error', ['mensajeError' => $e->getMessage()]);
-        }
-    }
-
-    public function modificarPreguntaYORespuestas()
-    {
-        try {
-            $idPregunta = $_POST['idPregunta'];
-            if (isset($_POST['modificarPregunta']) && $_POST['modificarPregunta'] === 'true') {
-                $textoPregunta = $_POST['textoPregunta'];
-                $idCategoria = $_POST['idCategoria'];
-
-                $this->validarDatosPregunta($idPregunta, $textoPregunta, $idCategoria);
-
-                $preguntaActual = $this->model->obtenerPreguntaPorId($idPregunta);
-                if ($preguntaActual['texto'] !== $textoPregunta || $preguntaActual['categoria_id'] !== $idCategoria) {
-                    $this->model->modificarPregunta($idPregunta, $textoPregunta, $idCategoria);
-                }
-            }
-
-            if (isset($_POST['respuestas'])) {
-                foreach ($_POST['respuestas'] as $respuestaData) {
-                    $this->validarRespuesta($respuestaData);
-                    $respuestaActual = $this->model->obtenerRespuestaPorId($respuestaData['id_respuesta']);
-                    if ($respuestaActual['descripcion'] !== $respuestaData['descripcion']) {
-                        $this->model->modificarRespuesta($respuestaData['id_respuesta'], $respuestaData['descripcion']);
-                    }
-                }
-            }
-            $this->redirigirAPreguntasReportadas();
-        } catch (Exception $e) {
-            $this->presenter->show('error', ['mensajeError' => "Error al modificar la pregunta o respuestas: " . $e->getMessage()]);
-        }
-    }
-
-    public function mostrarFormularioEdicionPregunta()
-    {
-        try {
-            if (isset($_POST['idPregunta'])) {
-                $idPregunta = $_POST['idPregunta'];
-                $pregunta = $this->model->obtenerPreguntaPorId($idPregunta);
-                $respuestas = $this->model->obtenerRespuestasDeUnaPregunta($idPregunta);
-
-                $respuestasCorrecta = [];
-                $respuestasIncorrectas = [];
-
-                foreach ($respuestas as $respuesta) {
-                    if ($respuesta['es_correcta']) {
-                        $respuestasCorrecta[] = $respuesta;
-                    } else {
-                        $respuestasIncorrectas[] = $respuesta;
-                    }
-                }
-
-                $respuestas = array_merge($respuestasCorrecta, $respuestasIncorrectas);
-
-                foreach ($respuestas as $index => $respuesta) {
-                    $respuestas[$index]['isFirstResponse'] = ($index == 0);
-                }
-
-                $data = [
-                    'id_pregunta' => $pregunta['id'],
-                    'texto_pregunta' => $pregunta['descripcion'],
-                    'respuestas' => $respuestas,
-                    'isCategoria1' => $pregunta['idCategoria'] == 1,
-                    'isCategoria2' => $pregunta['idCategoria'] == 2,
-                    'isCategoria3' => $pregunta['idCategoria'] == 3,
-                    'isCategoria4' => $pregunta['idCategoria'] == 4,
-                ];
-
-                $this->presenter->show('modificarPreguntaReportada', $data);
-            }
-        } catch (Exception $e) {
-            $this->presenter->show('error', ['mensajeError' => "No se pudo cargar la pregunta: " . $e->getMessage()]);
-        }
-    }
 
     // Métodos de validación privados
     private function validarAccion($accion) {
@@ -286,11 +285,18 @@ class EditorController
         }
     }
 
-    // Redirigir a preguntas reportadas
+    // Redireccionamientos
+
     private function redirigirAPreguntasReportadas()
     {
         header("Location: /editor/preguntasReportadas");
         exit();
     }
+
+    private function redirigirAPreguntasSugeridas() {
+        header("Location: /editor/preguntasSugeridas");
+        exit();
+    }
+
 
 }

@@ -33,12 +33,12 @@
                     <label for="respuesta{{id_respuesta}}" class="form-label">Respuesta {{@index + 1}}</label>
                     <input type="text" class="form-control" id="respuesta{{id_respuesta}}" name="respuestas[{{id_respuesta}}][descripcion]" value="{{descripcion}}" required>
 
-                    {{#isFirstResponse}}
+                    {{#isPrimerRespuesta}}
                         <p class="text-success"><strong>Correcta</strong></p>
-                    {{/isFirstResponse}}
-                    {{^isFirstResponse}}
+                    {{/isPrimerRespuesta}}
+                    {{^isPrimerRespuesta}}
                         <p class="text-danger"><strong>Incorrecta</strong></p>
-                    {{/isFirstResponse}}
+                    {{/isPrimerRespuesta}}
 
                     <input type="hidden" name="respuestas[{{id_respuesta}}][id_respuesta]" value="{{id_respuesta}}">
                 </div>
