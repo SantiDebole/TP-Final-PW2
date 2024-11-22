@@ -18,37 +18,37 @@
                 $respuestaIncorrecta2,
                 $estado,
                 $idCategoria
-            )
-            {
-                // Insertar la pregunta en la tabla `pregunta`
-                $sqlPregunta = "INSERT INTO pregunta (descripcion, estado, idCategoria) VALUES (?, ?, ?)";
-                $stmtPregunta = $this->database->connection->prepare($sqlPregunta);
-                $stmtPregunta->bind_param("ssi", $preguntaSugerida, $estado, $idCategoria); // Se añadió idCategoria
-                $stmtPregunta->execute();
+            ) {
+                // Iniciar transacción
+                $this->database->connection->begin_transaction();
 
-                $idPregunta = $this->database->connection->insert_id;
+                try {
+                    // Insertar la pregunta
+                    $sqlPregunta = "INSERT INTO pregunta (descripcion, estado, idCategoria) VALUES (?, ?, ?)";
+                    $stmtPregunta = $this->database->connection->prepare($sqlPregunta);
+                    $stmtPregunta->bind_param("ssi", $preguntaSugerida, $estado, $idCategoria);
+                    $stmtPregunta->execute();
+                    $idPregunta = $this->database->connection->insert_id;
 
-                // Insertar las respuestas
-                $sqlRespuesta = "INSERT INTO respuesta (descripcion, esCorrecta, idPregunta) VALUES (?, ?, ?)";
-                $stmtRespuesta = $this->database->connection->prepare($sqlRespuesta);
+                    // Insertar respuestas
+                    $sqlRespuestas = "INSERT INTO respuesta (descripcion, esCorrecta, idPregunta) VALUES 
+                          (?, 1, ?), (?, 0, ?), (?, 0, ?)";
+                    $stmtRespuestas = $this->database->connection->prepare($sqlRespuestas);
+                    $stmtRespuestas->bind_param(
+                        "sisisi",
+                        $respuestaCorrecta, $idPregunta,
+                        $respuestaIncorrecta1, $idPregunta,
+                        $respuestaIncorrecta2, $idPregunta
+                    );
+                    $stmtRespuestas->execute();
 
-                // Respuesta correcta
-                $esCorrecta = 1;
-                $stmtRespuesta->bind_param("sii", $respuestaCorrecta, $esCorrecta, $idPregunta);
-                $stmtRespuesta->execute();
-
-                // Respuesta incorrecta 1
-                $esCorrecta = 0;
-                $stmtRespuesta->bind_param("sii", $respuestaIncorrecta1, $esCorrecta, $idPregunta);
-                $stmtRespuesta->execute();
-
-                // Respuesta incorrecta 2
-                $stmtRespuesta->bind_param("sii", $respuestaIncorrecta2, $esCorrecta, $idPregunta);
-                $stmtRespuesta->execute();
-
-                // Cerrar las declaraciones
-                $stmtPregunta->close();
-                $stmtRespuesta->close();
+                    // Confirmar transacción
+                    $this->database->connection->commit();
+                } catch (Exception $e) {
+                    // Revertir transacción en caso de error
+                    $this->database->connection->rollback();
+                    throw $e;
+                }
             }
 
 
