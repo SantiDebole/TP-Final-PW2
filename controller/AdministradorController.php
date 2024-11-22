@@ -13,7 +13,7 @@ class AdministradorController
         $this->presenter = $presenter;
     }
 
-    public function imprimirPdf() {
+    public function imprimirCantidadJugadores() {
         ob_clean();
         // Obtener los parámetros de la URL
         $filtro = $_GET['filtro'] ?? 'dia';
