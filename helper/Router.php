@@ -114,7 +114,8 @@ class Router
                                                     'administrador/cantidadPreguntasEnElJuego',
                                                     'administrador/verCantidadPreguntasEnElJuego',
                                                         'administrador/imprimirCantidadJugadores',
-                                                        'administrador/imprimirCantidadPartidasJugadas'];
+                                                        'administrador/imprimirCantidadPartidasJugadas',
+                                                        'administrador/imprimirCantidadPreguntas'];
                                          break;
             }
 

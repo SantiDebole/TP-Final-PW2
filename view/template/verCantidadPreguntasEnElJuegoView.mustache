@@ -6,10 +6,10 @@
         <a href="/lobby/listar" class="btn btn-info">Ir al lobby</a>
         <a href="/administrador/dashboard" class="btn btn-info">Ir al dashboard</a>
         <a href="/administrador/cantidadPreguntasEnElJuego" class="btn btn-info">Ir al formulario</a>
-        <a href="#" class="btn btn-danger">Ver pdf</a>
+        <a href="/administrador/imprimirCantidadPreguntas?filtro={{filtro}}&fecha={{fecha}}&resultado={{resultado}}&uniqueId={{uniqueId}}" class="btn btn-danger" target="_blank">Ver pdf</a>
 
         <h2>La cantidad de preguntas en el juego por {{filtro}} en la fecha '{{fecha}}' es: {{resultado}}</h2>
-
+        <img src="{{grafico}}" alt="Gráfico de cantidad de jugadores" class="img-fluid">
     </div>
 
 
