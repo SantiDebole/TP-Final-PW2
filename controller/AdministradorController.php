@@ -57,9 +57,10 @@ class AdministradorController
         $filtro = $_GET['filtro'] ?? 'dia';
         $fecha_actual = $_GET['fecha'] ?? date('Y-m-d');
         $resultado = $_GET['resultado'] ?? 0;
+        $uniqueId = $_GET['uniqueId'] ?? 0;
 
         // Ruta del gráfico (debes asegurarte de pasar esta variable desde tu vista)
-        $grafico = $_SERVER['DOCUMENT_ROOT'] . '/public/image/grafico_' . $filtro . '_' . $fecha_actual . '.png';
+        $grafico = $_SERVER['DOCUMENT_ROOT'] . '/public/image/grafico_' . $filtro . '_' . $fecha_actual ."_".$uniqueId.'.png';
 
         // Crear una nueva instancia de FPDF
         $pdf = new FPDF();
@@ -166,7 +167,8 @@ class AdministradorController
         $labels = [$fecha_actual]; // Puedes ajustar según lo que necesites como etiquetas
         $data = [$resultado];     // Datos obtenidos de la consulta
         $title = "Cantidad de Jugadores por $filtro";
-        $nombreGrafico = "grafico_" . $filtro . "_" . $fecha_actual . ".png";
+        $uniqueId = uniqid();
+        $nombreGrafico = "grafico_" . $filtro . "_" . $fecha_actual ."_".$uniqueId. ".png";
         $outputFile = $_SERVER['DOCUMENT_ROOT'] . '/public/image/' . $nombreGrafico;
         $ruta = '/public/image/' . $nombreGrafico;
 
@@ -177,7 +179,8 @@ class AdministradorController
             'resultado' => $resultado,
             'filtro' => $filtro,
             'fecha' => $fecha_actual,
-            'grafico' => $ruta
+            'grafico' => $ruta,
+            'uniqueId' => $uniqueId
         ];
 
         $this->presenter->show('verCantidadPartidasJugadas', $data);
