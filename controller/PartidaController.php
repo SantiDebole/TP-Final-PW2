@@ -58,7 +58,7 @@ class PartidaController
             $preguntaConRespuestas = $this->model->getPreguntaConRespuestas($idUsuario, $idPartida);
             $tiempoRestante = $this->model->tiempoRestanteDeRespuesta($idPartida);
             $puntaje = $this->model->traerPuntajeDelUsuarioEnLaPartida($idPartida, $idUsuario);
-            var_dump($tiempoRestante);
+
             if ($preguntaConRespuestas) {
                 $data = [
 
