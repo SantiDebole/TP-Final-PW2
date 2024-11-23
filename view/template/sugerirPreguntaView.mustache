@@ -1,8 +1,11 @@
-<div class="flex-grow-1 ">
 
+
+
+<div class="flex-grow-1">
     <div class="container mt-5">
         <div class="d-flex justify-content-end mb-4 p-2">
-            <a href="/lobby/listar" class="btn btn-danger m-1">Ir al lobby</a>
+            <a href="/lobby/listar" class="btn btn-secondary m-1">Volver al lobby</a>
+
         </div>
 
         <div class="card shadow-sm">
@@ -10,6 +13,7 @@
                 <h4 class="mb-0">Crear una Pregunta</h4>
             </div>
             <div class="card-body">
+
                 <form action="/pregunta/validarPreguntaSugerida" method="post" enctype="multipart/form-data">
 
                     <div class="mb-3">
@@ -36,3 +40,56 @@
 
 
 </div>
+=======
+                {{#preguntaEnviada}}
+                    <!-- Mostrar el mensaje verde y el botón de volver al lobby -->
+                    <div class="alert alert-success text-center">
+                        <h4 class="alert-heading">¡Pregunta Enviada Correctamente!</h4>
+                        <p>Tu sugerencia de pregunta ha sido enviada correctamente. Un editor revisará tu sugerencia.</p>
+                        <a href="/lobby/listar" class="btn btn-success">Ir al Lobby</a>
+                    </div>
+                {{/preguntaEnviada}}
+
+                {{^preguntaEnviada}}
+                    <!-- Si la sugerencia no ha sido enviada, mostrar el formulario -->
+                    <form action="/editor/validarPreguntaSugerida" method="post">
+                        <div class="mb-3">
+                            <label for="pregunta_sugerida" class="form-label">Pregunta:</label>
+                            <input type="text" class="form-control" id="pregunta_sugerida" name="pregunta_sugerida" placeholder="Ingresa tu pregunta aquí" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="respuesta_correcta" class="form-label">Respuesta 1 - CORRECTA:</label>
+                            <input type="text" class="form-control" id="respuesta_correcta" name="respuesta_correcta" placeholder="Ingresa la primera respuesta" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="respuesta_incorrecta_1" class="form-label">Respuesta 2 - INCORRECTA:</label>
+                            <input type="text" class="form-control" id="respuesta_incorrecta_1" name="respuesta_incorrecta_1" placeholder="Ingresa la segunda respuesta" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="respuesta_incorrecta_2" class="form-label">Respuesta 3 - INCORRECTA:</label>
+                            <input type="text" class="form-control" id="respuesta_incorrecta_2" name="respuesta_incorrecta_2" placeholder="Ingresa la tercera respuesta" required>
+                        </div>
+
+                        <!-- Selección de Categoría -->
+                        <div class="mb-3">
+                            <label for="idCategoria" class="form-label">Categoría</label>
+                            <select class="form-select" id="idCategoria" name="idCategoria" required>
+                                <option value="1">Paises</option>
+                                <option value="2">Geografía</option>
+                                <option value="3">Astronomía</option>
+                                <option value="4">Literatura</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Enviar Sugerencia</button>
+                    </form>
+
+                {{/preguntaEnviada}}
+            </div>
+        </div>
+    </div>
+</div>
+
