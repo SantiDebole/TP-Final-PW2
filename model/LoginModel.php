@@ -19,20 +19,15 @@ class LoginModel {
 
     public function getUser($username){
         $sql = "SELECT * FROM usuario WHERE usuario = ? and esta_verificado =1";
-        $stmt = $this->db->connection->prepare($sql);
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        return $stmt->get_result()->fetch_assoc();
+        $result = $this->db->executeQueryConParametros($sql,[$username]);
+        return $result->fetch_assoc();
     }
 
     public function getUserRol($userId) {
         $sql = "SELECT rol FROM usuario WHERE id = ?";
-        $stmt = $this->db->connection->prepare($sql);
-        $stmt->bind_param("i", $userId);
-        $stmt->execute();
-
-        $result = $stmt->get_result()->fetch_assoc();
-        return $result ? $result['rol'] : null; //retorna null si no lo encuentra
+        $result = $this->db->executeQueryConParametros($sql,[$userId]);
+        $resultado = $result->fetch_assoc();
+        return $resultado ? $resultado['rol'] : null; //retorna null si no lo encuentra
     }
 
 

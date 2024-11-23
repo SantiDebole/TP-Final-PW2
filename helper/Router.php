@@ -44,6 +44,10 @@ class Router
         $rutasPermitidas = [];
         $rutaConstruida = "$controllerName/$methodName";
 
+
+
+
+
         if (!isset($_SESSION['rol'])) {
             $rutasPermitidas = ['registro/listar',
                 'registro/validarRegistro',
@@ -52,7 +56,6 @@ class Router
                 'login/listar',
                 'login/validate'
             ];
-            $this->controlDeRuta($rutaConstruida, $rutasPermitidas);
         } else {
             switch ($_SESSION['rol']) {
                 case "ur":
@@ -61,29 +64,60 @@ class Router
                         'lobby/verRivalPorQR',
                         'lobby/mis_partidas',
                         'lobby/ranking',
-                        'partida/jugar',
-                        'partida/responder',
                         'partida/mostrarPuntos',
+                        'partida/iniciarPartida',
+                        'partida/jugarNuevaPartida',
+                        'partida/crearPartida',
+                        'partida/preguntar',
+                        'partida/reanudarPartida',
+                        'partida/responder',
                         'login/logout',
                         'login/validate',
                         'perfil/listar',
+                        'reporte/reporteEnviado',
                         'reporte/reportarPregunta',
                         'reporte/reporteEnviadoCorrecta',
                         'reporte/reporteEnviadoIncorrecta',
-                        'pregunta/sugerirPregunta'];
+                        'pregunta/sugerirPregunta',
+                        'pregunta/validarPreguntaSugerida'];
                     break;
                 case "e":
-                    $rutasPermitidas = [ 'lobby/listar',
-                                         'login/validate',
-                                         'login/logout'];
+
+
+                    $rutasPermitidas = [
+                        'lobby/listar',
+                        'login/validate',
+                        'login/logout',
+                        'editor/preguntasReportadas',
+                        'perfil/listar',
+                        'editorController/manejoAccionReporte',
+                        'editor/modificarPreguntaYORespuestas',
+                        'editor/mostrarFormularioEdicionPregunta',
+                        'editor/verReportes',
+                        'editor/preguntasSugeridas',
+                        'editor/sugerirPregunta'
+                    ];
+
+
                     break;
+
                 case "a":
                     $rutasPermitidas = [ 'lobby/listar',
                                          'login/validate',
-                                         'login/logout'];
+                                         'login/logout',
+                                         'perfil/listar',
+                                         'administrador/dashboard',
+                                            'administrador/cantidadJugadores',
+                                            'administrador/verCantidadJugadores',
+                                                'administrador/cantidadPartidasJugadas',
+                                                'administrador/verCantidadPartidasJugadas',
+                                                    'administrador/cantidadPreguntasEnElJuego',
+                                                    'administrador/verCantidadPreguntasEnElJuego',
+                                                        'administrador/imprimirCantidadJugadores',
+                                                        'administrador/imprimirCantidadPartidasJugadas'];
                                          break;
             }
-            $this->controlDeRuta($rutaConstruida, $rutasPermitidas);
+
         }
 
 
@@ -93,10 +127,16 @@ class Router
     {
 
         foreach ($rutasPermitidas as $rutaPermitida) {
-            if ($rutaPermitida == $rutaConstruida) return true;
+            if ($rutaPermitida == $rutaConstruida) {
+                return true;
+            }
+
         }
-        if(isset($_SESSION['rol'])) {header("Location: /lobby/listar");
-        exit();}
+
+        if(isset($_SESSION['rol'])) {
+            header("Location: /lobby/listar");
+        exit();
+        }
         else {header("Location: /login/listar");
             exit();}
 

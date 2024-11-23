@@ -22,11 +22,17 @@ class PreguntaController {
     }
 
     public function validarPreguntaSugerida(){
-        //$idUsuario = $_SESSION['user_id'];
+        $preguntaSugerida = isset($_POST['pregunta_sugerida']) ? $_POST['pregunta_sugerida'] : '';
+        $respuestaCorrecta = isset($_POST['respuesta_correcta']) ? $_POST['respuesta_correcta'] : '';
+        $respuesta_incorrecta_1 = isset($_POST['respuesta_incorrecta_1']) ? $_POST['respuesta_incorrecta_1'] : '';
+        $respuesta_incorrecta_2 = isset($_POST['respuesta_incorrecta_2']) ? $_POST['respuesta_incorrecta_2'] : '';
+        $estado = "pendiente";
+
+        $this->model->agregarPreguntaConUnaRespuestaCorrectaYDosIncorrectasYCambiarDeEstado($preguntaSugerida,$respuestaCorrecta,$respuesta_incorrecta_1,$respuesta_incorrecta_2,$estado);
 
         //$data['perfil'] = $this->model->traerPerfil($idUsuario);
 
-        $this->presenter->show('sugerirPregunta');
+        $this->presenter->show('preguntaSugeridaEnviada');
     }
 
 }

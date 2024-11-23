@@ -18,8 +18,9 @@ class LobbyController {
         $userId = $_SESSION['user_id'];
         $username = $_SESSION['username'];
         $posicionRanking = $this->model->getPosicionRankingMejoresJugadores($username);
-        var_dump($posicionRanking);
-        var_dump($posicionRanking['puesto_ranking']);
+
+        //var_dump($posicionRanking);
+        //($posicionRanking['puesto_ranking']);
 
         // Preparar los datos para la vista
         $data = [
@@ -86,11 +87,13 @@ class LobbyController {
     }
 
 
+
     public function getUserById($id) { //ESTO ESTA MAL, TIENE QUE IR EN EL MODELO!!!
         $stmt = $this->conn->prepare("SELECT nombre, puntaje FROM usuarios WHERE id = :id");
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
 
     public function mis_partidas(){
         $idUsuario = $_SESSION['user_id'];
@@ -119,6 +122,13 @@ class LobbyController {
 
 
     }
+
+
+
+
+
+
+
 }
 ?>
 

@@ -1,0 +1,54 @@
+<h1 class="text-center my-4">Preguntas Sugeridas</h1>
+
+<div class="container">
+    <div class="text-center mt-4 mb-4">
+        <a href="/lobby/listar" class="btn btn-secondary">Volver al Lobby</a>
+    </div>
+    <div class="row justify-content-center">
+        {{#preguntasSugeridas}}
+            <div class="col-md-8 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Pregunta ID:</strong> {{id_pregunta}}
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Pregunta:</strong> {{descripcion}}</p>
+                        <p><strong>Respuestas:</strong></p>
+                        <ul class="list-unstyled">
+                            {{#respuestas}}
+                                <li class="mt-2 p-2
+                                    {{#es_correcta}}bg-success{{/es_correcta}}
+                                    {{^es_correcta}}bg-danger{{/es_correcta}}
+                                    text-white rounded">
+                                    {{descripcion}}
+                                </li>
+                            {{/respuestas}}
+                        </ul>
+                    </div>
+                    <div class="card-footer text-center">
+                        <form method="POST" action="/editor/manejoAccionSugerencia" class="d-inline">
+                            <input type="hidden" name="idPregunta" value="{{id_pregunta}}">
+                            <input type="hidden" name="accion" value="aprobar">
+                            <button type="submit" class="btn btn-success me-2">Aprobar</button>
+                        </form>
+
+                        <form method="POST" action="/editor/manejoAccionSugerencia" class="d-inline">
+                            <input type="hidden" name="idPregunta" value="{{id_pregunta}}">
+                            <input type="hidden" name="accion" value="rechazar">
+                            <button type="submit" class="btn btn-danger me-2">Rechazar</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        {{/preguntasSugeridas}}
+
+        {{^preguntasSugeridas}}
+            <div class="col-12">
+                <div class="alert alert-info text-center" role="alert">
+                    No hay preguntas sugeridas.
+                </div>
+            </div>
+        {{/preguntasSugeridas}}
+    </div>
+</div>

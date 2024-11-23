@@ -19,11 +19,7 @@ class LobbyModel
               JOIN tienen ON partida.id = tienen.idPartida
               WHERE partida.idUsuario = ?
               GROUP BY partida.id, partida.fecha, partida.estado;";
-
-        $stmt = $this->database->connection->prepare($query);
-        $stmt->bind_param("i", $idUsuario);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $result = $this->database->executeQueryConParametros($query,[$idUsuario]);
 
 
         $puntajeTotal = 0;
@@ -54,11 +50,7 @@ class LobbyModel
               GROUP BY partida.id, partida.fecha, partida.estado
               ORDER BY puntaje_total DESC
               LIMIT 1;";
-
-        $stmt = $this->database->connection->prepare($query);
-        $stmt->bind_param("i", $idUsuario);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $result = $this->database->executeQueryConParametros($query,[$idUsuario]);
         return $result->fetch_assoc(); // Retorna solo una fila con el puntaje más alto
     }
 
@@ -66,7 +58,7 @@ class LobbyModel
     {
         $usuario = $this->buscarUsuario($idBuscado);
         echo 'soy el usuario: ';
-        var_dump($usuario);
+
         if (is_null($usuario)){
             return $usuario;
         }else{
@@ -86,16 +78,16 @@ class LobbyModel
     private function buscarUsuario($idUsuario)
     {
         $query = "SELECT id, usuario, nombre_completo, fecha_nacimiento, genero, email, pais, ciudad, fecha_creacion FROM usuario where usuario = ?";
-        $param = "s";
-        return $this->ejecucionDeConsultaConFetch_assocConUnParametro($query, $param, $idUsuario);
+        $result = $this->database->executeQueryConParametros($query,[$idUsuario]);
+        return $result->fetch_assoc();
     }
-        private function ejecucionDeConsultaConFetch_assocConUnParametro($query, $param, $variable){
+       /* private function ejecucionDeConsultaConFetch_assocConUnParametro($query, $param, $variable){
         $stmt = $this->database->connection->prepare($query);
         $stmt->bind_param($param, $variable);
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_assoc();
-    }
+    }*/
 
 
     public function obtenerRanking()
@@ -118,7 +110,8 @@ class LobbyModel
                   GROUP BY usuario.id
                   ORDER BY puntaje_total DESC
                   LIMIT 10;";
-        return $this->ejecucionDeConsultaFetchAllSinParametros($query);
+        $result = $this->database->executeQuery($query);
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
     private function obtenerPartidasHistorico()
     {
@@ -134,7 +127,8 @@ class LobbyModel
                     GROUP BY partida.id, partida.fecha, partida.estado
                     ORDER BY puntaje_total DESC
                     LIMIT 10;";
-       return $this->ejecucionDeConsultaFetchAllSinParametros($query);
+        $result = $this->database->executeQuery($query);
+       return $result->fetch_all(MYSQLI_ASSOC);
     }
     private function obtenerPartidasDelMes()
     {
@@ -151,7 +145,8 @@ class LobbyModel
                         GROUP BY partida.id, partida.fecha, partida.estado
                         ORDER BY puntaje_total DESC
                         LIMIT 10;";
-       return $this->ejecucionDeConsultaFetchAllSinParametros($query);
+        $result = $this->database->executeQuery($query);
+       return $result->fetch_all(MYSQLI_ASSOC);
     }
     private function obtenerPartidasDeLaSemana()
     {
@@ -168,8 +163,8 @@ class LobbyModel
                         GROUP BY partida.id, partida.fecha, partida.estado
                         ORDER BY puntaje_total DESC
                         LIMIT 10;";
-
-       return $this->ejecucionDeConsultaFetchAllSinParametros($query);
+        $result = $this->database->executeQuery($query);
+       return $result->fetch_all(MYSQLI_ASSOC);
     }
     private function obtenerMejoresJugadores()
     {
@@ -200,9 +195,10 @@ class LobbyModel
                     GROUP BY usuario
                     ORDER by promedio_respuestas DESC;";
 
-
-        return $this->ejecucionDeConsultaFetchAllSinParametros($query);
+        $result = $this->database->executeQuery($query);
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
+
 
     public function getPosicionRankingMejoresJugadores($userNombre) {
         $query = "WITH PartidasOrdenadas AS (
@@ -236,12 +232,9 @@ ORDER BY puesto_ranking;
     ";
 
         // Preparar y ejecutar la consulta usando el parámetro userId
-        $stmt = $this->database->connection->prepare($query);
-        $stmt->bind_param("s", $userNombre);  // El tipo "i" es para un parámetro entero (userId)
-        $stmt->execute();
-
+        $result = $this->database->executeQueryConParametros($query,[$userNombre]);
         // Obtener el resultado como un arreglo asociativo
-        $resultado = $stmt->get_result()->fetch_assoc();
+        $resultado = $result->fetch_assoc();
 
         // Verificar si el resultado contiene datos
         if ($resultado) {
@@ -253,21 +246,19 @@ ORDER BY puesto_ranking;
     }
 
 
+    /*private function ejecucionDeConsultaFetchAllSinParametros($query)
+    {
 
-
-    private function ejecucionDeConsultaFetchAllSinParametros($query){
         try {
 
-    $stmt = $this->database->connection->prepare($query);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    return $result->fetch_all(MYSQLI_ASSOC);}
-        catch (Exception $e) {
-                // Manejo de la excepción, por ejemplo, registrar el error o lanzar una excepción personalizada
-              //  header("Location: lobby/mostrarError?error=$e");
-            echo "hay un error";}
-
-}
+            $stmt = $this->database->connection->prepare($query);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }*/
 
 
 //Las primeras 10 preguntas son rdm y no dependen del nivel.
@@ -275,6 +266,10 @@ ORDER BY puesto_ranking;
 // promedio < a 2 les damos las de 70% acetadas para arriba (malos)
 // promedio > a 2 y < a 4 (intermedio)
 // promedio > a 4 (experto)
+
+
+
+
 
 
 }

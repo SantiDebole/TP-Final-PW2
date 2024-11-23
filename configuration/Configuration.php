@@ -9,6 +9,8 @@ include_once ("./helper/Database.php");
 include_once ("./helper/Router.php");
 include_once ("./helper/Mailer.php");
 include_once ("./helper/GeneradorDeQR.php");
+include_once ("./helper/PdfHelper.php");
+include_once ("./helper/GraphHelper.php");
 //model
 include_once ("./model/RegistroModel.php");
 include_once("./model/LoginModel.php");
@@ -18,6 +20,7 @@ include_once ("./model/EditorModel.php");
 include_once ("./model/PartidaModel.php");
 include_once ("./model/ReporteModel.php");
 include_once ("./model/PreguntaModel.php");
+include_once ("./model/AdministradorModel.php");
 
 
 //controladores
@@ -26,10 +29,14 @@ include_once ("./controller/RegistroController.php");
 include_once ("./controller/LobbyController.php");
 include_once ("./controller/PerfilController.php");
 include_once ("./controller/PartidaController.php");
-include_once ("./controller/EditorController.php");
+
 include_once ("./controller/RegistroController.php");
 include_once ("./controller/ReporteController.php");
 include_once ("./controller/PreguntaController.php");
+
+include_once ("./controller/EditorController.php");
+include_once ("./controller/AdministradorController.php");
+
 
 
 
@@ -61,6 +68,15 @@ class Configuration
         return new MustachePresenter("./view/template");
     }
     // getCONTROLLERS
+
+    public function getAdministradorController(){
+        return new AdministradorController($this->getAdministradorModel(),$this->getPresenter());
+    }
+
+    // getMODELS
+    public function getAdministradorModel(){
+        return new AdministradorModel($this->getDatabase());
+    }
 
     public function getPreguntaController(){
         return new PreguntaController($this->getPreguntaModel(),$this->getPresenter());
