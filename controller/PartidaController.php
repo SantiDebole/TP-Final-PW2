@@ -100,9 +100,6 @@ class PartidaController
         $partida = $this->model->getPartida($idUsuario);
         $_SESSION["idPartida"] = $partida["id"];
     }
-
-
-
-
+    
 
 }
