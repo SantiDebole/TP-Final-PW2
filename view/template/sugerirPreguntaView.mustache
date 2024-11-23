@@ -1,11 +1,7 @@
-
-
-
 <div class="flex-grow-1">
     <div class="container mt-5">
         <div class="d-flex justify-content-end mb-4 p-2">
             <a href="/lobby/listar" class="btn btn-secondary m-1">Volver al lobby</a>
-
         </div>
 
         <div class="card shadow-sm">
@@ -13,34 +9,6 @@
                 <h4 class="mb-0">Crear una Pregunta</h4>
             </div>
             <div class="card-body">
-
-                <form action="/pregunta/validarPreguntaSugerida" method="post" enctype="multipart/form-data">
-
-                    <div class="mb-3">
-                        <label for="pregunta_sugerida" class="form-label">Pregunta:</label>
-                        <input type="text" class="form-control" id="pregunta_sugerida" name="pregunta_sugerida" placeholder="Ingresa tu pregunta aquí" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="respuesta_correcta" class="form-label">Respuesta 1 - CORRECTA: </label>
-                        <input type="text" class="form-control" id="answer1" name="respuesta_correcta" placeholder="Ingresa la primera respuesta" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="respuesta_incorrecta_1" class="form-label">Respuesta 2 - INCORRECTA:</label>
-                        <input type="text" class="form-control" id="answer2" name="respuesta_incorrecta_1" placeholder="Ingresa la segunda respuesta" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="respuesta_incorrecta_2" class="form-label">Respuesta 3 - INCORRECTA:</label>
-                        <input type="text" class="form-control" id="answer3" name="respuesta_incorrecta_2" placeholder="Ingresa la tercera respuesta" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Enviar Pregunta</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-</div>
-=======
                 {{#preguntaEnviada}}
                     <!-- Mostrar el mensaje verde y el botón de volver al lobby -->
                     <div class="alert alert-success text-center">
@@ -92,4 +60,3 @@
         </div>
     </div>
 </div>
-
