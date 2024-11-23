@@ -65,7 +65,7 @@ class EditorModel
              FROM reporte
              JOIN usuario ON reporte.usuario_id = usuario.id
              JOIN pregunta ON reporte.pregunta_id = pregunta.id
-             WHERE reporte.estado = 'activa'
+             WHERE reporte.estado = 'activo'
              ORDER BY pregunta.id ASC;";
         return $this->ejecucionDeConsultaFetchAllSinParametros($query);
     }
