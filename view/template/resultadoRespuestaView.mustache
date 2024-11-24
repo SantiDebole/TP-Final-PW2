@@ -1,51 +1,56 @@
-<div class="flex-grow-1 ">
+<div class="flex-grow-1">
 
-    <div class="container mt-5 ">
-        <h2 class="mb-4">PUNTAJE: {{puntaje}}</h2>
+    <div class="container mt-5">
+        <div class="text-center">
+            <h2 class="mb-4">PUNTAJE: <span class="badge bg-secondary">{{puntaje}}</span></h2>
+        </div>
 
         {{#resultadoCorrecta}}
-            <h2 class="mb-4">Resultado ultima pregunta: <span class="text-danger">{{resultadoCorrecta}}</span></h2>
-            <a href="/partida/preguntar" class="btn btn-info">Siguiente pregunta</a>
+            <div class="alert alert-success text-center">
+                <h4 class="mb-4">Resultado última pregunta:</h4>
+                <p class="fw-bold">{{resultadoCorrecta}}</p>
+                <a href="/partida/preguntar" class="btn btn-info">Siguiente pregunta</a>
+            </div>
         {{/resultadoCorrecta}}
-        {{#resultadoIncorrecta}}
-            <h2 class="mb-4">Resultado ultima pregunta: <span class="text-danger">{{resultadoIncorrecta}}</span></h2>
-            <h2>Juego finalizado: </h2>
-        {{/resultadoIncorrecta}}
-        <br>
-        <a href="/lobby/listar" class="btn btn-info">Ir al lobby</a>
 
+        {{#resultadoIncorrecta}}
+            <div class="alert alert-danger text-center">
+                <h4 class="mb-4">Resultado última pregunta:</h4>
+                <p class="fw-bold">{{resultadoIncorrecta}}</p>
+                <h2>Juego finalizado</h2>
+            </div>
+        {{/resultadoIncorrecta}}
+
+        <div class="text-center mt-3">
+            <a href="/lobby/listar" class="btn btn-primary">Ir al lobby</a>
+        </div>
     </div>
 
-    <div class="container mt-5 ">
-        <!-- Encabezado h2 -->
-        <h1 class="mb-4">Hubo algun problema con la pregunta con el ID: {{ultimaPregunta}}? </h1>
-        <h2 class="mb-4">ID DEL USUARIO: {{loggedUserId}}</h2>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">¿Hubo algún problema con la pregunta?</h1>
+        <p class="text-center">ID de la pregunta: <span class="fw-bold">{{ultimaPregunta}}</span></p>
+        <p class="text-center">ID del usuario: <span class="fw-bold">{{loggedUserId}}</span></p>
 
-        <div class="container mt-5">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header text-center bg-primary text-white">
-                            <h4>Reportar Pregunta</h4>
-                        </div>
-                        <div class="card-body">
-                            <form action="/reporte/reporteEnviado" method="post" enctype="multipart/form-data">
-                                <div class="form-group">
-                                    <label for="textoReportePregunta">Describe el problema con la pregunta:</label>
-                                    <input type="hidden" name="idUsuario" value="{{loggedUserId}}">
-                                    <input type="hidden" name="idPregunta" value="{{ultimaPregunta}}">
-
-                                    <textarea class="form-control" id="textoReportePregunta" name="textoReportePregunta" rows="4" placeholder="Escribe aquí los detalles..."></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-block">Enviar Reporte</button>
-                            </form>
-                        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow">
+                    <div class="card-header text-center bg-primary text-white">
+                        <h4>Reportar Pregunta</h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="/reporte/reporteEnviado" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="textoReportePregunta" class="form-label">Describe el problema:</label>
+                                <input type="hidden" name="idUsuario" value="{{loggedUserId}}">
+                                <input type="hidden" name="idPregunta" value="{{ultimaPregunta}}">
+                                <textarea class="form-control" id="textoReportePregunta" name="textoReportePregunta" rows="4" placeholder="Escribe aquí los detalles..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Enviar Reporte</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-
 
 </div>
