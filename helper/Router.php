@@ -45,9 +45,6 @@ class Router
         $rutaConstruida = "$controllerName/$methodName";
 
 
-
-
-
         if (!isset($_SESSION['rol'])) {
             $rutasPermitidas = ['registro/listar',
                 'registro/validarRegistro',
@@ -118,6 +115,7 @@ class Router
                                                         'administrador/imprimirCantidadPreguntas'];
                                          break;
             }
+            $this->controlDeRuta($rutaConstruida, $rutasPermitidas);
 
         }
 
