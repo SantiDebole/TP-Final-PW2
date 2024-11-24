@@ -57,7 +57,7 @@ class LobbyModel
     public function buscarDatosDeOtrosJugadores($idBuscado)
     {
         $usuario = $this->buscarUsuario($idBuscado);
-        echo 'soy el usuario: ';
+
 
         if (is_null($usuario)){
             return $usuario;
@@ -77,8 +77,9 @@ class LobbyModel
 
     private function buscarUsuario($idUsuario)
     {
-        $query = "SELECT id, usuario, nombre_completo, fecha_nacimiento, genero, email, pais, ciudad, fecha_creacion FROM usuario where usuario = ?";
+        $query = "SELECT id, usuario, nombre_completo, fecha_nacimiento, genero, email, pais, ciudad, fecha_creacion, foto_perfil FROM usuario where usuario = ?";
         $result = $this->database->executeQueryConParametros($query,[$idUsuario]);
+
         return $result->fetch_assoc();
     }
        /* private function ejecucionDeConsultaConFetch_assocConUnParametro($query, $param, $variable){

@@ -49,6 +49,7 @@ class LobbyController {
             exit();
         }else{
             $usuario[] = $this->model->buscarDatosDeOtrosJugadores($idBuscado);
+
         }
         if($usuario[0] == NULL){
             $rol = $_SESSION['rol'];
