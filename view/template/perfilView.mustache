@@ -1,111 +1,119 @@
-<div class="flex-grow-1 ">
-    <div class="container mt-5 mb-5 bg-light">
-        {{#perfil}}
-            <a href="/lobby/listar">Ir al lobby</a>
-            <div class="container">
-                <div class="img-container mx-auto" style="max-width: 300px;">
-                    <img src="{{foto_perfil}}" class="img-fluid" alt="Descripción de la imagen">
-                </div>
+<div class="container py-5">
+    <!-- Sección Perfil -->
+    {{#perfil}}
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header text-center">
+                <a href="/lobby/listar" class="btn btn-primary">Ir al Lobby</a>
             </div>
-            <h1>Bienvenido usuario con el id: {{id}}</h1>
-            <h2>Usuario: {{usuario}}</h2>
-            <h3>Nombre completo: {{nombre_completo}}</h3>
-            <h4>Fecha nacimiento: {{fecha_nacimiento}}</h4>
-            <h5>Genero: {{genero}}</h5>
-            <h6>Email: {{email}}</h6>
-        <div class="container mt-4">
-            <div class="row">
-                <div class="col-12">
-                    <div id="map" style="width: 100%; height: 400px;"></div>
-                    <h6>Es de {{ciudad}}, {{pais}}</h6>
+            <div class="card-body text-center">
+                <div class="img-container mx-auto mb-3" style="max-width: 300px;">
+                    <img src="{{foto_perfil}}" class="rounded-circle img-fluid" alt="Foto de perfil">
                 </div>
+                <h1 class="card-title">Bienvenido usuario con el ID: {{id}}</h1>
+                <p><strong>Usuario:</strong> {{usuario}}</p>
+                <p><strong>Nombre completo:</strong> {{nombre_completo}}</p>
+                <p><strong>Fecha de nacimiento:</strong> {{fecha_nacimiento}}</p>
+                <p><strong>Género:</strong> {{genero}}</p>
+                <p><strong>Email:</strong> {{email}}</p>
             </div>
-        {{/perfil}}
+            <div class="card-footer">
+                <div id="map" class="rounded mb-3" style="width: 100%; height: 400px;"></div>
+                <p class="text-center">Es de {{ciudad}}, {{pais}}</p>
+            </div>
+        </div>
+    {{/perfil}}
 
-        {{#perfilRival}}
-            <a href="/lobby/listar">Ir al lobby</a>
-            <div class="container">
-                <div class="img-container mx-auto" style="max-width: 300px;">
-                    <img src="/public/image/{{foto_perfil}}" class="img-fluid" alt="Descripción de la imagen">
-                    <img src="/public/QRs/{{usuario}}.png" class="img-fluid" alt="qr">
+    <!-- Sección Perfil Rival -->
+    {{#perfilRival}}
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header text-center">
+                <a href="/lobby/listar" class="btn btn-primary">Ir al Lobby</a>
+            </div>
+            <div class="card-body text-center">
+                <div class="img-container mx-auto mb-3" style="max-width: 300px;">
+                    <img src="/public/image/{{foto_perfil}}" class="rounded-circle img-fluid mb-2" alt="Foto de perfil">
+                    <img src="/public/QRs/{{usuario}}.png" class="img-fluid" alt="QR">
                 </div>
+                <p><strong>Usuario:</strong> {{usuario}}</p>
+                <p><strong>Nombre completo:</strong> {{nombre_completo}}</p>
+                <p><strong>Fecha de nacimiento:</strong> {{fecha_nacimiento}}</p>
+                <p><strong>Género:</strong> {{genero}}</p>
+                <p><strong>Email:</strong> {{email}}</p>
+                <p><strong>Juega desde:</strong> {{fecha_creacion}}</p>
             </div>
-            <h2>Usuario: {{usuario}}</h2>
-            <h3>Nombre completo: {{nombre_completo}}</h3>
-            <h4>Fecha nacimiento: {{fecha_nacimiento}}</h4>
-            <h5>Genero: {{genero}}</h5>
-            <h6>Email: {{email}}</h6>
-            <h6>Juega desde : {{fecha_creacion}}</h6>
-            <div class="container mt-4">
-                <div class="row">
-                    <div class="col-12">
-                        <div id="map" style="width: 100%; height: 400px;"></div>
-                        <h6>Es de {{ciudad}}, {{pais}}</h6>
-                    </div>
-                </div>
-
-
-
-
-        <h2>Puntaje total acumulado: {{puntaje_total}}</h2>
-
-            <h1 class="text-center mb-4">Mejor partida:</h1>
-            <div class="table-responsive">
-                <table class="table table-hover table-bordered table-striped align-middle">
-                    <thead class="table-dark text-center">
-                    <tr>
-                        <th scope="col">ID de Partida</th>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Puntaje</th>
-
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    {{#mejor_partida}}
-                        <tr class="text-center">
-                            <td>{{id_partida}}</td>
-                            <td>{{fecha_partida}}</td>
-                            <td>{{estado_partida}}</td>
-                            <td>{{puntaje_total}}</td>
-                        </tr>
-                    {{/mejor_partida}}
-                    </tbody>
-                </table>
-            </div>
-            <h1 class="text-center mb-4">Todas las Partidas</h1>
-            <div class="table-responsive">
-                <table class="table table-hover table-bordered table-striped align-middle">
-                    <thead class="table-dark text-center">
-                    <tr>
-                        <th scope="col">ID de Partida</th>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Puntaje</th>
-
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{#partidas}}
-                        <tr class="text-center">
-                            <td>{{id_partida}}</td>
-                            <td>{{fecha_partida}}</td>
-                            <td>{{estado_partida}}</td>
-                            <td>{{puntaje_total}}</td>
-                        </tr>
-                    {{/partidas}}
-
-                    </tbody>
-                </table>
+            <div class="card-footer">
+                <div id="map" class="rounded mb-3" style="width: 100%; height: 400px;"></div>
+                <p class="text-center">Es de {{ciudad}}, {{pais}}</p>
             </div>
         </div>
 
-        {{/perfilRival}}
-    </div>
+        <!-- Puntaje Total -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title text-center">Puntaje Total Acumulado: {{puntaje_total}}</h2>
+            </div>
+        </div>
 
-    </div>
+        <!-- Mejor Partida -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h2 class="text-center mb-4">Mejor Partida</h2>
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-dark text-center">
+                        <tr>
+                            <th>ID de Partida</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Puntaje</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#mejor_partida}}
+                            <tr class="text-center">
+                                <td>{{id_partida}}</td>
+                                <td>{{fecha_partida}}</td>
+                                <td>{{estado_partida}}</td>
+                                <td>{{puntaje_total}}</td>
+                            </tr>
+                        {{/mejor_partida}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Todas las Partidas -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h2 class="text-center mb-4">Todas las Partidas</h2>
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-dark text-center">
+                        <tr>
+                            <th>ID de Partida</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Puntaje</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#partidas}}
+                            <tr class="text-center">
+                                <td>{{id_partida}}</td>
+                                <td>{{fecha_partida}}</td>
+                                <td>{{estado_partida}}</td>
+                                <td>{{puntaje_total}}</td>
+                            </tr>
+                        {{/partidas}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {{/perfilRival}}
 </div>
+
 <script>
 // Inicializar el mapa en una ubicación predeterminada (puedes ajustarlo según tu preferencia)
 var map = L.map('map').setView([20.5937, 78.9629], 2); // Latitud y longitud de India (puedes cambiarlo)

@@ -28,8 +28,8 @@ class LobbyController {
                 'loggedUserId' => $userId,
                 'username' => $username,
                 'rol' => $rol,
-                'posicionRanking' => $posicionRanking['puesto_ranking'],
-                'puntajePosicionRanking' => $posicionRanking['promedio_respuestas']
+                'posicionRanking' => isset($posicionRanking['puesto_ranking'])?$posicionRanking['puesto_ranking']:'',
+                'puntajePosicionRanking' => isset($posicionRanking['promedio_respuestas'])?$posicionRanking['promedio_respuestas']:'',
             ],
             'rol' => $rol,
             'isAdmin' => ($rol === 'a'),
@@ -82,7 +82,6 @@ class LobbyController {
     }
     public function verRivalPorQr($usuario){
         $idBuscado = $usuario;
-
         $generadorDeQR = new GeneradorDeQR();
         $generadorDeQR->generarQRParaPerfil($usuario);
         $data['perfilRival'] = $this->model->buscarDatosDeOtrosJugadores($idBuscado);

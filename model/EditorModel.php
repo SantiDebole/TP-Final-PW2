@@ -4,7 +4,7 @@ class EditorModel
 {
     private $database;
     const ESTADO_PENDIENTE = 'pendiente';
-    const ESTADO_ACTIVA = 'activa';
+    const ESTADO_ACTIVA = 'activo';
     const ESTADO_DESACTIVADA = 'desactivada';
     const ESTADO_INACTIVA = 'inactiva';
     public function __construct($database)
@@ -98,7 +98,6 @@ class EditorModel
               ORDER BY reporte.id ASC;";
         return $this->ejecucionDeConsultaFetchAllConParametros($query, [$id_pregunta, self::ESTADO_ACTIVA]);
     }
-
 
 
     // Método para dar de alta (solo cambia el estado de los reportes a 'inactiva')
