@@ -115,10 +115,10 @@ class Router
                                                         'administrador/imprimirCantidadPreguntas'];
                                          break;
             }
-            $this->controlDeRuta($rutaConstruida, $rutasPermitidas);
+
 
         }
-
+        $this->controlDeRuta($rutaConstruida, $rutasPermitidas);
 
     }
 
