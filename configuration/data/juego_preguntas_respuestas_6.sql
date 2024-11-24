@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 20, 2024 at 09:08 PM
+-- Generation Time: Nov 24, 2024 at 03:17 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -123,7 +123,9 @@ INSERT INTO `partida` (`id`, `estado`, `fecha`, `idUsuario`) VALUES
 (126, 'inactivo', '2024-11-20 01:11:52', 16),
 (127, 'inactivo', '2024-11-20 01:14:00', 16),
 (128, 'inactivo', '2024-11-20 01:14:06', 16),
-(129, 'Activo', '2024-11-20 01:14:28', 16);
+(129, 'inactivo', '2024-11-20 01:14:28', 16),
+(130, 'inactivo', '2024-11-23 22:19:50', 16),
+(131, 'inactivo', '2024-11-23 22:24:34', 16);
 
 -- --------------------------------------------------------
 
@@ -151,7 +153,7 @@ INSERT INTO `pregunta` (`id`, `descripcion`, `estado`, `idCategoria`) VALUES
 (6, '¿Qué país tiene la mayor cantidad de islas en el mundo?', 'activa', 2),
 (7, '¿Qué planeta es conocido como el \"planeta rojo\"?', 'activa', 3),
 (8, '¿Cuántas lunas tiene la Tierra?', 'activa', 3),
-(9, '¿Qué planeta es el más grande del sistema solar?', 'reportada', 3),
+(9, '¿Qué planeta es el más grande del sistema solar?', 'desactivada', 3),
 (10, '¿Quién es el autor de \"Don Quijote de la Mancha\"?', 'activa', 4),
 (11, '¿En qué siglo se escribió \"La Odisea\" de Homero?', 'activa', 4),
 (12, '¿Cuál de los siguientes es un libro escrito por Gabriel García Márquez?', 'activa', 4),
@@ -211,7 +213,10 @@ INSERT INTO `pregunta` (`id`, `descripcion`, `estado`, `idCategoria`) VALUES
 (66, '¿Qué dispositivo convierte la energía solar en energía eléctrica?', 'activa', 7),
 (67, '¿En qué continente se encuentra el Monte Kilimanjaro?', 'activa', 2),
 (68, '¿Qué instrumento mide la presión atmosférica?', 'activa', 5),
-(69, '¿Cuál es el país más grande del mundo por superficie?', 'activa', 1);
+(69, '¿Cuál es el país más grande del mundo por superficie?', 'activa', 1),
+(70, 'asd', 'pendiente', 1),
+(71, 'aa', 'desactivada', 1),
+(72, 'as', 'desactivada', 1);
 
 -- --------------------------------------------------------
 
@@ -232,7 +237,10 @@ CREATE TABLE `reporte` (
 --
 
 INSERT INTO `reporte` (`id`, `usuario_id`, `pregunta_id`, `texto`, `estado`) VALUES
-(11, 14, 9, 'esta rara', 'activo');
+(11, 14, 9, 'esta rara', 'inactiva'),
+(12, 16, 39, 'asd', 'activo'),
+(13, 16, 43, 'qr', 'activo'),
+(14, 16, 42, 'asd', 'activo');
 
 -- --------------------------------------------------------
 
@@ -452,7 +460,16 @@ INSERT INTO `respuesta` (`id`, `descripcion`, `esCorrecta`, `idPregunta`) VALUES
 (201, 'Charles Babbage', 0, 14),
 (202, 'Portugués', 1, 17),
 (203, 'Español', 0, 17),
-(204, 'Francés', 0, 17);
+(204, 'Francés', 0, 17),
+(205, '1', 1, 70),
+(206, '2', 0, 70),
+(207, '3', 0, 70),
+(208, 'asd', 1, 71),
+(209, 'sdsd', 0, 71),
+(210, 'asd', 0, 71),
+(211, 'as', 1, 72),
+(212, 'as', 0, 72),
+(213, 'as', 0, 72);
 
 -- --------------------------------------------------------
 
@@ -7022,7 +7039,10 @@ INSERT INTO `tienen` (`idPartida`, `idPregunta`, `fecha`, `puntaje`) VALUES
 (128, 41, '2024-11-20 01:14:06', 1),
 (128, 59, '2024-11-20 01:14:08', 1),
 (128, 61, '2024-11-20 01:14:12', 1),
-(129, 65, '2024-11-20 01:14:28', 1);
+(129, 65, '2024-11-20 01:14:28', 1),
+(130, 39, '2024-11-23 22:19:50', 1),
+(130, 43, '2024-11-23 22:20:01', 0),
+(131, 42, '2024-11-23 22:24:35', 0);
 
 -- --------------------------------------------------------
 
@@ -7052,21 +7072,22 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id`, `nombre_completo`, `usuario`, `fecha_nacimiento`, `genero`, `email`, `password`, `rol`, `foto_perfil`, `pais`, `ciudad`, `fecha_creacion`, `esta_verificado`, `token_verificacion`) VALUES
-(1, 'Juan Pérez', 'juanperez123', '1990-03-12', 'Masculino', 'juanperez123@gmail.com', 'password1', 'a', 'foto1.jpg', 'México', 'Ciudad de México', '2024-01-01', 1, 12345),
-(2, 'María López', 'maria_lopez', '1985-07-20', 'F', 'maria.lopez@mail.com', 'maria85', 'e', 'maria_lopez.jpg', 'México', 'Ciudad de México', '2023-06-15', 1, 2147483647),
-(3, 'Carlos López', 'carloslopez789', '1992-11-30', 'Masculino', 'carloslopez789@gmail.com', 'password3', 'ur', 'foto3.jpg', 'Argentina', 'Buenos Aires', '2024-03-15', 1, 11223),
-(4, 'Ana Rodríguez', 'anarodriguez101', '1995-07-05', 'Femenino', 'anarodriguez101@gmail.com', 'password4', 'a', 'foto4.jpg', 'Colombia', 'Bogotá', '2024-04-10', 1, 44556),
-(5, 'Luis García', '@luis_garcia', '1988-05-05', 'M', 'luis.garcia@mail.com', 'LuisGarc88', 'a', 'luis_garcia.jpg', 'Colombia', 'Bogotá', '2023-09-01', 0, NULL),
-(6, 'Sofía Torres', 'sofia.torres303', '1993-02-14', 'Femenino', 'sofia.torres303@gmail.com', 'password6', 'ur', 'foto6.jpg', 'Chile', 'Santiago', '2024-06-25', 1, 33445),
-(7, 'Ricardo Fernández', 'ricardofernandez404', '1990-10-10', 'Masculino', 'ricardofernandez404@gmail.com', 'password7', 'a', 'foto7.jpg', 'México', 'Monterrey', '2024-07-30', 0, 22334),
-(8, 'Laura Sánchez', 'laurasanchez505', '1996-01-25', 'Femenino', 'laurasanchez505@gmail.com', 'password8', 'e', 'foto8.jpg', 'España', 'Barcelona', '2024-08-05', 1, 55667),
-(9, 'José Ramírez', 'joseramirez606', '1983-05-17', 'Masculino', 'joseramirez606@gmail.com', 'password9', 'ur', 'foto9.jpg', 'Argentina', 'Córdoba', '2024-09-12', 1, 88990),
-(10, 'Isabel Díaz', 'isabel.diaz707', '1994-09-02', 'Femenino', 'isabel.diaz707@gmail.com', 'password10', 'a', 'foto10.jpg', 'Perú', 'Arequipa', '2024-10-01', 0, 11234),
-(14, 'usuarioleo', 'usuarioleo', '0000-00-00', '', 'leandrojavierloureiro@gmail.comaa', 'usuarioleo', 'ur', '', '', '', '0000-00-00', 1, 5623866),
-(15, 'qr', 'qr', '0000-00-00', 'femenino', 'leandrojavierloureiro@gmail.com', 'qr', 'e', '319165_255720784462118_1025491_n.jpg', 'Brazil', 'Iguatu', '0000-00-00', 1, 8),
-(16, 'eric', 'eric', '2002-05-16', 'masculino', 'ericaquino2002@gmail.com', 'eric', 'ur', '', 'Argentina', 'La Plata', '0000-00-00', 1, 5840942),
-(98, 'Luis Martínez', 'luismartinez202', '1988-12-18', 'Masculino', 'luismartinez202@gmail.com', 'password5', 'e', 'foto5.jpg', 'Perú', 'Lima', '2024-05-20', 0, 77889),
-(99, 'María González', 'mariagonzalez456', '1985-08-22', 'Femenino', 'mariagonzalez456@gmail.com', 'password2', 'ur', 'foto2.jpg', 'España', 'Madrid', '2024-02-10', 0, 67890);
+(1, 'Juan Pérez', 'admin', '1990-03-12', 'Masculino', 'juanperez123@gmail.com', 'admin', 'a', 'foto.jpg', 'México', 'Ciudad de México', '2024-06-27', 1, 12345),
+(2, 'María López', 'maria_lopez', '1985-07-20', 'F', 'maria.lopez@mail.com', 'maria85', 'ur', 'foto.jpg', 'México', 'Ciudad de México', '2024-06-24', 1, 2147483647),
+(3, 'Carlos López', 'carloslopez789', '1992-11-30', 'Masculino', 'carloslopez789@gmail.com', 'password3', 'ur', 'foto.jpg', 'Argentina', 'Buenos Aires', '2024-03-15', 1, 11223),
+(4, 'Ana Rodríguez', 'anarodriguez101', '1995-07-05', 'Femenino', 'anarodriguez101@gmail.com', 'password4', 'a', 'foto.jpg', 'Colombia', 'Bogotá', '2024-04-10', 1, 44556),
+(5, 'Luis García', '@luis_garcia', '1988-05-05', 'M', 'luis.garcia@mail.com', 'LuisGarc88', 'a', 'foto.jpg', 'Colombia', 'Bogotá', '2023-09-01', 0, NULL),
+(6, 'Sofía Torres', 'sofia.torres303', '1993-02-14', 'Femenino', 'sofia.torres303@gmail.com', 'password6', 'ur', 'foto.jpg', 'Chile', 'Santiago', '2024-06-25', 1, 33445),
+(7, 'Ricardo Fernández', 'ricardofernandez404', '1990-10-10', 'Masculino', 'ricardofernandez404@gmail.com', 'password7', 'a', 'foto.jpg', 'México', 'Monterrey', '2024-07-30', 0, 22334),
+(8, 'Laura Sánchez', 'laurasanchez505', '1996-01-25', 'Femenino', 'laurasanchez505@gmail.com', 'password8', 'e', 'foto.jpg', 'España', 'Barcelona', '2024-08-05', 1, 55667),
+(9, 'José Ramírez', 'joseramirez606', '1983-05-17', 'Masculino', 'joseramirez606@gmail.com', 'password9', 'ur', 'foto.jpg', 'Argentina', 'Córdoba', '2024-09-12', 1, 88990),
+(10, 'Isabel Díaz', 'isabel.diaz707', '1994-09-02', 'Femenino', 'isabel.diaz707@gmail.com', 'password10', 'a', 'foto.jpg', 'Perú', 'Arequipa', '2024-10-01', 0, 11234),
+(14, 'usuarioleo', 'usuarioleo', '0000-00-00', '', 'leandrojavierloureiro@gmail.comaa', 'usuarioleo', 'ur', 'foto.jpg', 'Argentina', 'Buenos Aires', '0000-00-00', 1, 5623866),
+(15, 'qr', 'editora', '0000-00-00', 'femenino', '', 'editora', 'e', 'foto.jpg', 'Brazil', 'Iguatu', '0000-00-00', 1, 8),
+(16, 'eric', 'eric', '2002-05-16', 'masculino', 'ericaquino2002@gmail.com', 'eric', 'ur', 'foto.jpg', 'Argentina', 'La Plata', '0000-00-00', 1, 5840942),
+(98, 'Luis Martínez', 'luismartinez202', '1988-12-18', 'Masculino', 'luismartinez202@gmail.com', 'password5', 'e', 'foto.jpg', 'Perú', 'Lima', '2024-05-20', 0, 77889),
+(99, 'María González', 'mariagonzalez456', '1985-08-22', 'Femenino', 'mariagonzalez456@gmail.com', 'password2', 'ur', 'foto.jpg', 'España', 'Madrid', '2024-02-10', 0, 67890),
+(100, 'editor', 'editor', '2024-11-15', 'femenino', 'leandrojavierloureiro@gmail.com', 'editor', 'e', 'foto.jpg', 'Argentina', 'Guernica', '0000-00-00', 1, 978);
 
 -- --------------------------------------------------------
 
@@ -7102,8 +7123,11 @@ INSERT INTO `usuariopregunta` (`idUsuario`, `idPregunta`) VALUES
 (16, 33),
 (16, 35),
 (16, 37),
+(16, 39),
 (16, 40),
 (16, 41),
+(16, 42),
+(16, 43),
 (16, 44),
 (16, 45),
 (16, 46),
@@ -7194,31 +7218,31 @@ ALTER TABLE `categoria`
 -- AUTO_INCREMENT for table `partida`
 --
 ALTER TABLE `partida`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
 
 --
 -- AUTO_INCREMENT for table `pregunta`
 --
 ALTER TABLE `pregunta`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT for table `reporte`
 --
 ALTER TABLE `reporte`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `respuesta`
 --
 ALTER TABLE `respuesta`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=214;
 
 --
 -- AUTO_INCREMENT for table `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 
 --
 -- Constraints for dumped tables
