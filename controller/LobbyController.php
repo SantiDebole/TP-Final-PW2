@@ -82,6 +82,9 @@ class LobbyController {
     }
     public function verRivalPorQr($usuario){
         $idBuscado = $usuario;
+
+        $generadorDeQR = new GeneradorDeQR();
+        $generadorDeQR->generarQRParaPerfil($usuario);
         $data['perfilRival'] = $this->model->buscarDatosDeOtrosJugadores($idBuscado);
         $this->presenter->show("perfil",$data);
 
