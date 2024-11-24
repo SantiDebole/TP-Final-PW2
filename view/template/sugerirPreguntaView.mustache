@@ -45,12 +45,22 @@
                         <div class="mb-3">
                             <label for="idCategoria" class="form-label">Categoría</label>
                             <select class="form-select" id="idCategoria" name="idCategoria" required>
+                                {{#categorias}}
+                                    <option value="{{id}}">{{descripcion}}</option>
+                                {{/categorias}}
+                            </select>
+                        </div>
+
+
+                        <!--<div class="mb-3">
+                            <label for="idCategoria" class="form-label">Categoría</label>
+                            <select class="form-select" id="idCategoria" name="idCategoria" required>
                                 <option value="1">Paises</option>
                                 <option value="2">Geografía</option>
                                 <option value="3">Astronomía</option>
                                 <option value="4">Literatura</option>
                             </select>
-                        </div>
+                        </div>-->
 
                         <button type="submit" class="btn btn-primary">Enviar Sugerencia</button>
                     </form>

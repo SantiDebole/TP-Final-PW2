@@ -14,7 +14,15 @@ class EditorController
 
     public function sugerirPregunta()
     {
-        $this->presenter->show('sugerirPregunta');
+        $categorias = $this->model->traerCategorias();
+
+        // Preparar los datos para el presenter
+        $data = [
+            'categorias' => $categorias
+        ];
+
+
+        $this->presenter->show('sugerirPregunta',$data);
     }
 
     // Cuando clickeo enviar sugerencia, valida que los datos enviados por el form sean correctos y crea la pregunta con estado pendiente.

@@ -13,13 +13,20 @@ class PreguntaController {
         $this->presenter = $presenter;
     }
 
-    public function sugerirPregunta(){
-        //$idUsuario = $_SESSION['user_id'];
+    public function sugerirPregunta()
+    {
+        // Obtener las categorías desde el modelo
+        $categorias = $this->model->traerCategorias();
 
-        //$data['perfil'] = $this->model->traerPerfil($idUsuario);
+        // Preparar los datos para el presenter
+        $data = [
+            'categorias' => $categorias
+        ];
 
-        $this->presenter->show('sugerirPregunta');
+        // Pasar los datos al presenter
+        $this->presenter->show('sugerirPregunta', $data);
     }
+
 
     public function validarPreguntaSugerida(){
         $preguntaSugerida = isset($_POST['pregunta_sugerida']) ? $_POST['pregunta_sugerida'] : '';

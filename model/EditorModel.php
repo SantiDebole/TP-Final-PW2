@@ -13,6 +13,33 @@ class EditorModel
     }
 
 
+    public function traerCategorias()
+    {
+        // Consulta SQL para obtener todas las categorías con id y descripcion
+        $sql = "SELECT id, descripcion FROM categoria";
+
+        // Ejecutar la consulta utilizando executeQuery
+        $resultados = $this->database->executeQuery($sql);
+
+        // Verifica si hubo un error al ejecutar la consulta
+        if (!$resultados) {
+            throw new Exception("Error al obtener las categorías.");
+        }
+
+        // Almacenar las categorías en un array asociativo
+        $categorias = [];
+        while ($fila = $resultados->fetch_assoc()) {
+            $categorias[] = [
+                'id' => $fila['id'],
+                'descripcion' => $fila['descripcion']
+            ];
+        }
+
+        // Retornar las categorías como un array asociativo
+        return $categorias;
+    }
+
+
 
     // Métodos para que el editor cree preguntas
     public function agregarPreguntaConUnaRespuestaCorrectaYDosIncorrectasYCambiarDeEstado(
