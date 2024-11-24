@@ -21,111 +21,66 @@ class AdministradorController
         $resultado = $_GET['resultado'] ?? 0;
         $uniqueId = $_GET['uniqueId'] ?? 0;
 
-        // Ruta del gráfico (debes asegurarte de pasar esta variable desde tu vista)
         $grafico = $_SERVER['DOCUMENT_ROOT'] . '/public/image/grafico_' . $filtro . '_' . $fecha_actual ."_".$uniqueId.'.png';
-
-        // Crear una nueva instancia de FPDF
         $pdf = new FPDF();
         $pdf->AddPage();
-
-        // Establecer fuente para el título
         $pdf->SetFont('Arial', 'B', 16);
-
-        // Agregar título al PDF con los datos recibidos
         $pdf->MultiCell(0, 10, "La cantidad de jugadores por $filtro en la fecha '$fecha_actual' es: $resultado", 0, 'C');
-
-        // Agregar un espacio antes de insertar la imagen
         $pdf->Ln(10);
-
-        // Insertar la imagen del gráfico al PDF
         if (file_exists($grafico)) {
-            // Insertar el gráfico con dimensiones ajustadas
-            $pdf->Image($grafico, 50, 60, 100, 70); // Ajusta las coordenadas y dimensiones según sea necesario
+            $pdf->Image($grafico, 50, 60, 100, 70);
         } else {
-            // Mostrar un mensaje si no se encuentra el gráfico
             $pdf->SetFont('Arial', 'I', 12);
             $pdf->Cell(0, 10, "El gráfico no está disponible.", 0, 1, 'C');
         }
-
-        // Generar y mostrar el PDF
         $pdf->Output('I', 'reporte.pdf'); // 'I' lo muestra en el navegador
         ob_end_flush();
     }
 
     public function imprimirCantidadPartidasJugadas() {
         ob_clean();
-        // Obtener los parámetros de la URL
+
         $filtro = $_GET['filtro'] ?? 'dia';
         $fecha_actual = $_GET['fecha'] ?? date('Y-m-d');
         $resultado = $_GET['resultado'] ?? 0;
         $uniqueId = $_GET['uniqueId'] ?? 0;
 
-        // Ruta del gráfico (debes asegurarte de pasar esta variable desde tu vista)
+
         $grafico = $_SERVER['DOCUMENT_ROOT'] . '/public/image/grafico_' . $filtro . '_' . $fecha_actual ."_".$uniqueId.'.png';
 
-        // Crear una nueva instancia de FPDF
         $pdf = new FPDF();
         $pdf->AddPage();
-
-        // Establecer fuente para el título
         $pdf->SetFont('Arial', 'B', 16);
-
-        // Agregar título al PDF con los datos recibidos
         $pdf->MultiCell(0, 10, "La cantidad de jugadores por $filtro en la fecha '$fecha_actual' es: $resultado", 0, 'C');
-
-        // Agregar un espacio antes de insertar la imagen
         $pdf->Ln(10);
-
-        // Insertar la imagen del gráfico al PDF
         if (file_exists($grafico)) {
-            // Insertar el gráfico con dimensiones ajustadas
-            $pdf->Image($grafico, 50, 60, 100, 70); // Ajusta las coordenadas y dimensiones según sea necesario
+            $pdf->Image($grafico, 50, 60, 100, 70);
         } else {
-            // Mostrar un mensaje si no se encuentra el gráfico
             $pdf->SetFont('Arial', 'I', 12);
             $pdf->Cell(0, 10, "El gráfico no está disponible.", 0, 1, 'C');
         }
-
-        // Generar y mostrar el PDF
         $pdf->Output('I', 'reporte.pdf'); // 'I' lo muestra en el navegador
         ob_end_flush();
     }
 
     public function imprimirCantidadPreguntas() {
         ob_clean();
-        // Obtener los parámetros de la URL
         $filtro = $_GET['filtro'] ?? 'dia';
         $fecha_actual = $_GET['fecha'] ?? date('Y-m-d');
         $resultado = $_GET['resultado'] ?? 0;
         $uniqueId = $_GET['uniqueId'] ?? 0;
-
-        // Ruta del gráfico (debes asegurarte de pasar esta variable desde tu vista)
         $grafico = $_SERVER['DOCUMENT_ROOT'] . '/public/image/grafico_' . $filtro . '_' . $fecha_actual ."_".$uniqueId.'.png';
-
-        // Crear una nueva instancia de FPDF
         $pdf = new FPDF();
         $pdf->AddPage();
-
-        // Establecer fuente para el título
         $pdf->SetFont('Arial', 'B', 16);
-
-        // Agregar título al PDF con los datos recibidos
         $pdf->MultiCell(0, 10, "La cantidad de jugadores por $filtro en la fecha '$fecha_actual' es: $resultado", 0, 'C');
-
-        // Agregar un espacio antes de insertar la imagen
         $pdf->Ln(10);
-
-        // Insertar la imagen del gráfico al PDF
         if (file_exists($grafico)) {
-            // Insertar el gráfico con dimensiones ajustadas
-            $pdf->Image($grafico, 50, 60, 100, 70); // Ajusta las coordenadas y dimensiones según sea necesario
+            $pdf->Image($grafico, 50, 60, 100, 70);
         } else {
-            // Mostrar un mensaje si no se encuentra el gráfico
             $pdf->SetFont('Arial', 'I', 12);
             $pdf->Cell(0, 10, "El gráfico no está disponible.", 0, 1, 'C');
         }
-
-        // Generar y mostrar el PDF
         $pdf->Output('I', 'reporte.pdf'); // 'I' lo muestra en el navegador
         ob_end_flush();
     }
@@ -173,7 +128,7 @@ class AdministradorController
         $resultado = $this->model->verCantidadPreguntasEnElJuego($rango);
 
         $graphHelper = new GraphHelper();
-        $labels = [$fecha_actual]; // Puedes ajustar según lo que necesites como etiquetas
+        $labels = [$fecha_actual];
         $data = [$resultado];     // Datos obtenidos de la consulta
         $title = "Cantidad de Jugadores por $filtro";
         $uniqueId = uniqid();
@@ -183,8 +138,6 @@ class AdministradorController
 
         $graphHelper->generateBarGraph($data, $labels, $title, $outputFile);
 
-
-        // Pasar datos y la ruta del gráfico a la vista
         $data = [
             'resultado' => $resultado,
             'filtro' => $filtro,
@@ -219,8 +172,8 @@ class AdministradorController
 
         $resultado = $this->model->verCantidadPartidasJugadas($rango);
         $graphHelper = new GraphHelper();
-        $labels = [$fecha_actual]; // Puedes ajustar según lo que necesites como etiquetas
-        $data = [$resultado];     // Datos obtenidos de la consulta
+        $labels = [$fecha_actual];
+        $data = [$resultado];
         $title = "Cantidad de Jugadores por $filtro";
         $uniqueId = uniqid();
         $nombreGrafico = "grafico_" . $filtro . "_" . $fecha_actual ."_".$uniqueId. ".png";
@@ -264,10 +217,9 @@ class AdministradorController
 
         $resultado = $this->model->verCantidadJugadores($rango);
 
-        // Usar GraphHelper para generar el gráfico
         $graphHelper = new GraphHelper();
-        $labels = [$fecha_actual]; // Puedes ajustar según lo que necesites como etiquetas
-        $data = [$resultado];     // Datos obtenidos de la consulta
+        $labels = [$fecha_actual];
+        $data = [$resultado];
         $title = "Cantidad de Jugadores por $filtro";
         $uniqueId = uniqid();
         $nombreGrafico = "grafico_" . $filtro . "_" . $fecha_actual ."_".$uniqueId. ".png";
@@ -281,7 +233,7 @@ class AdministradorController
             throw new Exception("Error al generar el gráfico.");
         }*/
 
-        // Pasar datos y la ruta del gráfico a la vista
+
         $data = [
             'resultado' => $resultado,
             'filtro' => $filtro,

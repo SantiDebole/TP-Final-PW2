@@ -79,8 +79,6 @@ class Router
                         'pregunta/validarPreguntaSugerida'];
                     break;
                 case "e":
-
-
                     $rutasPermitidas = [
                         'lobby/listar',
                         'login/validate',
@@ -94,8 +92,6 @@ class Router
                         'editor/preguntasSugeridas',
                         'editor/sugerirPregunta'
                     ];
-
-
                     break;
 
                 case "a":
