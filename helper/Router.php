@@ -85,7 +85,7 @@ class Router
                         'login/logout',
                         'editor/preguntasReportadas',
                         'perfil/listar',
-                        'editorController/manejoAccionReporte',
+                        'editor/manejoAccionReporte',
                         'editor/modificarPreguntaYORespuestas',
                         'editor/mostrarFormularioEdicionPregunta',
                         'editor/verReportes',
