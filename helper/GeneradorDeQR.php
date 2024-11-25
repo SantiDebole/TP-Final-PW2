@@ -1,4 +1,4 @@
-<<?php
+<?php
 
 require './vendor/phpqrcode/qrlib.php';
 class GeneradorDeQR{
