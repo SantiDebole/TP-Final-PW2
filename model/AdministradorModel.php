@@ -44,4 +44,28 @@ class AdministradorModel
 
     }
 
+    public function verCantidadPreguntasRespondidasCorrectamenteEnElJuego($rango){
+        $query = "SELECT COUNT(*) AS cantidad_preguntas_respondidas_correctamente 
+                    FROM tienen
+                    WHERE puntaje = 1 AND $rango";
+        $stmt = $this->db->connection->prepare($query);
+        $stmt-> execute();
+        $resultado = $stmt->get_result()->fetch_assoc();
+
+        return $resultado ? $resultado['cantidad_preguntas_respondidas_correctamente'] : 0;
+    }
+
+    public function verCantidadPreguntasHechasEnElJuego($rango){
+
+        $query = "SELECT COUNT(*) AS cantidad_preguntas_hechas 
+                    FROM tienen
+                    WHERE $rango";
+        $stmt = $this->db->connection->prepare($query);
+        $stmt-> execute();
+        $resultado = $stmt->get_result()->fetch_assoc();
+
+        return $resultado ? $resultado['cantidad_preguntas_hechas'] : 0;
+
+    }
+
 }
