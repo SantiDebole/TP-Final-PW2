@@ -40,6 +40,7 @@ class RegistroModel
         $result = $this->database->executeQueryConParametros($sql,[$email]);
         if ($result) {
                 $mailer = new Mailer($email, $token);
+            $mailer->mandarEmail($email, $token);
                 return $token;
         }
         return new Exception("Error, no se pudo enviar el correo");
@@ -52,19 +53,30 @@ class RegistroModel
         $datos_usuario['errores'] = [];
         $datos_usuario['nombreArchivo'] = [];
 
-        //Valida las contraseñas, el email y el usuario
+
         list($errores, $datos_usuario) = $this->validarDatos($datos_usuario, $errores);
         if($errores==1) return $datos_usuario;
 
         //si el guardado de foto falla, devuelve un error sino devuelve el nombre de la imagen para guardarla en la bd
         $guardadoDeFotoDePerfil = $this->guardarFotoDePerfil($datos_usuario['foto_perfil']);
+        if($guardadoDeFotoDePerfil==0){
+            $datos_usuario['errores'][] = "Error en la carga de la foto";
+            return $datos_usuario;
+        }
 
          $token=$this->cargarNuevoUsuarioEnBaseDeDatos($datos_usuario);
         if($token=="fallo"){
             $datos_usuario['errores'][] = "Error en la carga de base de datos";
             return $datos_usuario;}
         else {
-            $mailer = new Mailer($datos_usuario['email'], $token);
+            $mailer = new Mailer();
+            $resultadoEmail=$mailer->mandarEmail($datos_usuario('email'), $token);
+            if($resultadoEmail==0) {
+                $datos_usuario['errores'][] = "Error en el envio de email";
+                $this->borrarDatosPorErrorEnElEnvioDelEmail($datos_usuario['usuario']);
+                return $datos_usuario;
+            }
+
             $datos_usuario['nombreArchivo']=$token;
             return $datos_usuario;
         }
@@ -139,30 +151,18 @@ class RegistroModel
             $tipoArchivo = $foto_perfil['type'];
             $tamanioArchivo = $foto_perfil['size'];
             $archivoTemporal = $foto_perfil['tmp_name'];
-
-
-            // Si se sube un archivo que no sea png, me da error
             $extensionArchivo = pathinfo($nombreArchivo, PATHINFO_EXTENSION);
-
-
-            // Limito el tamaño del archivo a 2mb
             if ($tamanioArchivo > 2097152) {
-                echo "El archivo es muy pesado. Tamaño máximo permitido es 2MB.";
-                exit();
+                return 0;
             }
-
             $carpetaDestino = 'public/image/';
             $nombreImagen = pathinfo($foto_perfil["name"],PATHINFO_FILENAME); // Hago que el nombre de la imagen sea igual al nombre del pokemon, para despues mostrarlo bien en la vista principal
-
             $rutaImagen = $carpetaDestino . $nombreImagen . '.' . $extensionArchivo;
-
-            // Mover el archivo desde su ubicación temporal a la carpeta de destino
             if (!move_uploaded_file($archivoTemporal, $rutaImagen)) {
-                echo "Error al subir la imagen.";
-                exit();
+                return 0;
             }
         }
-
+    return 1;
     }
 
     private function validarPassword($password, $repeat_password)
@@ -201,4 +201,9 @@ class RegistroModel
         }
         return array($errores, $datos_usuario);
     }
+
+    private function borrarDatosPorErrorEnElEnvioDelEmail($usuario){
+    $sql = "DELETE FROM usuario WHERE usuario = ?";
+    $this->database->executeQueryConParametros($sql,[$usuario]);
+}
 }

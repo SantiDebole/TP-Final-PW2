@@ -12,11 +12,13 @@ class Mailer
 {
     public $mail;
 
-    public function __construct($destinatario, $token)
+    public function __construct()
     {
         // Inicializar PHPMailer
         $this->mail = new PHPMailer(true);
+    }
 
+    public function mandarEmail($destinatario, $token){
         try {
             // Configuración del servidor
             $this->mail->isSMTP();
@@ -36,9 +38,9 @@ class Mailer
 
             // Enviar el correo
             $this->mail->send();
-            echo 'El correo ha sido enviado con éxito';
+            return 1;
         } catch (Exception $e) {
-            echo "El correo no pudo ser enviado. Error: {$this->mail->ErrorInfo}";
+            return 0;
             exit();
         }
     }

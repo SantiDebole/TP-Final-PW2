@@ -52,8 +52,6 @@ class RegistroController{
 
 
         if(empty($data['errores'])) $data = $this->model->registrar($datos_usuario);
-        /*var_dump($data);
-        var_dump($data['errores']);*/
         if(empty($data['errores'])){
             $retorno['registro']=$data['email'];
             $this->presenter->show('validarEmail',$retorno);

@@ -71,9 +71,9 @@ class LobbyController {
             ];
 
             $this->presenter->show("lobby",$data);
-            //header("location: /lobby/listar");
-            //exit();
-        }else{
+            }else{
+            $generadorDeQR = new GeneradorDeQR();
+            $generadorDeQR->generarQRParaPerfil($idBuscado);
             $data['perfilRival'] = $usuario;
             $this->presenter->show("perfil",$data);
         }
