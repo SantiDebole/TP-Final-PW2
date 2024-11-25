@@ -11,7 +11,7 @@ class PartidaModel
 
     public function ultimaPregunta($idPartida, $idUsuario)
     {
-        // Consulta para obtener el ID de la última pregunta
+
         $query = "
         SELECT p.id
         FROM pregunta p
@@ -23,15 +23,13 @@ class PartidaModel
     ";
 
         $result = $this->db->executeQueryConParametros($query,[$idPartida, $idUsuario]);
-
-        // Verificar si se encontró una pregunta
         if ($result->num_rows > 0) {
-            // Obtener el ID de la pregunta
+
             $row = $result->fetch_assoc();
-            return $row['id']; // Devolver solo el ID
+            return $row['id'];
         }
 
-        // Si no hay resultados, retornar null
+
         return null;
     }
 
@@ -316,7 +314,7 @@ WHERE r.esCorrecta = 1 AND r.id = ? and p.id=  ?
         $this->db->executeQueryConParametros($query,[$idUsuario, $idPregunta]);
     }
     public function traerPuntajeDelUsuarioEnLaPartida($idPartida, $idUsuario) {
-        // Preparar la consulta SQL
+
         $query = "SELECT SUM(t.puntaje) AS total_puntaje
                   FROM usuario u
                   JOIN partida p ON u.id = p.idUsuario
