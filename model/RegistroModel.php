@@ -40,7 +40,7 @@ class RegistroModel
         $result = $this->database->executeQueryConParametros($sql,[$email]);
         if ($result) {
                 $mailer = new Mailer($email, $token);
-            $mailer->mandarEmail($email, $token);
+            $mailer->mandarEmail($gmail, $token);
                 return $token;
         }
         return new Exception("Error, no se pudo enviar el correo");
@@ -70,7 +70,7 @@ class RegistroModel
             return $datos_usuario;}
         else {
             $mailer = new Mailer();
-            $resultadoEmail=$mailer->mandarEmail($datos_usuario('email'), $token);
+            $resultadoEmail = $mailer->mandarEmail($datos_usuario['email'], $token);
             if($resultadoEmail==0) {
                 $datos_usuario['errores'][] = "Error en el envio de email";
                 $this->borrarDatosPorErrorEnElEnvioDelEmail($datos_usuario['usuario']);
