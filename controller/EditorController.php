@@ -175,7 +175,7 @@ class EditorController
     public function verReportes()
     {
         // Validar que se recibió un parámetro GET
-        if (!isset($_GET['idPregunta']) || !is_numeric($_GET['idPregunta'])) {
+        if (!isset($_GET['idPregunta']) || !is_numeric($_GET['idPregunta']) || intval($_GET['idPregunta']) <= 0) {
             $this->presenter->show("error", ["mensajeError" => "ID de pregunta inválido."]);
             return;
         }
