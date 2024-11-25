@@ -16,18 +16,20 @@
                     </div>
                     <div class="card-body">
                         <p><strong>Pregunta:</strong> {{descripcion}}</p>
+                        <p><strong>Categoría:</strong> {{categoria}}</p>
                         <p><strong>Respuestas:</strong></p>
                         <ul class="list-unstyled">
                             {{#respuestas}}
                                 <li class="mt-2 p-2
-                                    {{#es_correcta}}bg-success{{/es_correcta}}
+                {{#es_correcta}}bg-success{{/es_correcta}}
                                     {{^es_correcta}}bg-danger{{/es_correcta}}
-                                    text-white rounded">
+                text-white rounded">
                                     {{descripcion}}
                                 </li>
                             {{/respuestas}}
                         </ul>
                     </div>
+
                     <div class="card-footer text-center">
                         <form method="POST" action="/editor/manejoAccionReporte" class="d-inline">
                             <input type="hidden" name="idPregunta" value="{{id_pregunta}}">

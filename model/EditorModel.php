@@ -39,6 +39,19 @@ class EditorModel
         return $categorias;
     }
 
+    public function obtenerCategoriaPregunta($id_pregunta) {
+        $query = "
+        SELECT c.descripcion AS categoria
+        FROM pregunta p
+        JOIN categoria c ON p.idCategoria = c.id
+        WHERE p.id = ?";
+        $stmt = $this->database->connection->prepare($query);
+        $stmt->bind_param("i", $id_pregunta);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc()['categoria'] ?? null;
+    }
+
 
 
     // Métodos para que el editor cree preguntas

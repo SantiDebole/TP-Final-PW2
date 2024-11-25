@@ -50,22 +50,36 @@ class EditorController
         $this->presenter->show('sugerirPregunta', ['preguntaEnviada' => true]);
     }
 
-    // Ver preguntas reportadas, Obtiene las preguntas reportadas junto a sus respuestas y se las manda a la vista
+    // Ver preguntas reportadas, Obtiene las preguntas reportadas junto a su categoria y respuestas y se las manda a la vista
     public function preguntasReportadas()
     {
         try {
+
             $preguntasReportadas = $this->model->obtenerPreguntasReportadas();
+
             foreach ($preguntasReportadas as &$pregunta) {
+                // Obtener las respuestas de la pregunta
                 $respuestas = $this->model->obtenerRespuestasDeUnaPregunta($pregunta['id_pregunta']);
                 if (!empty($respuestas)) {
                     $pregunta['respuestas'] = $respuestas;
                 }
+
+                $categoria = $this->model->obtenerCategoriaPregunta($pregunta['id_pregunta']);
+                if (!empty($categoria)) {
+                    $pregunta['categoria'] = $categoria; // Añade la categoría a la pregunta
+                } else {
+                    $pregunta['categoria'] = 'Categoría no disponible';
+                }
             }
+
+            // Pasar las preguntas reportadas con sus datos a la vista
             $this->presenter->show('preguntasReportadas', ['preguntasReportadas' => $preguntasReportadas]);
         } catch (Exception $e) {
+            // En caso de error, mostrar mensaje de error
             $this->presenter->show('error', ['mensajeError' => "No se pudieron obtener las preguntas reportadas: " . $e->getMessage()]);
         }
     }
+
 
     // Si se da de alta o da de baja, maneja la accion y redirige a la vista de los reportes
     public function manejoAccionReporte()
