@@ -85,12 +85,14 @@ class Router
                         'login/logout',
                         'editor/preguntasReportadas',
                         'perfil/listar',
-                        'editorController/manejoAccionReporte',
+                        'editor/manejoAccionReporte',
+                        'editor/manejoAccionSugerencia',
                         'editor/modificarPreguntaYORespuestas',
                         'editor/mostrarFormularioEdicionPregunta',
                         'editor/verReportes',
                         'editor/preguntasSugeridas',
-                        'editor/sugerirPregunta'
+                        'editor/sugerirPregunta',
+                        'editor/validarPreguntaSugerida'
                     ];
                     break;
 
