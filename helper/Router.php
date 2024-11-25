@@ -86,11 +86,13 @@ class Router
                         'editor/preguntasReportadas',
                         'perfil/listar',
                         'editor/manejoAccionReporte',
+                        'editor/manejoAccionSugerencia',
                         'editor/modificarPreguntaYORespuestas',
                         'editor/mostrarFormularioEdicionPregunta',
                         'editor/verReportes',
                         'editor/preguntasSugeridas',
-                        'editor/sugerirPregunta'
+                        'editor/sugerirPregunta',
+                        'editor/validarPreguntaSugerida'
                     ];
                     break;
 
