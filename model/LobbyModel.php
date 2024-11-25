@@ -211,25 +211,30 @@ class LobbyModel
         ROW_NUMBER() OVER (PARTITION BY usuario.id ORDER BY partida.fecha DESC) AS rn
     FROM partida
     JOIN usuario ON partida.idUsuario = usuario.id
-)
-    
-SELECT
-    usuario,
-    AVG(puntaje_total) AS promedio_respuestas,
-    ROW_NUMBER() OVER (ORDER BY AVG(puntaje_total) DESC) AS puesto_ranking
-FROM (
+),
+RankingGeneral AS (
     SELECT
         usuario,
-        SUM(tienen.puntaje) AS puntaje_total
-    FROM PartidasOrdenadas
-    JOIN tienen ON tienen.idPartida = id_partida
-    WHERE rn <= 25
-    GROUP BY usuario, id_partida
-    HAVING COUNT(id_partida) > 2
-) AS subconsulta
-WHERE usuario = ?
-GROUP BY usuario
-ORDER BY puesto_ranking;
+        AVG(puntaje_total) AS promedio_respuestas,
+        ROW_NUMBER() OVER (ORDER BY AVG(puntaje_total) DESC) AS puesto_ranking
+    FROM (
+        SELECT
+            usuario,
+            SUM(tienen.puntaje) AS puntaje_total
+        FROM PartidasOrdenadas
+        JOIN tienen ON tienen.idPartida = id_partida
+        WHERE rn <= 25
+        GROUP BY usuario, id_partida
+        HAVING COUNT(id_partida) > 2
+    ) AS subconsulta
+    GROUP BY usuario
+)
+SELECT
+    usuario,
+    promedio_respuestas,
+    puesto_ranking
+FROM RankingGeneral
+WHERE usuario = ?;
     ";
 
         // Preparar y ejecutar la consulta usando el parámetro userId
